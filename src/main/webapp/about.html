@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>About the BtrPlace constraint catalog sandbox</title>
+  <link rel="stylesheet" href="css/common.css" type="text/css"/>
+    <meta name="description" content="Sandbox for the Btrplace constraint catalog" />
+    <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints" />
+    <meta name="author" content="Fabien Hermenier" />
+    <meta charset="UTF-8" />
+</head>
+<body>
+<div id="content">
+  <h1>About this sandbox</h1>
+
+    <h2>About this sandbox</h2>
+    <p>This sandbox have been realized in the context of the FUI
+        <a href="http://opencloudware.org" target="_blank">OpenCloudware project</a>.
+        This project aims at building an open software engineering platform for the collaborative development of distributed
+        applications to be deployed on multiple Cloud infrastructures.
+        The sandbox relies on BtrPlace, one of the component of the OpenCloudware project,
+        to check for the constraints viability and to fix, when necessary, a non-viable configuration.
+    </p>
+
+    <h2>About BtrPlace</h2>
+
+    <h3>Objectives</h3>
+    <p>Clients of IaaS providers are looking for dependable infrastructures that can cope with their SLA
+        requirements. To stay attractive, a cloud must then rely on a VM placement algorithm with features matching
+        as possible the SLAs expectations. These constraints are however very specific to each of
+        the tenants but also the infrastructure. They also cover a large
+        range of concerns (reliability, performance, security,
+        energy-efficiency, ...) that are continuously evolving according to
+        new trends and new technologies. Current VM placement algorithms are
+        designed as monolithic systems. Clouds administrators and clients
+        are then passive actors, waiting for the future release of the
+        placement algorithm that may match their current expectations.</p>
+
+    <p>BtrPlace, is the VM placement algorithm
+        that is used inside the open source OW2 project <a href="http://ow2.org/view/ActivitiesDashboard/Entropy">Entropy</a>.
+        BtrPlace can be specialized on demand by third party developers
+        to integrate new placement constraints. It has already been used
+        successfully to address high-availability, security but also
+        energy-efficiency concerns. It has been developped since 2006
+        with the <a href="http://www.emn.fr/z-info/ascola/doku.php">
+            ASCOLA Research Team</a> from the <a href="http://www.mines-nantes.fr">Mines de Nantes</a>,
+        then with the <a href="http://www-sop.inria.fr/oasis/">OASIS Research Team</a> from the
+        <a href="http://unice.fr/">University of Nice-Sophia Antipolis</a>.</p>
+
+    <p>BtrPlace relies on <a href="http://en.wikipedia.org/wiki/Constraint_programming">Constraint Programming</a>
+        to compute a new configuration and a plan to reach it when constraints are violated. This approach makes
+        placement constraint independant of each other and new constraints can be added without changing the existing
+        implementation of other constraints.
+
+        In practice, BtrPlace uses the Open source <a href="http://www.emn.fr/z-info/choco-solver/">CHOCO solver</a>.
+    </p>
+
+    <h3>The BtrPlace constraint catalog</h3>
+    <p>
+        The BtrPlace contraints catalog aggregates constraints related to the management of VMs and servers on hosting platforms.
+        It presents numerous constraints that are of a practical interest for applications and datacenter administrators
+        to express dependability or management requirements such as performance, availability or security.
+        Each constraint is associated with practical use cases and classification criteria to help users at
+        understanding its interest and its relationship with others.
+        An online version of the catalog is available
+        <a href="http://www-sop.inria.fr/members/Fabien.Hermenier/btrpcc/">here</a>.
+    </p>
+    <p> The catalog serves as a support to prove the flexibility of Btrplace.
+        Currently, 14 of the presented constraints are available in BtrPlace and 10 of them can be tested in the sandbox.
+        Non-implemented constraints will be implemented using BtrPlace and made available in the sandbox as soon as
+        possible.
+    </p>
+
+    <div id="footer">
+        © <a href="mailto:fabien.hermenier@inria.fr">Fabien Hermenier</a> 2012
+    </div>
+
+</body>
+</html>
