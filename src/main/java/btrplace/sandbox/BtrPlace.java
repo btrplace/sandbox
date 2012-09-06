@@ -1,8 +1,27 @@
+/*
+ * Copyright (c) 2012 University of Nice Sophia-Antipolis
+ *
+ * This file is part of btrplace-sandbox.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package btrplace.sandbox;
 
 import btrpsl.BtrPlaceVJobBuilder;
-import btrpsl.BtrpPlaceVJobBuilderException;
-import btrpsl.constraint.*;
+import btrpsl.constraint.ConstraintsCatalog;
+import btrpsl.constraint.ConstraintsCatalogBuilderFromProperties;
 import btrpsl.template.VirtualMachineTemplateStub;
 import entropy.PropertiesHelper;
 import entropy.configuration.Configuration;
@@ -13,6 +32,7 @@ import entropy.configuration.parser.PlainTextConfigurationSerializer;
 import entropy.plan.DefaultTimedReconfigurationPlan;
 import entropy.plan.TimedReconfigurationPlan;
 import entropy.plan.action.*;
+import entropy.plan.action.Shutdown;
 import entropy.plan.choco.ChocoCustomRP;
 import entropy.plan.durationEvaluator.DurationEvaluator;
 import entropy.plan.durationEvaluator.FastDurationEvaluatorFactory;
@@ -22,25 +42,27 @@ import entropy.vjob.DefaultVJob;
 import entropy.vjob.PlacementConstraint;
 import entropy.vjob.VJob;
 import entropy.vjob.builder.DefaultVJobElementBuilder;
-import entropy.vjob.builder.VJobBuilderBuilderException;
 import entropy.vjob.builder.VJobElementBuilder;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import javax.ws.rs.*;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created with IntelliJ IDEA.
- * User: fhermeni
- * Date: 31/08/12
- * Time: 13:20
- * To change this template use File | Settings | File Templates.
+ * Simili Resource to check then solve non-viable configurations.
+ *
+ * @author Fabien Hermenier
  */
 @Path("/btrplace")
 public class BtrPlace {
@@ -57,7 +79,6 @@ public class BtrPlace {
     private DefaultVirtualMachineTemplateFactory vtpls;
 
     private DefaultPlatformFactory ptpls;
-
 
 
     private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
@@ -250,9 +271,10 @@ public class BtrPlace {
 
     private static Pattern syntaxError = Pattern.compile("\\((\\d+):(\\d+)\\)\\ssandbox:\\s(.+)");
     private static Pattern lexError = Pattern.compile("line\\s(\\d+):(-?\\d+)\\s(.+)");
+
     private String simplifyErrorMessage(Configuration cfg, String s) {
         //remove any "sandbox."
-        String res = s.replaceAll("sandbox\\.","");
+        String res = s.replaceAll("sandbox\\.", "");
 
         //Remove the list of available constraints.
         if (res.contains("Unknown constraint")) {
@@ -277,5 +299,6 @@ public class BtrPlace {
 
         return res;
     }
+
     private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
 }

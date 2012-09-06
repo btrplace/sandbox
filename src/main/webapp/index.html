@@ -1,100 +1,127 @@
 <!DOCTYPE HTML>
+<!--
+  ~ Copyright (c) 2012 University of Nice Sophia-Antipolis
+  ~
+  ~ This file is part of btrplace-sandbox.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <html>
 <head>
-  <title>BtrPlace constraint catalog sandbox</title>
-  <script src="js/raphael.js" type="text/javascript"></script>
-  <script src="js/svgConfig.js" type="text/javascript"></script>
-  <script type="text/javascript" src="js/jquery.min.js"></script>
-  <script src="js/jquery-linedtextarea.js" type="text/javascript"></script>
-  <script type="text/javascript" src="js/console.js"></script>
-  <link rel="stylesheet" href="css/common.css" type="text/css"/>
-  <link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
-  <link rel="stylesheet" href="css/jquery-linedtextarea.css" type="text/css"/>
-  <meta name="description" content="Sandbox for the Btrplace constraint catalog" />
-  <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints" />
-  <meta name="author" content="Fabien Hermenier" />
-  <meta charset="UTF-8" />
+    <title>BtrPlace constraint catalog sandbox</title>
+    <script src="js/raphael.js" type="text/javascript"></script>
+    <script src="js/svgConfig.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/jquery-linedtextarea.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/console.js"></script>
+    <link rel="stylesheet" href="css/common.css" type="text/css"/>
+    <link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
+    <link rel="stylesheet" href="css/jquery-linedtextarea.css" type="text/css"/>
+    <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
+    <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
+    <meta name="author" content="Fabien Hermenier"/>
+    <meta charset="UTF-8"/>
 </head>
 <body onload="step(0);">
 <div id="content">
-  <h1>Constraint catalog sandbox</h1>
+    <h1>Constraint catalog sandbox</h1>
 
-<div id="sandbox">
-<div id="intro">
-<p>
-    This sandbox allows to test the effect of constraints restricting the placement of VMs on servers.
-    The following figure depicts a sample configuration. Each grid represents a server with a finite amount
-    of CPU and memory to share among the hosted virtual machines.
-    Each gray rectangle denotes a virtual machine that consumes some resources on its server.
-    Customizer the script with some of the available constraints,
-    and observe BtrPlace fixing a non-viable placement for you !
-</p>
-    <a href="about.html" target="_blank">Read more &#9654;</a>
-</div>
-
-  <div class="export_button" id="txt_export"></div>
-  <div class="export_button" id="svg_export"></div>
-  <div id="canvas"></div>
-  <div id="script">
-    <div id="input">
-      <h3>Script:</h3>
-      <textarea class="lined" id="constraints" placeholder="insert constraints here...  " rows="8" cols="40"></textarea>
-    </div>
-    <div id="output">
-        <div class="state" id="state0">
-            <p>Customize the script on the right then let BtrPlace
-                inspect it to check for the constraints' viability.
-            </p>
-            <div class="check_button" onclick="check('constraints');"></div>
-            <br/><div id="available_constraints"></div>
-            <div id="lookRight"></div>
-        </div>
-        <div class="state"  id="state1">
+    <div id="sandbox">
+        <div id="intro">
             <p>
-                The constraints in red are not satisfied but
-                Btrplace found doing the following actions makes the placement viable. Use
-                the buttons to navigate through the reconfiguration.
+                This sandbox allows to test the effect of constraints restricting the placement of VMs on servers.
+                The following figure depicts a sample configuration. Each grid represents a server with a finite amount
+                of CPU and memory to share among the hosted virtual machines.
+                Each gray rectangle denotes a virtual machine that consumes some resources on its server.
+                Customizer the script with some of the available constraints,
+                and observe BtrPlace fixing a non-viable placement for you !
             </p>
-            <div id="scenario">
-                <div id="navigation">
-                    <div class="nav_button" id="prev" onclick="prev();"></div>
-                    <div class="nav_button" id="next" onclick="next();"></div>
-                </div>
-                <div id="plan"></div>
+            <a href="about.html" target="_blank">Read more &#9654;</a>
+        </div>
+
+        <div class="export_button" id="txt_export"></div>
+        <div class="export_button" id="svg_export"></div>
+        <div id="canvas"></div>
+        <div id="script">
+            <div id="input">
+                <h3>Script:</h3>
+                <textarea class="lined" id="constraints" placeholder="insert constraints here...  " rows="8"
+                          cols="40"></textarea>
             </div>
-               <p id="reconfigrationIsOver" style="display:none;">Now every constraints are satisfied !</p>
-        </div>
-        <div class="state" id="state2">
-            <p>
-                Every constraints are already satisfied.
-                Declare other constraints in the script.
-            </p>
-            <div class="check_button" onclick="check('constraints');"></div>
-        </div>
-        <div class="state" id="state3">
-            <p>
-                The constraints in red are not satisfied and BtrPlace found there
-                is no possible placement that can satisfy every constraint. Use other
-                constraints or refresh the page for a new configuration.
-            </p>
-            <div class="check_button" onclick="check('constraints');"></div>
-        </div>
-        <div class="state" id="state4">
-            <p>The script was not interpreted due to the following errors:</p>
-            <div id="syntax_error"></div>
-            <div class="check_button" onclick="check('constraints');"></div>
-        </div>
-    </div>
-  </div>
-    <div id="restart">
-        <div class="restart_button" onclick="step(0);"></div>
-    </div>
-    <div id="footer">
+            <div id="output">
+                <div class="state" id="state0">
+                    <p>Customize the script on the right then let BtrPlace
+                        inspect it to check for the constraints' viability.
+                    </p>
 
-        © <a href="mailto:fabien.hermenier@inria.fr">Fabien Hermenier</a> 2012
-    </div>
+                    <div class="check_button" onclick="check('constraints');"></div>
+                    <br/>
 
-</div>
+                    <div id="available_constraints"></div>
+                    <div id="lookRight"></div>
+                </div>
+                <div class="state" id="state1">
+                    <p>
+                        The constraints in red are not satisfied but
+                        Btrplace found doing the following actions makes the placement viable. Use
+                        the buttons to navigate through the reconfiguration.
+                    </p>
+
+                    <div id="scenario">
+                        <div id="navigation">
+                            <div class="nav_button" id="prev" onclick="prev();"></div>
+                            <div class="nav_button" id="next" onclick="next();"></div>
+                        </div>
+                        <div id="plan"></div>
+                    </div>
+                    <p id="reconfigrationIsOver" style="display:none;">Now every constraints are satisfied !</p>
+                </div>
+                <div class="state" id="state2">
+                    <p>
+                        Every constraints are already satisfied.
+                        Declare other constraints in the script.
+                    </p>
+
+                    <div class="check_button" onclick="check('constraints');"></div>
+                </div>
+                <div class="state" id="state3">
+                    <p>
+                        The constraints in red are not satisfied and BtrPlace found there
+                        is no possible placement that can satisfy every constraint. Use other
+                        constraints or refresh the page for a new configuration.
+                    </p>
+
+                    <div class="check_button" onclick="check('constraints');"></div>
+                </div>
+                <div class="state" id="state4">
+                    <p>The script was not interpreted due to the following errors:</p>
+
+                    <div id="syntax_error"></div>
+                    <div class="check_button" onclick="check('constraints');"></div>
+                </div>
+            </div>
+        </div>
+        <div id="restart">
+            <div class="restart_button" onclick="step(0);"></div>
+        </div>
+        <div id="footer">
+
+            © <a href="mailto:fabien.hermenier@inria.fr">Fabien Hermenier</a> 2012
+        </div>
+
+    </div>
 </div>
 </body>
 </html>
