@@ -113,7 +113,6 @@ public class BtrPlace {
         for (Node node : cfg.getAllNodes()) {
             s = s.replaceAll(node.getName(), "@" + node.getName());
         }
-        System.out.println(n.toString());
         return s;
     }
 
@@ -176,7 +175,6 @@ public class BtrPlace {
                             new SimpleManagedElementSet<Node>(),
                             new SimpleManagedElementSet<Node>(),
                             vjobs);
-                    System.out.println("Plan: " + plan);
                 } catch (Exception e) {
                     errors.add("no solution");
                 }
@@ -257,7 +255,6 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        System.out.println("Yop: " + o.toString());
         return o;
     }
 
@@ -294,7 +291,6 @@ public class BtrPlace {
             if (m.matches()) {
                 return "(" + (Integer.parseInt(m.group(1)) - shift) + ":" + m.group(2) + ") " + m.group(3);
             }
-            System.err.println("Unable to match " + res + " " + m.groupCount());
         }
 
         return res;

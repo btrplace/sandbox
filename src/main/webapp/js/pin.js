@@ -1,5 +1,17 @@
+//Check for an id
+function init() {
+var offset = location.href.indexOf("id=");
+if ( offset > 0) {
+        pin = location.href.substring(offset + 3);
+        loadExperiment(pin);
+} else {
+    console.log("Nothing to load");
+    step(0);
+}
+}
+
 function pin(nodes, scenario) {
-    var experiment = {"cfg":smallConfig(nodes), "scenario" : scenario};
+    var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
     console.log(experiment);
 
     var http = createXhrObject();
@@ -16,8 +28,7 @@ function pin(nodes, scenario) {
     http.onreadystatechange = function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 200) {
-	            console.log(this.responseText);
-
+                console.log("pinned: " + this.responseText);
 	        } else {
 	            console.log("ERROR: " + this.responseText);
 	        }
@@ -26,7 +37,33 @@ function pin(nodes, scenario) {
     http.send(params);
 }
 
-function smallConfig(nodes) {
+function loadExperiment(id) {
+    console.log("Looking for experiment '" + id + "'");
+        var http = createXhrObject();
+        //Remove the possible index.html at the end
+        var url = location.origin + location.pathname;
+        http.open("GET", url + "/cache/" + id, true);
+        http.onreadystatechange = function() {
+    	    if (this.readyState == 4) {
+    	        if (this.status == 200) {
+    	            console.log(this.responseText);
+    	            var experiment = JSON.parse(this.responseText);
+    	            scenario = experiment.scenario;
+    	            unserialize(experiment.cfg);
+    	            document.getElementById('constraints').value = experiment.script;
+    	            drawConfiguration('canvas');
+    	            step(1);
+
+    	        } else {
+    	            console.log("ERROR: " + this.status + ":\n" + this.responseText);
+    	            step(0);
+    	        }
+    	    }
+        }
+        http.send(null);
+}
+
+function serialize(nodes) {
     var cpy = [];
     for (var i in nodes) {
         var n = nodes[i];
@@ -45,4 +82,17 @@ function smallConfig(nodes) {
         }
     }
     return cpy;
+}
+
+function unserialize(src) {
+    nodes = [];
+    for (var i in src) {
+        s = src[i];
+        var n = new Node(s.id, s.cpu, s.mem);
+        for (var j in s.vms) {
+            v = s.vms[j];
+            n.host(new VirtualMachine(v.id, v.cpu, v.mem));
+        }
+        nodes.push(n);
+    }
 }

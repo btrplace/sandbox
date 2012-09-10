@@ -50,7 +50,7 @@ public class Cache {
         String id = makeID(context);
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new FileWriter(id));
+            out = new PrintWriter(new FileWriter(context.getRealPath(CACHE_DIR) + File.separator + id));
             out.println(scenario);
             //Remove the /rest/cache stuff
             String rest = req.getRequestURL().substring(0,req.getRequestURL().lastIndexOf("/"));
@@ -58,7 +58,7 @@ public class Cache {
             String uri = root + "?id=" + id;
             return Response.ok(uri).build();
         } catch(Exception e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             return Response.serverError().build();
         } finally {
             if (out != null) {

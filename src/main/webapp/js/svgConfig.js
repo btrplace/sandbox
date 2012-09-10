@@ -192,7 +192,9 @@ function generateConfiguration(id) {
 	        n.online = false;
 	    }
     }
+}
 
+function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
     var height = 0;
@@ -323,7 +325,8 @@ function step(id) {
         animationStep = 0;
         scenario = undefined;
         pending = false;
-	    generateConfiguration('canvas');
+	    generateConfiguration();
+	    drawConfiguration('canvas');
 	    generateSampleScript(document.getElementById('constraints'));
     } else if (id == 1) {
         document.getElementById("reconfigrationIsOver").style.display="none";
