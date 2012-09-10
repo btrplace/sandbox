@@ -1,0 +1,6 @@
+Release notes
+
+
+1.0rc1 - 9 sep. 2012
+-------------------------
+- Initial release

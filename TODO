@@ -11,7 +11,7 @@ TODO 1.5
 TODO 2
 - full BtrPlace + extension
 - server pinning
-- user pinning
+- user pinning -> store javascript object
 
 TODO 3
 - ressources réservées, ressources utilisées
