@@ -19,43 +19,79 @@
 
 package btrplace.sandbox;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: fhermeni
- * Date: 30/08/12
- * Time: 13:29
- * To change this template use File | Settings | File Templates.
+ *
+ * @author Fabien Hermenier
  */
 @Path("/cache")
 public class Cache {
 
+    private static final String CACHE_DIR = "cache";
+
+    private static final String EXT = ".js";
+
     @POST
-    public Response push(@QueryParam("cfg") String config, @QueryParam("script") String constraints) {
-        String key = Long.toString(System.currentTimeMillis());
+    public Response push(@Context HttpServletRequest req, @Context ServletContext context, @FormParam("experiment") String scenario) {
 
-        System.out.println("Configuration: " + config);
-        System.out.println("Script: " + constraints);
-
-
+        //Extract the JSON stuff, store into a JS file
+        String id = makeID(context);
+        PrintWriter out = null;
         try {
-            return Response.created(new URI("sandbox/gallery?tag=" + key)).build();
-        } catch (URISyntaxException e) {
-            return Response.ok("sandbox/gallery?tag=" + key).build();
+            out = new PrintWriter(new FileWriter(id));
+            out.println(scenario);
+            //Remove the /rest/cache stuff
+            String rest = req.getRequestURL().substring(0,req.getRequestURL().lastIndexOf("/"));
+            String root = rest.substring(0, rest.lastIndexOf("/") + 1);
+            String uri = root + "?id=" + id;
+            return Response.ok(uri).build();
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
         }
     }
 
-    @GET
-    @Produces("text/plain")
-    public String load(@QueryParam("tag") String tag) {
-        if (tag == null) {
-            return "no Element";
+    @DELETE
+    public void delete(@QueryParam("id") String id) {
+
+    }
+
+    private String makeID(ServletContext ctx) {
+
+        String cachePath = ctx.getRealPath(CACHE_DIR);
+        File d = new File(cachePath);
+        if (!d.isDirectory()) {
+            if (!d.mkdirs()) {
+                System.err.println("Unable to create the cache directory '" + d.getPath() + "'");
+            } else {
+                System.err.println("Cache '" + d.getPath() + "' created");
+            }
         } else {
-            return "redirect to the reference '" + tag + "'";
+            System.err.println("Reusing '" + d.getPath() + "'");
         }
+
+        long l = System.currentTimeMillis();
+        String path = ctx.getRealPath(CACHE_DIR + File.separator + l + EXT);
+        File f = new File(path);
+        while (f.exists()) {
+            f = new File(makeID(ctx));
+        }
+        return l + EXT;
     }
 }
