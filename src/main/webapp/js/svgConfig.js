@@ -296,7 +296,7 @@ function step(id) {
     }
     if (id == 0) {
         checkable(true);
-        document.getElementById('pin').style.visibility="hidden";
+        //document.getElementById('pin').style.visibility="hidden";
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;

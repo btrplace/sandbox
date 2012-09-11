@@ -10,7 +10,7 @@ function init() {
     }
 }
 
-function pin(nodes, scenario) {
+function pin() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
 
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
@@ -40,8 +40,12 @@ function loadExperiment(id) {
     	            document.getElementById('constraints').value = experiment.script;
     	            drawConfiguration('canvas');
     	            step(1);
-    	            //Hide the pin, cause already pinned
-    	            document.getElementById('pin').style.visibility="hidden";
+
+    	            //Switch the pin to unpin
+    	            var p = document.getElementById('pin');
+    	            p.src="img/unpin.png";
+                    p.onclick="unpin();";
+                    p.title="Un-pin the sandbox";
     	        } else {
     	            console.log("ERROR: " + this.status + ":\n" + this.responseText);
     	            step(0);
