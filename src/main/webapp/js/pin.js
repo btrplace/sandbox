@@ -17,7 +17,7 @@ function pinSandbox() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
 	            var l = this.getResponseHeader("Location");
-                console.log("pinned: " + l);
+                Notifier.info("Sandbox pinned","The sandbox is pinned. It is accessible at the following address<br><code>" + l + "</code>");
                 document.location.href=l;
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);

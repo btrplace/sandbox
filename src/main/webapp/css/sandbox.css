@@ -93,7 +93,6 @@
     background-position: 0px 0px;
     width: 132px;
     height: 27px;
-    margin-left:334px;
 
 }
 
@@ -102,6 +101,19 @@
 
 }
 
+.pin_button {
+    clear: both;
+    background-image:url('../img/pin2.png');
+    background-repeat:no-repeat;
+    background-position: 0px 0px;
+    width: 132px;
+    height: 27px;
+}
+
+.pin_button:hover {
+    background-position: 0px -26px;
+
+}
 
 #output {
     margin-bottom: 20px;
