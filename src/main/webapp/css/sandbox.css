@@ -86,14 +86,20 @@
     background-position: 0px -28px;
 }
 
-.restart_button {
+#restart {
     clear: both;
+    height: 30px;
+    width: 50%;
+    text-align: center;
+}
+.restart_button {
     background-image:url('../img/restart.png');
     background-repeat:no-repeat;
     background-position: 0px 0px;
     width: 132px;
     height: 27px;
-
+    position: relative;
+    float: right;
 }
 
 .restart_button:hover {
@@ -102,12 +108,13 @@
 }
 
 .pin_button {
-    clear: both;
+    position: relative;
     background-image:url('../img/pin2.png');
     background-repeat:no-repeat;
     background-position: 0px 0px;
     width: 132px;
     height: 27px;
+    float: right;
 }
 
 .pin_button:hover {
@@ -181,6 +188,15 @@ display : none;
     margin-right:20px;
     height: 40px;
     width: 40px;
-    cursor: pointer;
     visibility: hidden;
+}
+#pin:hover {
+cursor: pointer;
+}
+
+
+#modal code {
+    border: solid #aaa 1px;
+    background: #eee;
+    text-align: center;
 }

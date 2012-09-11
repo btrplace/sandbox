@@ -28,9 +28,10 @@
     <script type="text/javascript" src="js/console.js"></script>
     <script type="text/javascript" src="js/analytics.js"></script>
     <script type="text/javascript" src="js/pin.js"></script>
-    <script type="text/javascript" src="js/notifier.js"></script>
+    <script type="text/javascript" src="js/tinybox.js"></script>
     <link rel="stylesheet" href="css/common.css" type="text/css"/>
     <link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
+    <link rel="stylesheet" href="css/tinybox.css" type="text/css"/>
     <link rel="stylesheet" href="css/jquery-linedtextarea.css" type="text/css"/>
     <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
     <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
@@ -118,7 +119,7 @@
             </div>
         </div>
         <div id="restart">
-            <div class="pin_button" onclick="pin();" style="disabled: disabled;"></div>
+            <div class="pin_button" onclick="pinSandbox();" style="disabled: disabled;"></div>
             <div class="restart_button" onclick="step(0);"></div>
         </div>
         <div id="footer">

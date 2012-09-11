@@ -12,12 +12,11 @@ function init() {
 
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
-
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
 	            var l = this.getResponseHeader("Location");
-                Notifier.info("Sandbox pinned","The sandbox is pinned. It is accessible at the following address<br><code>" + l + "</code>");
+	            TINY.box.show({animate:true,boxid:'modal', close:false,opacity:60, html:'The sandbox has been pinned to the following address:<br><code>' + l + '</code>',width:300,height:50});
                 document.location.href=l;
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
