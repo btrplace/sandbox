@@ -155,7 +155,6 @@ public class BtrPlace {
                     nb++;
                 } catch (Exception e) {
                     for (String m : e.getMessage().split("\n")) {
-                        System.err.println("---" + m);
                         errors.add(simplifyErrorMessage(src, m));
                     }
                 }
