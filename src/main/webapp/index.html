@@ -20,6 +20,7 @@
 <html>
 <head>
     <title>BtrPlace constraint catalog sandbox</title>
+    <script type="text/javascript" src="js/common.js"></script>
     <script src="js/raphael.js" type="text/javascript"></script>
     <script src="js/svgConfig.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
@@ -37,7 +38,7 @@
 </head>
 <body onload="init();">
 <div id="content">
-    <div id="pin" onclick="pin(nodes, scenario);"></div>
+    <div id="pin" onclick="pin(nodes, scenario);" style="visibility: hidden;"></div>
     <h1>Constraint catalog sandbox</h1>
 
     <div id="sandbox">

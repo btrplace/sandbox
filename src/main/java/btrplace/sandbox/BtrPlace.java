@@ -64,7 +64,7 @@ import java.util.regex.Pattern;
  *
  * @author Fabien Hermenier
  */
-@Path("/btrplace")
+@Path("/inspect")
 public class BtrPlace {
 
     @Context

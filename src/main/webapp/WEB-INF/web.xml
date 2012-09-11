@@ -42,7 +42,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Sandbox</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     <welcome-file-lists>
         <welcome-file>index.html</welcome-file>

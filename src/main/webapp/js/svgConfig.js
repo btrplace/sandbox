@@ -4,21 +4,6 @@ Javascript to generate a SVG from a configuration.
 
 */
 
-function createXhrObject() {
-    if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
-    }
-    if (window.ActiveXObject) {
-        var names = ["Msxml2.XMLHTTP.6.0","Msxml2.XMLHTTP.3.0","Msxml2.XMLHTTP","Microsoft.XMLHTTP"];
-        for(var i in names) {
-            try{ return new ActiveXObject(names[i]); }
-            catch(e){}
-        }
-    }
-    window.alert("Your browser does not support XMLHttpRequest.");
-    return null;
-}
-
 var paper;
 var columns = 4;
 var lines = 2;
@@ -230,17 +215,9 @@ function check(id) {
     var script = document.getElementById(id).value;
     var config = toPlainTextConfiguration();
     var http = createXhrObject();
-    var port = document.location.port;
-    var href = document.location.href;
-    //Remove the possible index.html at the end
-    var url = href;
-    if (href.lastIndexOf("/index.html") > 1) {
-        url = href.substring(0, href.lastIndexOf("/index.html"));
-    }
-    var params = "cfg="+encodeURI(config)+"&script="+encodeURI(script);
-    http.open("POST", url + "rest/btrplace", true);
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.onreadystatechange = function() {
+
+    postToAPI("inspect","cfg="+encodeURI(config)+"&script="+encodeURI(script),
+    function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	        scenario = JSON.parse(this.responseText);
 	        if (scenario.errors.length == 0) {
@@ -255,8 +232,7 @@ function check(id) {
 	            step(4);
 	        }
         }
-    }
-    http.send(params);
+    });
     checkable(false);
 }
 
@@ -320,6 +296,7 @@ function step(id) {
     }
     if (id == 0) {
         checkable(true);
+        document.getElementById('pin').style.visibility="hidden";
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
@@ -329,6 +306,7 @@ function step(id) {
 	    drawConfiguration('canvas');
 	    generateSampleScript(document.getElementById('constraints'));
     } else if (id == 1) {
+        document.getElementById('pin').style.visibility="visible";
         document.getElementById("reconfigrationIsOver").style.display="none";
         document.getElementById('constraints').disabled=true;
         showScenario();

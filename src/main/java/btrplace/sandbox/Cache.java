@@ -36,7 +36,7 @@ import java.net.URI;
  *
  * @author Fabien Hermenier
  */
-@Path("/cache")
+@Path("/pin")
 public class Cache {
 
     private static final String CACHE_DIR = "cache";
@@ -56,7 +56,7 @@ public class Cache {
             String rest = req.getRequestURL().substring(0,req.getRequestURL().lastIndexOf("/"));
             String root = rest.substring(0, rest.lastIndexOf("/") + 1);
             String uri = root + "?id=" + id;
-            return Response.ok(uri).build();
+            return Response.created(new URI(uri)).build();
         } catch(Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
