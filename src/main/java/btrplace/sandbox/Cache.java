@@ -19,6 +19,9 @@
 
 package btrplace.sandbox;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -31,9 +34,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- *
+ * A Cache for experiments.
  * @author Fabien Hermenier
  */
 @Path("/pin")
@@ -43,6 +50,13 @@ public class Cache {
 
     private static final String EXT = ".js";
 
+    /**
+     * Encache a sandbox.
+     * @param req
+     * @param context
+     * @param scenario the sandbox to encache
+     * @return
+     */
     @POST
     public Response push(@Context HttpServletRequest req, @Context ServletContext context, @FormParam("experiment") String scenario) {
 
@@ -67,9 +81,49 @@ public class Cache {
         }
     }
 
+    /**
+     * Delete a sandbox
+     * @param context
+     * @param id the sandbox identifier
+     * @return code 200 if the operation is successful, code 304 if the sandbox does not exist or was not deleted.
+     */
     @DELETE
-    public void delete(@QueryParam("id") String id) {
+    public Response delete(@Context ServletContext context, @QueryParam("id") String id) {
+        String path = context.getRealPath(CACHE_DIR) + File.separator + id;
+        File f = new File(path);
+        if (!f.exists()) {
+            return Response.notModified().build();
+        } else {
+            if (!f.delete()) {
+                return Response.notModified().build();
+            }
+        }
+        return Response.ok().build();
+    }
 
+    /**
+     * List all the pinned sandboxes.
+     * @param context
+     * @return
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response list(@Context ServletContext context) {
+        File root = new File(context.getRealPath(CACHE_DIR));
+        JSONObject o = new JSONObject();
+        List<String> ids = new ArrayList<String>();
+        if (root.exists() && root.list() != null) {
+            for(String id : root.list()) {
+                ids.add(id);
+            }
+        }
+        try {
+            o.put("ids", ids);
+            return Response.ok(o.toString()).build();
+        } catch (JSONException e) {
+            System.err.println(e.getMessage());
+            return Response.serverError().build();
+        }
     }
 
     private String makeID(ServletContext ctx) {
@@ -79,11 +133,7 @@ public class Cache {
         if (!d.isDirectory()) {
             if (!d.mkdirs()) {
                 System.err.println("Unable to create the cache directory '" + d.getPath() + "'");
-            } else {
-                System.err.println("Cache '" + d.getPath() + "' created");
             }
-        } else {
-            System.err.println("Reusing '" + d.getPath() + "'");
         }
 
         long l = System.currentTimeMillis();
