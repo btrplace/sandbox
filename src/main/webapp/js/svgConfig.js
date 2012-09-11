@@ -409,6 +409,7 @@ function undoAction() {
 
 function commit() {
     document.getElementById('a' + animationStep).style.color="#666";
+    document.getElementById('a' + animationStep).style.fontWeight="normal";
     animationStep++;
     if (animationStep == scenario.actions.length) {
         document.getElementById("reconfigrationIsOver").style.display="block";
@@ -419,12 +420,14 @@ function commit() {
 function rollback() {
     animationStep--;
     document.getElementById('a' + animationStep).style.color="#bbb";
+    document.getElementById('a' + animationStep).style.fontWeight="normal";
     colorLines(animationStep);
     pending = false;
 }
 
 function begin(a){
     document.getElementById('a' + a).style.color="red";
+    document.getElementById('a' + a).style.fontWeight="bold";
     pending = true;
 }
 
@@ -553,7 +556,7 @@ function showScenario() {
     var id = document.getElementById("plan");
     var buf = "<ul>";
     for (var i in scenario.actions) {
-        buf += "<li style='color:#bbbd; font-family: monospace; font-size: 10pt;' id='a" + i + "'>" + rephrase(scenario.actions[i]) + "</li>";
+        buf += "<li style='color:#bbb; font-family: monospace; font-size: 10pt;' id='a" + i + "'>" + rephrase(scenario.actions[i]) + "</li>";
     }
     buf += "</ul>";
     id.innerHTML = buf;
