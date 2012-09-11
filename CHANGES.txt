@@ -1,7 +1,7 @@
 Release notes
 
 
-1.0rc2 - 11 sep. 2012
+1.0rc2 && 1.0rc3 - 11 sep. 2012
 -------------------------
 - Spell checking
 - minor visual improvements
