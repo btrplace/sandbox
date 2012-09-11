@@ -86,12 +86,15 @@ function serialize(nodes) {
 
 function unserialize(src) {
     nodes = [];
+    vms = [];
     for (var i in src) {
         s = src[i];
         var n = new Node(s.id, s.cpu, s.mem);
         for (var j in s.vms) {
             v = s.vms[j];
-            n.host(new VirtualMachine(v.id, v.cpu, v.mem));
+            vv = new VirtualMachine(v.id, v.cpu, v.mem);
+            n.host(vv);
+            vms.push(vv);
         }
         nodes.push(n);
     }
