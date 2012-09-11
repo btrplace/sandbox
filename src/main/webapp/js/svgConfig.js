@@ -296,7 +296,7 @@ function step(id) {
     }
     if (id == 0) {
         checkable(true);
-        //document.getElementById('pin').style.visibility="hidden";
+        document.getElementById('pin').style.visibility="hidden";
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
@@ -390,6 +390,7 @@ function undoAction() {
 
 function commit() {
     document.getElementById('a' + animationStep).style.color="#666";
+    document.getElementById('a' + animationStep).style.fontWeight="normal";
     animationStep++;
     if (animationStep == scenario.actions.length) {
         document.getElementById("reconfigrationIsOver").style.display="block";
@@ -400,12 +401,14 @@ function commit() {
 function rollback() {
     animationStep--;
     document.getElementById('a' + animationStep).style.color="#bbb";
+    document.getElementById('a' + animationStep).style.fontWeight="normal";
     colorLines(animationStep);
     pending = false;
 }
 
 function begin(a){
     document.getElementById('a' + a).style.color="red";
+    document.getElementById('a' + a).style.fontWeight="bold";
     pending = true;
 }
 
