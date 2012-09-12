@@ -66,7 +66,7 @@
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>btrpsl</artifactId>
-            <version>0.103</version>
+            <version>0.104</version>
         </dependency>
     </dependencies>
 
@@ -93,4 +93,12 @@
         <finalName>sandbox</finalName>
     </build>
 
+    <repositories>
+        <!-- local repository for dependencies not available on central repositories -->
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repository</url>
+        </repository>
+    </repositories>
 </project>
