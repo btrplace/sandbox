@@ -18,6 +18,7 @@ function init() {
 
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
+    document.getElementById('pin_button').style.visibility="hidden";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
