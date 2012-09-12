@@ -1,4 +1,5 @@
 //Check for an id
+
 function init() {
     var o = parseUri(location.href);
     if (o.queryKey.id) {
@@ -10,20 +11,27 @@ function init() {
     }
 }
 
+	            $().ready(function() {
+                  $('#pinBox').jqm();
+                });
+
+
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
 	            var l = this.getResponseHeader("Location");
-	            TINY.box.show({animate:true,boxid:'modal', close:false,opacity:60, html:'The sandbox has been pinned to the following address:<br><code>' + l + '</code>',width:300,height:50});
-                document.location.href=l;
+                document.getElementById('pinURL').innerHTML = l;
+                document.getElementById('goToPin').href = l;
+                $('#pinBox').jqmShow();
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }
 	    }
     });
 }
+
 
 function loadExperiment(id) {
         var http = createXhrObject();
@@ -39,12 +47,6 @@ function loadExperiment(id) {
     	            document.getElementById('constraints').value = experiment.script;
     	            drawConfiguration('canvas');
     	            step(1);
-
-    	            //Switch the pin to unpin
-    	            /*var p = document.getElementById('pin');
-    	            p.src="img/unpin.png";
-                    p.onclick="unpin();";
-                    p.title="Un-pin the sandbox";*/
     	        } else {
     	            console.log("ERROR: " + this.status + ":\n" + this.responseText);
     	            step(0);

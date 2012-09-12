@@ -104,20 +104,20 @@
 
 .restart_button:hover {
     background-position: 0px -27px;
-
+    cursor: pointer;
 }
 
-.pin_button {
+#pin_button {
     position: relative;
     background-image:url('../img/pin2.png');
     background-repeat:no-repeat;
     background-position: 0px 0px;
     width: 132px;
     height: 27px;
-    float: right;
+    float: left;
 }
 
-.pin_button:hover {
+#pin_button:hover {
     background-position: 0px -26px;
 
 }
@@ -182,21 +182,18 @@ display : none;
     margin-left: 20px;
 }
 
-#pin {
-    float: right;
-    margin-top: 10px;
-    margin-right:20px;
-    height: 40px;
-    width: 40px;
-    visibility: hidden;
-}
-#pin:hover {
-cursor: pointer;
-}
-
-
-#modal code {
+#pinURL {
     border: solid #aaa 1px;
-    background: #eee;
+    background-color: white;
+    color: #666;
+    padding: 0px 5px 0px 5px;
+}
+
+#pinBox {
     text-align: center;
+}
+
+#pinBox p {
+    text-indent: 0px;
+    margin: 10px;
 }

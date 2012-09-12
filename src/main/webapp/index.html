@@ -17,7 +17,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>BtrPlace constraint catalog sandbox</title>
     <script type="text/javascript" src="js/common.js"></script>
@@ -28,10 +28,10 @@
     <script type="text/javascript" src="js/console.js"></script>
     <script type="text/javascript" src="js/analytics.js"></script>
     <script type="text/javascript" src="js/pin.js"></script>
-    <script type="text/javascript" src="js/tinybox.js"></script>
+    <script type="text/javascript" src="js/jqModal.js"></script>
     <link rel="stylesheet" href="css/common.css" type="text/css"/>
     <link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
-    <link rel="stylesheet" href="css/tinybox.css" type="text/css"/>
+    <link rel="stylesheet" href="css/jqModal.css" type="text/css"/>
     <link rel="stylesheet" href="css/jquery-linedtextarea.css" type="text/css"/>
     <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
     <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
@@ -40,7 +40,6 @@
 </head>
 <body onload="init()">
 <div id="content">
-    <img id="pin" src="img/pin.png" title="Pin the sandbox" onClick="pinSandbox();">
     <h1>Constraint catalog sandbox</h1>
 
     <div id="sandbox">
@@ -119,7 +118,7 @@
             </div>
         </div>
         <div id="restart">
-            <div class="pin_button" onclick="pinSandbox();" style="disabled: disabled;"></div>
+            <div id="pin_button" onclick="pinSandbox();" style="visibility: hidden;"></div>
             <div class="restart_button" onclick="step(0);"></div>
         </div>
         <div id="footer">
@@ -128,6 +127,10 @@
         </div>
 
     </div>
+</div>
+<div id="pinBox" class="jqmWindow">
+      <p>This sandbox is locked. It can be accessed at the following address:</p>
+      <a id="goToPin" href="#"><code id="pinURL"></code></a>
 </div>
 </body>
 </html>

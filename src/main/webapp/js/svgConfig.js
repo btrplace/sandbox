@@ -294,9 +294,18 @@ function step(id) {
         if (id != i) {document.getElementById("state" + i).style.display="none";}
         else {document.getElementById("state" + i).style.display="block";}
     }
+            var o = parseUri(location.href);
+
+
     if (id == 0) {
+
+        //If the URL indicates we are in the sandbox,
+        //restart indicates we go to the root URL
+        if (o.queryKey.id) {
+            document.location.href=location.origin + location.pathname;
+        }
         checkable(true);
-        document.getElementById('pin').style.visibility="hidden";
+        document.getElementById('pin_button').style.visibility="hidden";
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
@@ -306,7 +315,10 @@ function step(id) {
 	    drawConfiguration('canvas');
 	    generateSampleScript(document.getElementById('constraints'));
     } else if (id == 1) {
-        document.getElementById('pin').style.visibility="visible";
+        //Don't show the pin button when the sandbox is already pinned
+        if (!o.queryKey.id) {
+            document.getElementById('pin_button').style.visibility="visible";
+        }
         document.getElementById("reconfigrationIsOver").style.display="none";
         document.getElementById('constraints').disabled=true;
         showScenario();
