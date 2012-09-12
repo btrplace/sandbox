@@ -113,7 +113,6 @@ public class BtrPlace {
         for (Node node : cfg.getAllNodes()) {
             s = s.replaceAll(node.getName(), "@" + node.getName());
         }
-        System.out.println(n.toString());
         return s;
     }
 
@@ -156,7 +155,6 @@ public class BtrPlace {
                     nb++;
                 } catch (Exception e) {
                     for (String m : e.getMessage().split("\n")) {
-                        System.err.println("---" + m);
                         errors.add(simplifyErrorMessage(src, m));
                     }
                 }
@@ -257,7 +255,6 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        System.out.println("Yop: " + o.toString());
         return o;
     }
 
