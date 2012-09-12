@@ -549,7 +549,7 @@ function showScenario() {
     var id = document.getElementById("plan");
     var buf = "<ul>";
     for (var i in scenario.actions) {
-        buf += "<li style='color:#bbbd; font-family: monospace; font-size: 10pt;' id='a" + i + "'>" + rephrase(scenario.actions[i]) + "</li>";
+        buf += "<li style='color:#bbb; font-family: monospace; font-size: 10pt;' id='a" + i + "'>" + rephrase(scenario.actions[i]) + "</li>";
     }
     buf += "</ul>";
     id.innerHTML = buf;
