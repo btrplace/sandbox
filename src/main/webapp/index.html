@@ -33,6 +33,7 @@
     <script src="js/analytics.js" type="text/javascript"></script>
     <script src="js/pin.js" type="text/javascript"></script>
     <script src="js/jqModal.js" type="text/javascript"></script>
+    <script src="js/player.js" type="text/javascript"></script>
     <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
     <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
     <meta name="author" content="Fabien Hermenier"/>
@@ -72,23 +73,26 @@
 
                     <div class="check_button" onclick="check('constraints');"></div>
                     <br/>
-
                     <div id="available_constraints"></div>
-                    <div id="lookRight"></div>
                 </div>
                 <div class="state" id="state1">
                     <p>
                         The constraints in red are not satisfied but
                         Btrplace found doing the following actions makes the placement viable. Use
-                        the buttons to navigate through the reconfiguration.
+                        the player to navigate through the reconfiguration.
                     </p>
 
                     <div id="scenario">
-                        <div id="navigation">
-                            <div class="nav_button" id="prev" onclick="prev();"></div>
-                            <div class="nav_button" id="next" onclick="next();"></div>
-                        </div>
                         <div id="plan"></div>
+                        <div id="player">
+                            <div class="player_button" id="begin_button" onclick="reset()"></div>
+                            <div class="player_button" id="prev_button" onclick="prev()"></div>
+                            <div class="player_button" id="play_button" onclick="playOrPause();"></div>
+                            <div class="player_button" id="next_button" onclick="next()"></div>
+                            <div class="player_button" id="end_button" onclick="directEnd()"></div>
+                            <br>
+                        </div>
+
                     </div>
                     <p id="reconfigrationIsOver" style="display:none;">Now every constraints are satisfied !</p>
                 </div>

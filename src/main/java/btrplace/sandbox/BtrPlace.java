@@ -67,11 +67,6 @@ import java.util.regex.Pattern;
 @Path("/inspect")
 public class BtrPlace {
 
-    @Context
-    UriInfo uriInfo;
-    @Context
-    Request request;
-
     private DurationEvaluator durEv;
 
     private ConstraintsCatalog catalog;

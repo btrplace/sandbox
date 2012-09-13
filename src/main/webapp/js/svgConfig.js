@@ -88,6 +88,16 @@ function Node(name, cpu, mem) {
 	this.vms.push(vm); 
     }
 
+    this.unhost = function(vm) {
+        for (var i in this.vms) {
+            if (this.vms[i].id == vm.id) {
+                this.vms[i].box.remove();
+                this.vms.splice(i, 1);
+                break;
+            }
+        }
+    }
+
     this.fit = function(vm) {
 	var freeCPU = this.cpu - vm.cpu;
 	var freeMem = this.mem - vm.mem;
@@ -265,29 +275,6 @@ function toPlainTextConfiguration() {
     return buffer;
 }
 
-//Go to the previous move in a reconfiguration
-function prev() {
-    if (pending) {
-        return false;
-    }
-        if (animationStep != 0) {
-            undoAction();
-        }
-        return true;
-}
-
-//Go to the next move of the reconfiguration
-function next() {
-    if (pending) {
-        return false;
-    }
-    if (animationStep < scenario.actions.length) {
-        doAction();
-    }
-    return true;
-}
-
-
 function step(id) {
 
     for (var i = 0; i < 5; i++) {
@@ -374,119 +361,6 @@ function output(id) {
 
 var spaceSplitter = /\s/g;
 
-function doAction() {
-    //console.log("do '" + scenario.actions[animationStep] + "'");
-    begin(animationStep);
-    var arr = scenario.actions[animationStep].split(spaceSplitter);
-    if (arr[1] == "M") {
-        migrate(animationStep, getVM(arr[2]),getNode(arr[3]),getNode(arr[4]), commit);
-    } else if (arr[1] == "H") {
-        halt(animationStep, getNode(arr[2]), commit);
-    } else if (arr[1] == "S") {
-        boot(animationStep, getNode(arr[2]), commit);
-    }
-}
-
-function undoAction() {
-    //console.log("undo '" + scenario.actions[animationStep - 1] + "'");
-    begin(animationStep - 1);
-    var arr = scenario.actions[animationStep - 1].split(spaceSplitter);
-        if (arr[1] == "M") {
-            migrate(animationStep - 1, getVM(arr[2]),getNode(arr[4]),getNode(arr[3]),rollback);
-        } else if (arr[1] == "S") {
-            halt(animationStep - 1, getNode(arr[2]),rollback);
-        } else if (arr[1] == "H") {
-            boot(animationStep - 1, getNode(arr[2]),rollback);
-        }
-}
-
-function commit() {
-    document.getElementById('a' + animationStep).style.color="#666";
-    document.getElementById('a' + animationStep).style.fontWeight="normal";
-    animationStep++;
-    if (animationStep == scenario.actions.length) {
-        document.getElementById("reconfigrationIsOver").style.display="block";
-    }
-    colorLines(animationStep);
-    pending = false;
-}
-function rollback() {
-    animationStep--;
-    document.getElementById('a' + animationStep).style.color="#bbb";
-    document.getElementById('a' + animationStep).style.fontWeight="normal";
-    colorLines(animationStep);
-    pending = false;
-}
-
-function begin(a){
-    document.getElementById('a' + a).style.color="red";
-    document.getElementById('a' + a).style.fontWeight="bold";
-    pending = true;
-}
-
-function migrate(a, vm, src, dst, f) {
-
-    //The dark gray VM stay on the source VM vm
-
-    //A light gray VM is posted on the destination
-    var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
-    ghostDst.bgColor = "#eee";
-    ghostDst.strokeColor = "#ddd";
-    // remove the moving light gray and the source dark gray
-    dst.host(ghostDst);
-    dst.refresh();
-
-
-        //a light gray VM will move from the source to the destination
-        var movingVM = new VirtualMachine(vm.id, vm.cpu, vm.mem);
-        movingVM.bgColor = "#eee";
-        movingVM.strokeColor = "#ddd";
-        movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
-        movingVM.box.toFront();
-        movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, 300 * vm.mem,"<>",
-        function() {
-
-            //The source VM goes away
-            for (var i in src.vms) {
-                if (src.vms[i].id == vm.id) {
-                    src.vms[i].box.remove();
-                    src.vms.splice(i, 1);
-                    break;
-                }
-            }
-
-            // the dst light gray VM into dark gray
-            ghostDst.box.remove();
-            dst.vms.length--;    //remove ghostDst
-            vm.posX = ghostDst.posX;
-            vm.posY = ghostDst.posY;
-            dst.host(vm);
-            src.refresh();
-            dst.refresh();
-            f(a);
-        }
-        );
-}
-
-function boot(a, node, f) {
-    node.boxStroke.animate({'stroke': 'black'}, 500,"<>", function()
-    {
-    f(a);
-    node.online = true;
-    }
-    );
-    node.boxFill.animate({'fill': 'black'}, 500,"<>", function() {});
-}
-
-function halt(a, node, f) {
-    node.boxStroke.animate({'stroke': '#bbb'}, 500,"<>", function()
-    {
-    f(a);
-    node.online = false;
-    }
-    );
-    node.boxFill.animate({'fill': '#bbb'}, 500,"<>", function() {});
-}
 
 function getNode(id) {
     for (var i in nodes) {
