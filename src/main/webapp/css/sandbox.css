@@ -158,14 +158,6 @@ textarea {
     background: lightyellow;
 }
 
-#step2 {
-display: none;
-}
-
-#step3 {
-display : none;
-}
-
 #scenario li {
     text-align: left;
     margin-left: 80px;

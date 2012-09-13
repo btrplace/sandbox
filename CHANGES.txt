@@ -1,5 +1,9 @@
 Release notes
 
+1.2-SNAPSHOT
+-------------------------
+- a 'pin' feature to save a sandbox
+
 1.0rc4 && 1.0rc5 - 12 sep. 2012
 -------------------------
 - Update dependencies

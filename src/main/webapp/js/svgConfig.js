@@ -458,8 +458,6 @@ function migrate(a, vm, src, dst, f) {
             // the dst light gray VM into dark gray
             ghostDst.box.remove();
             dst.vms.length--;    //remove ghostDst
-            //movingVM.bgColor="#bbb";
-            //movingVM.strokeColor="black";
             vm.posX = ghostDst.posX;
             vm.posY = ghostDst.posY;
             dst.host(vm);
@@ -568,11 +566,11 @@ function rephrase(a) {
 
 function showSyntaxErrors() {
     var e = document.getElementById("syntax_error");
-    var b = "<ul >";
+    var b = "<ul>";
+        for (var i in scenario.errors) {
+            b += "<li>" + scenario.errors[i] + "</li>";
+        }
     b += "</ul>";
-    for (var i in scenario.errors) {
-        b += "<li>" + scenario.errors[i] + "</li>";
-    }
     e.innerHTML = b;
 }
 
