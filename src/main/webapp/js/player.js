@@ -4,9 +4,9 @@ var currentTime = 0;
 
 //Play the reconfiguration or pause it
 function playOrPause() {
-    playing = !playing;
     if (playing) {document.getElementById("play_button").style.backgroundPositionX="-40px";}
     else {document.getElementById("play_button").style.backgroundPositionX="-60px";}
+    playing = !playing;
 }
 
 //Move back to the source configuration
@@ -64,6 +64,8 @@ function commit() {
     animationStep++;
     if (animationStep == scenario.actions.length) {
         document.getElementById("reconfigrationIsOver").style.display="block";
+    } else {
+        document.getElementById("reconfigrationIsOver").style.display="hidden";
     }
     colorLines(animationStep);
     pending = false;
@@ -128,7 +130,7 @@ function migrate(a, vm, src, dst, f,fast) {
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
     movingVM.box.toFront();
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 100 : (300 * vm.mem),"<>",
+    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
         function() {
 
             //The source VM goes away
@@ -149,12 +151,12 @@ function migrate(a, vm, src, dst, f,fast) {
 
 //Animation for booting a node
 function boot(a, node, f, fast) {
-    node.boxStroke.animate({'stroke': 'black'}, fast ? 100 :500,"<>", function() {node.online = true;f(a);});
-    node.boxFill.animate({'fill': 'black'}, fast ? 100 : 500,"<>", function() {});
+    node.boxStroke.animate({'stroke': 'black'}, fast ? 50 :500,"<>", function() {node.online = true;f(a);});
+    node.boxFill.animate({'fill': 'black'}, fast ? 50 : 500,"<>", function() {});
 }
 
 //Animation for halting a node.
 function halt(a, node, f, fast) {
-    node.boxStroke.animate({'stroke': '#bbb'}, fast ? 100 : 500,"<>", function(){node.online = false;f(a);});
-    node.boxFill.animate({'fill': '#bbb'}, fast ? 100 : 500,"<>", function() {});
+    node.boxStroke.animate({'stroke': '#bbb'}, fast ? 50 : 500,"<>", function(){node.online = false;f(a);});
+    node.boxFill.animate({'fill': '#bbb'}, fast ? 50 : 500,"<>", function() {});
 }
