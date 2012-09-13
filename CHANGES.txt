@@ -1,6 +1,6 @@
 Release notes
 
-1.0rc4 - 12 sep. 2012
+1.0rc4 && 1.0rc5 - 12 sep. 2012
 -------------------------
 - Update dependencies
 - Addition of an internal repository for non available dependencies.

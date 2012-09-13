@@ -7,17 +7,23 @@
     <snapshot>
       <localCopy>true</localCopy>
     </snapshot>
-    <lastUpdated>20120912102622</lastUpdated>
+    <lastUpdated>20120912124304</lastUpdated>
     <snapshotVersions>
+      <snapshotVersion>
+        <classifier>distribution</classifier>
+        <extension>tar.gz</extension>
+        <value>2.1.3-fh-SNAPSHOT</value>
+        <updated>20120912124304</updated>
+      </snapshotVersion>
       <snapshotVersion>
         <extension>jar</extension>
         <value>2.1.3-fh-SNAPSHOT</value>
-        <updated>20120912102622</updated>
+        <updated>20120912124304</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
         <value>2.1.3-fh-SNAPSHOT</value>
-        <updated>20120912102622</updated>
+        <updated>20120912124304</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>

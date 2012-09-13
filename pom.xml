@@ -21,7 +21,6 @@
     <groupId>btrplace</groupId>
     <artifactId>sandbox</artifactId>
     <packaging>war</packaging>
-
     <version>1.1-SNAPSHOT</version>
     <name>Btrplace sandbox</name>
     <url>http://github.com/fhermeni/btrplace-sandbox</url>
@@ -67,7 +66,8 @@
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>btrpsl</artifactId>
-            <version>0.104</version>
+            <version>0.105</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
