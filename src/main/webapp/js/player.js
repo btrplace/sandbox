@@ -3,8 +3,8 @@ var playing = false;
 
 var currentTime = 0;
 
-//Unstoppable reconfiguration process that go fast
-var forced = false;
+//Go very fast
+var fast = false;
 
 //Play : non-stop reconfiguration until
  //it is paused (new click)
@@ -14,10 +14,10 @@ var forced = false;
 //Play the reconfiguration or pause it
 function playOrPause() {
 
-    if (!playing && !pending) { //run & reveals the pause button
+    if (!playing && !pending && animationStep < scenario.actions.length) { //run & reveals the pause button if not at the end
         playing = !playing;
         document.getElementById("play_button").style.backgroundPositionX="-40px";
-          if (animationStep < scenario.actions.length) {doAction(autoCommit);}
+        doAction(autoCommit);
     }
     else { //pause & reveals the play button
         playing = !playing;
@@ -28,9 +28,9 @@ function playOrPause() {
 //Move back to the source configuration
 function reset() {
     if (pending) {return false;}
-
+    playing = true;
     if (animationStep != 0) {
-        forced = true;
+        fast = true;
         undoAction(autoRollback);
     }
 
@@ -40,9 +40,9 @@ function reset() {
 //Go directly to the destination configuration
 function directEnd() {
     if (pending) {return false;}
-
+    playing = true;
     if (animationStep < scenario.actions.length) {
-        forced = true;
+        fast = true;
         doAction(autoCommit);
     }
 }
@@ -96,7 +96,6 @@ function commit() {
 
 //Commit the current action.
 function autoCommit() {
-    if (playing || forced) {
         document.getElementById('a' + animationStep).style.color="#666";
         document.getElementById('a' + animationStep).style.fontWeight="normal";
         animationStep++;
@@ -105,12 +104,11 @@ function autoCommit() {
         if (animationStep == scenario.actions.length) {
             document.getElementById("reconfigrationIsOver").style.display="block";
             document.getElementById("play_button").style.backgroundPositionX="-60px";
-            forced = false;
+            fast = false;
             playing = false;
-        } else if (playing || forced) {
+        } else if (playing) {
             doAction(autoCommit);
         }
-    }
 }
 
 //Cancel the current action.
@@ -129,10 +127,10 @@ function autoRollback() {
     document.getElementById('a' + animationStep).style.fontWeight="normal";
     colorLines(animationStep);
     pending = false;
-    if (animationStep > 0 && (playing || forced)) {
+    if (animationStep > 0 && playing) {
         undoAction(autoRollback);
     } else {
-        forced = false;
+        fast = false;
         playing = false;
         document.getElementById("play_button").style.backgroundPositionX="-60px";
     }
@@ -162,9 +160,8 @@ function migrate(a, vm, src, dst, f) {
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
     movingVM.box.toFront();
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, forced ? 50 : (300 * vm.mem),"<>",
+    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
         function() {
-
             //The source VM goes away
             src.unhost(vm);
 
@@ -183,12 +180,12 @@ function migrate(a, vm, src, dst, f) {
 
 //Animation for booting a node
 function boot(a, node, f) {
-    node.boxStroke.animate({'stroke': 'black'}, forced ? 50 :500,"<>", function() {node.online = true;f(a);});
-    node.boxFill.animate({'fill': 'black'}, forced ? 50 : 500,"<>", function() {});
+    node.boxStroke.animate({'stroke': 'black'}, fast ? 50 :500,"<>", function() {node.online = true;f(a);});
+    node.boxFill.animate({'fill': 'black'}, fast ? 50 : 500,"<>", function() {});
 }
 
 //Animation for halting a node.
 function halt(a, node, f) {
-    node.boxStroke.animate({'stroke': '#bbb'}, forced ? 50 : 500,"<>", function(){node.online = false;f(a);});
-    node.boxFill.animate({'fill': '#bbb'}, forced ? 50 : 500,"<>", function() {});
+    node.boxStroke.animate({'stroke': '#bbb'}, fast ? 50 : 500,"<>", function(){node.online = false;f(a);});
+    node.boxFill.animate({'fill': '#bbb'}, fast ? 50 : 500,"<>", function() {});
 }
