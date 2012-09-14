@@ -16,9 +16,9 @@ function playMode() {
 function pauseMode() {
     playing = false;
     document.getElementById("play_button").style.backgroundPositionX="-60px";
+    fast = false;
 }
 function playOrPause() {
-
     if (!playing && !pending && animationStep < scenario.actions.length) { //run & reveals the pause button if not at the end
         playMode();
         doAction(autoCommit);
@@ -43,8 +43,8 @@ function reset() {
 //Go directly to the destination configuration
 function directEnd() {
     if (pending) {return false;}
-    playMode();
     if (animationStep < scenario.actions.length) {
+        playMode();
         fast = true;
         doAction(autoCommit);
     }

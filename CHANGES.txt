@@ -1,8 +1,10 @@
 Release notes
 
-1.2-SNAPSHOT
+1.1-SNAPSHOT
 -------------------------
-- a 'pin' feature to save a sandbox
+- a 'pin' feature to lock then save a sandbox
+- a player to navigate through the reconfiguration process
+- bug fixes
 
 1.0rc4 && 1.0rc5 - 12 sep. 2012
 -------------------------
