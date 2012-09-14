@@ -12,23 +12,31 @@ var fast = false;
  //rew go to previous action and put into pause
 
 //Play the reconfiguration or pause it
+
+function playMode() {
+    playing = true;
+    document.getElementById("play_button").style.backgroundPositionX="-40px";
+}
+
+function pauseMode() {
+    playing = false;
+    document.getElementById("play_button").style.backgroundPositionX="-60px";
+}
 function playOrPause() {
 
     if (!playing && !pending && animationStep < scenario.actions.length) { //run & reveals the pause button if not at the end
-        playing = !playing;
-        document.getElementById("play_button").style.backgroundPositionX="-40px";
+        playMode();
         doAction(autoCommit);
     }
     else { //pause & reveals the play button
-        playing = !playing;
-        document.getElementById("play_button").style.backgroundPositionX="-60px";
+        pauseMode();
     }
 }
 
 //Move back to the source configuration
 function reset() {
     if (pending) {return false;}
-    playing = true;
+    playMode();
     if (animationStep != 0) {
         fast = true;
         undoAction(autoRollback);
@@ -40,7 +48,7 @@ function reset() {
 //Go directly to the destination configuration
 function directEnd() {
     if (pending) {return false;}
-    playing = true;
+    playMode();
     if (animationStep < scenario.actions.length) {
         fast = true;
         doAction(autoCommit);
@@ -50,14 +58,20 @@ function directEnd() {
 //Go to the previous move in a reconfiguration
 function prev() {
     if (pending) {return false;}
-    if (animationStep != 0) {playing = false; undoAction(rollback);}
+    if (animationStep != 0) {
+        pauseMode();
+        undoAction(rollback);
+    }
     return true;
 }
 
 //Go to the next move of the reconfiguration
 function next() {
     if (pending) {return false;}
-    if (animationStep < scenario.actions.length) {playing = false; doAction(commit);}
+    if (animationStep < scenario.actions.length) {
+        pauseMode();
+        doAction(commit);
+    }
     return true;
 }
 
@@ -105,7 +119,7 @@ function autoCommit() {
             document.getElementById("reconfigrationIsOver").style.display="block";
             document.getElementById("play_button").style.backgroundPositionX="-60px";
             fast = false;
-            playing = false;
+            pauseMode();
         } else if (playing) {
             doAction(autoCommit);
         }
@@ -130,9 +144,8 @@ function autoRollback() {
     if (animationStep > 0 && playing) {
         undoAction(autoRollback);
     } else {
+        pauseMode();
         fast = false;
-        playing = false;
-        document.getElementById("play_button").style.backgroundPositionX="-60px";
     }
 }
 
