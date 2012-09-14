@@ -6,11 +6,6 @@ var currentTime = 0;
 //Go very fast
 var fast = false;
 
-//Play : non-stop reconfiguration until
- //it is paused (new click)
- //ffwd go to next action and put into pause
- //rew go to previous action and put into pause
-
 //Play the reconfiguration or pause it
 
 function playMode() {
