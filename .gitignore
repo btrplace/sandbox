@@ -2,3 +2,4 @@
 *.iml
 *.iws
 target
+src/main/webapp/cache
