@@ -89,14 +89,14 @@
 
 
     <build>
-        <finalName>${project.artifactId}-${project.groupId}-${project.version}</finalName>
+        <finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <path>${project.artifactId}-${project.groupId}-${project.version}</path>
+                    <path>${project.groupId}-${project.artifactId}-${project.version}</path>
                 </configuration>
             </plugin>
             <plugin>
