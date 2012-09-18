@@ -42,26 +42,19 @@
     </description>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>1.13</version>
+            <version>1.14</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version>1.13</version>
+            <version>1.14</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
-            <version>1.13</version>
+            <version>1.14</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>
@@ -72,8 +65,8 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>compile</scope>
+            <version>3.0-alpha-1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -96,11 +89,13 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <path>${project.groupId}-${project.artifactId}-${project.version}</path>
+                    <path>/</path>
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -109,7 +104,7 @@
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>downloads-maven-plugin</artifactId>
-                <version>0.5</version>
+                <version>0.6</version>
                 <configuration>
                     <description>Release ${project.version} of ${project.artifactId}-${project.groupId}</description>
                     <override>true</override>

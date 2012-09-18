@@ -12,18 +12,28 @@ it is stated as not viable.
 Installation Notes
 -------------------------------
 
-The build process is managed by [maven] (http://maven.apache.org). Once installed:
+The build process is managed by [maven] (http://maven.apache.org). Once installed, just type
 
     $ mvn install
 
-The war file will be located in the `target` directory. It should be deployable
-out of the box.
+to resolve the dependencies, compile and package the sandbox.
+The resulting war file will be located in the `target` directory and should be deployable
+on a servlet server.
+
+To test the sandbox without having to use an existing servlet server, just type
+
+    $ mvn tomcat7:run
+
+to deploy the war inside an embedded tomcat server.
+The webapp will then be available at [localhost:8080] (http://localhost:8080).
 
 Release notes
 -------------------------------
 
 ### 19 sep. 2012 - 1.2 ###
-- Deployment of the binaries on github
+- binaries are directly available on github
+- bug fixes
+- update dependencies
 
 ### 18 sep. 2012 - 1.1 ###
 - a 'pin' feature to lock then save a sandbox
@@ -31,15 +41,15 @@ Release notes
 - bug fixes
 
 ### 12 sep. 2012 - 1.0rc4 && 1.0rc5 ###
-- Update dependencies
-- Addition of an internal repository for non available dependencies.
+- update dependencies
+- addition of an internal repository for non available dependencies.
 
 ### 11 sep. 2012 - 1.0rc2 && 1.0rc3 ###
-- Spell checking
+- spell checking
 - minor visual improvements
 
 ### 9 sep. 2012 - 1.0rc1 ###
-- Initial release
+- initial release
 
 Copyright
 -------------------------------

@@ -46,6 +46,7 @@ import entropy.vjob.builder.VJobElementBuilder;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -75,14 +76,13 @@ public class BtrPlace {
 
     private DefaultPlatformFactory ptpls;
 
-
     private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
 
-    public BtrPlace() {
+    public BtrPlace(@Context ServletContext context) {
         try {
-            PropertiesHelper p = new PropertiesHelper(this.getClass().getClassLoader().getResourceAsStream("../../config/durations.properties"));
+            PropertiesHelper p = new PropertiesHelper(context.getRealPath("config/durations.properties"));
             durEv = FastDurationEvaluatorFactory.readFromProperties(p);
-            PropertiesHelper p2 = new PropertiesHelper(this.getClass().getClassLoader().getResourceAsStream("../../config/catalog.properties"));
+            PropertiesHelper p2 = new PropertiesHelper(context.getRealPath("config/catalog.properties"));
             catalog = new ConstraintsCatalogBuilderFromProperties(p2).build();
         } catch (Exception e) {
             e.printStackTrace();
