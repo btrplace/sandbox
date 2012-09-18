@@ -4,7 +4,7 @@ Btrplace Sandbox
 This web application allows to simply test the behavior of BtrPlace.
 It first generate a sample configuration. The user can then write
 some placement constraints and check BtrPlace fix the configuration when
-it is stated as notviable.
+it is stated as not viable.
 
 - author: Fabien Hermenier
 - contact: fabien.hermenier@gmail.com
@@ -21,6 +21,9 @@ out of the box.
 
 Release notes
 -------------------------------
+
+### 19 sep. 2012 - 1.2 ###
+- Deployment of the binaries on github
 
 ### 18 sep. 2012 - 1.1 ###
 - a 'pin' feature to lock then save a sandbox
