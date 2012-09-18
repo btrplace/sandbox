@@ -89,14 +89,14 @@
 
 
     <build>
-        <finalName>sandbox</finalName>
+        <finalName>${project.artifactId}-${project.groupId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <path>/sandbox</path>
+                    <path>${project.artifactId}-${project.groupId}-${project.version}</path>
                 </configuration>
             </plugin>
             <plugin>
@@ -111,7 +111,7 @@
                 <artifactId>downloads-maven-plugin</artifactId>
                 <version>0.5</version>
                 <configuration>
-                    <description>${project.version} release of ${project.name}</description>
+                    <description>${project.version} release of ${project.artifactId}-${project.groupId}</description>
                     <override>true</override>
                     <includeAttached>true</includeAttached>
                 </configuration>
