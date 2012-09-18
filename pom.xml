@@ -89,10 +89,15 @@
 
 
     <build>
+        <finalName>sandbox</finalName>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0</version>
+                <configuration>
+                    <path>/sandbox</path>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -110,17 +115,8 @@
                     <override>true</override>
                     <includeAttached>true</includeAttached>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>deploy</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
-        <finalName>btrplace-sandbox-${project.version}</finalName>
     </build>
 
     <repositories>

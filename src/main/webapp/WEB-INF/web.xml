@@ -24,7 +24,7 @@
 <web-app>
     <display-name>Btrplace sandbox</display-name>
     <servlet>
-        <servlet-name>Sandbox</servlet-name>
+        <servlet-name>btrplace-sandbox</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
@@ -41,7 +41,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Sandbox</servlet-name>
+        <servlet-name>btrplace-sandbox</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     <welcome-file-lists>
