@@ -111,7 +111,7 @@
                 <artifactId>downloads-maven-plugin</artifactId>
                 <version>0.5</version>
                 <configuration>
-                    <description>${project.version} release of ${project.artifactId}-${project.groupId}</description>
+                    <description>Release ${project.version} of ${project.artifactId}-${project.groupId}</description>
                     <override>true</override>
                     <includeAttached>true</includeAttached>
                 </configuration>
