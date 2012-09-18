@@ -30,7 +30,8 @@
   <updated>2012-09-18</updated>
 	<link href="http://btrp.inria.fr/sandbox"/>
 	<summary>Two additional features and some bug fixes</summary>
-    <content>
+    <content type="html">
+        <div>
         <ul>
             <li>"Pinning" a sandbox allows to save it remotely to re-use it later. Once pinned, it is not possible to change
                 the configuration nor the constraints.
@@ -38,6 +39,7 @@
             <li>A better player to observe the reconfiguration process nicely</li>
             <li>Bug fixes</li>
         </ul>
+        </div>
     </content>
 </entry>
     <entry>
