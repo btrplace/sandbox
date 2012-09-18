@@ -292,7 +292,6 @@ function step(id) {
             document.location.href=location.origin + location.pathname;
         }
         checkable(true);
-        document.getElementById('pin_button').style.visibility="hidden";
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
@@ -303,9 +302,8 @@ function step(id) {
 	    generateSampleScript(document.getElementById('constraints'));
     } else if (id == 1) {
         //Don't show the pin button when the sandbox is already pinned
-        if (!o.queryKey.id) {
-            document.getElementById('pin_button').style.visibility="visible";
-        }
+        if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
+        else {document.getElementById('pin_button').style.visibility="hidden";}
         document.getElementById("reconfigrationIsOver").style.display="none";
         document.getElementById('constraints').disabled=true;
         showScenario();

@@ -71,21 +71,6 @@
     cursor: pointer;
 }
 
-#pin_button {
-    position: relative;
-    background-image:url('../img/pin2.png');
-    background-repeat:no-repeat;
-    background-position: 0px 0px;
-    width: 132px;
-    height: 27px;
-    float: left;
-}
-
-#pin_button:hover {
-    background-position: 0px -26px;
-
-}
-
 #output {
     margin-bottom: 20px;
     width: 380px;
@@ -156,6 +141,10 @@ textarea {
 /**
 * Player part
 **/
+#player {
+    margin-left: 100px;
+}
+
 .player_button {
     width: 20px;
     height: 20px;
@@ -183,4 +172,26 @@ textarea {
 
 #end_button {
     background-position-x: -100px;
+}
+
+#pin_button {
+    background-position-x: -120px;
+    visibility: visible;
+}
+
+.player_button .tt {
+    display: none;
+    padding: 2px 3px;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 10pt;
+}
+
+.player_button:hover .tt {
+    display: inline;
+    position: absolute;
+    background: #ffffff;
+    border: solid #cccccc 1px;
+    color: #6c6c6c;
+
 }
