@@ -342,7 +342,7 @@ function checkable(b) {
 
 function insertCatalogContent() {
     var buf = "Supported constraints: ";
-    var cstrs = ["spread", "gather", "root", "lonely", "split", "root", "among", "quarantine", "ban", "fence"];
+    var cstrs = ["spread", "gather", "root", "lonely", "split", "root", "among", "quarantine", "ban", "fence","online","offline"];
     for (var i in cstrs) {
         buf += "<a href='http://www-sop.inria.fr/members/Fabien.Hermenier/btrpcc/" + cstrs[i] + ".html' target='_blank'>"+cstrs[i]+"</a>";
         if ( i < cstrs.length - 1) {

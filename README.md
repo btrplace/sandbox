@@ -34,6 +34,7 @@ Release notes
 - binaries are directly available on github
 - bug fixes
 - update dependencies
+- support for the 'online' and the 'offline' constraints
 
 ### 18 sep. 2012 - 1.1 ###
 - a 'pin' feature to lock then save a sandbox
