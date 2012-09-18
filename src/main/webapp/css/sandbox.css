@@ -151,6 +151,7 @@ textarea {
     background-image: url('../img/player.png');
     float: left;
     margin-left: 5px;
+    margin-top: 20px;
 }
 
 .player_button:hover {

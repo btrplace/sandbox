@@ -25,7 +25,7 @@ function pinSandbox() {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
-                $('#pinBox').jqmShow();
+                $('#pinBox').jqmShow({modal:true});
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }

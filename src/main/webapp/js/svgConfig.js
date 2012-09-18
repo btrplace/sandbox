@@ -304,7 +304,6 @@ function step(id) {
         //Don't show the pin button when the sandbox is already pinned
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
         else {document.getElementById('pin_button').style.visibility="hidden";}
-        document.getElementById("reconfigrationIsOver").style.display="none";
         document.getElementById('constraints').disabled=true;
         showScenario();
         document.getElementById('constraints').readonly="readonly";

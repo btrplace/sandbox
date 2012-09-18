@@ -94,11 +94,6 @@ function commit() {
     document.getElementById('a' + animationStep).style.color="#666";
     document.getElementById('a' + animationStep).style.fontWeight="normal";
     animationStep++;
-    if (animationStep == scenario.actions.length) {
-        document.getElementById("reconfigrationIsOver").style.display="block";
-    } else {
-        document.getElementById("reconfigrationIsOver").style.display="hidden";
-    }
     colorLines(animationStep);
     pending = false;
 }
@@ -111,7 +106,6 @@ function autoCommit() {
         colorLines(animationStep);
         pending = false;
         if (animationStep == scenario.actions.length) {
-            document.getElementById("reconfigrationIsOver").style.display="block";
             document.getElementById("play_button").style.backgroundPositionX="-60px";
             fast = false;
             pauseMode();
