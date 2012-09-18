@@ -83,6 +83,11 @@
         <developerConnection>scm:git:git@github.com:fhermeni/btrplace-sandbox.git</developerConnection>
     </scm>
 
+    <properties>
+        <github.global.server>github</github.global.server>
+    </properties>
+
+
     <build>
         <plugins>
             <plugin>
@@ -96,8 +101,26 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>downloads-maven-plugin</artifactId>
+                <version>0.5</version>
+                <configuration>
+                    <description>${project.version} release of ${project.name}</description>
+                    <override>true</override>
+                    <includeAttached>true</includeAttached>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <finalName>sandbox</finalName>
+        <finalName>btrplace-sandbox-${project.version}</finalName>
     </build>
 
     <repositories>
