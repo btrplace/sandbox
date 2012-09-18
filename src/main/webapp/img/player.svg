@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1146.1304"
-   height="327.00006"
+   width="1147.9944"
+   height="327.00269"
    id="svg4433"
    version="1.1"
    inkscape:version="0.48.2 r9819"
    sodipodi:docname="player.svg"
-   inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/nav.png"
+   inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/player.png"
    inkscape:export-xdpi="11.707308"
    inkscape:export-ydpi="11.707308">
   <defs
@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.82924908"
-     inkscape:cx="560.7528"
-     inkscape:cy="125.10577"
+     inkscape:cx="411.77283"
+     inkscape:cy="125.10839"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -59,7 +59,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,7 +67,7 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(521.59375,-492.87495)">
+     transform="translate(372.61378,-492.87495)">
     <g
        id="g4118"
        transform="translate(-13.150527,0)">
