@@ -22,7 +22,7 @@ out of the box.
 Release notes
 -------------------------------
 
-### 1.1 ###
+### 18 sep. 2012 - 1.1 ###
 - a 'pin' feature to lock then save a sandbox
 - a player to navigate through the reconfiguration process
 - bug fixes

@@ -20,14 +20,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 <title>The BtrPlace sandbox</title>
 <link href="http://btrp.inria.fr/sandbox"/>
-<updated>2012-09-20</updated>
+<updated>2012-09-18</updated>
 <author>
 	<name>Fabien Hermenier</name>
 	<email>fabien.hermenier@inria.fr</email>
 </author>
 <entry>
   <title>version 1.1 - Features updates:  Pining and playing</title>
-  <updated>2012-09-20</updated>
+  <updated>2012-09-18</updated>
 	<link href="http://btrp.inria.fr/sandbox"/>
 	<summary>Two additional features and some bug fixes</summary>
     <content>
