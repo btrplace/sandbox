@@ -288,9 +288,9 @@ function step(id) {
 
         //If the URL indicates we are in the sandbox,
         //restart indicates we go to the root URL
-        if (o.queryKey.id) {
+        /*if (o.queryKey.id) {
             document.location.href=location.origin + location.pathname;
-        }
+        } */
         checkable(true);
         document.getElementById('constraints').disabled=false;
         resetLines();

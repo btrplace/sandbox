@@ -180,6 +180,13 @@ textarea {
     visibility: visible;
 }
 
+.jqmWindow .logo {
+    width: 48px;
+    float: left;
+    margin: 10px;
+    text-align: center;
+}
+
 .player_button .tt {
     display: none;
     padding: 2px 3px;

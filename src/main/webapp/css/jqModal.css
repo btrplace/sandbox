@@ -14,10 +14,11 @@
     margin-left: -300px;
     width: auto;
     
-    background-color: #EEE;
+    background-color: #FFF;
     color: #333;
     border: 1px solid black;
-    padding: 12px;
+    padding: 10px;
+    text-align:center;
 }
 
 .jqmOverlay { background-color: #000; }

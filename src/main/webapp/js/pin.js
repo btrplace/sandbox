@@ -12,7 +12,8 @@ function init() {
 }
 
 	            $().ready(function() {
-                  $('#pinBox').jqm();
+                  $('#pinBox').jqm({modal:true});
+                  $('#unknownPinBox').jqm({modal:true});
                 });
 
 
@@ -25,7 +26,7 @@ function pinSandbox() {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
-                $('#pinBox').jqmShow({modal:true});
+                $('#pinBox').jqmShow();
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }
@@ -51,6 +52,7 @@ function loadExperiment(id) {
     	        } else {
     	            console.log("ERROR: " + this.status + ":\n" + this.responseText);
     	            step(0);
+    	            $('#unknownPinBox').jqmShow();
     	        }
     	    }
         }

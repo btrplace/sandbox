@@ -32,7 +32,7 @@ Release notes
 
 ### 19 sep. 2012 - 1.2 ###
 - binaries are directly available on github
-- bug fixes
+- bug fixes and UI improvements
 - update dependencies
 - support for the 'online' and the 'offline' constraints
 
