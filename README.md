@@ -9,6 +9,8 @@ it is stated as not viable.
 - author: Fabien Hermenier
 - contact: fabien.hermenier@gmail.com
 
+The last release of the sandbox is always deployed and usable on [this server] (http://btrp.inria.fr/sandbox).
+
 Installation Notes
 -------------------------------
 
