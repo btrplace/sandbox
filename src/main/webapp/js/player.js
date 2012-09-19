@@ -30,7 +30,7 @@ function playOrPause() {
 
 //Move back to the source configuration
 function reset() {
-    if (pending) {return false;}
+    if (pending || animationStep == 0) {return false;}
     playMode();
     if (animationStep != 0) {
         fast = true;

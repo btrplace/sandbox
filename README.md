@@ -30,6 +30,9 @@ The webapp will then be available at [localhost:8080] (http://localhost:8080).
 Release notes
 -------------------------------
 
+### ?? - 1.3-SNAPSHOT ###
+- bug fixes
+
 ### 19 sep. 2012 - 1.2 ###
 - binaries are directly available on github
 - bug fixes and UI improvements
