@@ -16,7 +16,6 @@ function init() {
                   $('#unknownPinBox').jqm({modal:true});
                 });
 
-
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
     document.getElementById('pin_button').style.visibility="hidden";

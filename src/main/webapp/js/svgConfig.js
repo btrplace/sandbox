@@ -21,6 +21,11 @@ var animationStep;
 //Indicate an action is in progress
 var pending = false;
 
+function Configuration () {
+    this.vms = [];
+    this.nodes = [];
+}
+
 function Node(name, cpu, mem) {
     this.id = name;
     this.cpu = cpu;
@@ -147,9 +152,11 @@ function VirtualMachine(id, cpu, mem) {
  
 }
 
-    var nodes = [];
-    var vms = [];
-
+var nodes = [];
+var vms = [];
+var config = new Configuration();
+config.nodes = nodes;
+config.vms = vms;
 
 function generateConfiguration(id) {
 

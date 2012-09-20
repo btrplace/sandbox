@@ -31,8 +31,8 @@
 #input {
     width: 380px;
     margin-top: 20px;
-    float: right;
-    background: lightyellow;
+    float: left;
+    //background: lightyellow;
     margin-bottom: 20px;
 }
 
@@ -74,7 +74,7 @@
 #output {
     margin-bottom: 20px;
     width: 380px;
-    float: left;
+    float: right;
 }
 
 #footer {
@@ -201,5 +201,4 @@ textarea {
     background: #ffffff;
     border: solid #cccccc 1px;
     color: #6c6c6c;
-
 }
