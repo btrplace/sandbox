@@ -101,8 +101,7 @@ textarea {
     width: 100%;
     resize: none;
     font-size: 10pt;
-    outline: none;
-    background: lightyellow;
+    border: solid 1px #999;
 }
 
 #scenario li {

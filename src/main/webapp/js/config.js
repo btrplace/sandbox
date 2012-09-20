@@ -27,7 +27,10 @@ function parseConfiguration(buffer) {
     var ids = new Object();
     var config = new Configuration();
     for (var i in lines) {
-        var cnt = lines[i].split("\s");
+        if (lines[i].length == 0 || lines[i].indexOf("//") == 0) {
+        continue;
+        }
+        var cnt = lines[i].split(" ");
         var id = cnt[0];
         if (id.charAt(id.length - 1) == ":") { //This is an assignment
             var nodeId;
@@ -51,19 +54,31 @@ function parseConfiguration(buffer) {
                         var vm = new VirtualMachine(tok, ids[tok][0], ids[tok][1]);
                         if (n.fit(vm)) {
                             n.host(vm);
+                            config.vms.push(vm);
                         } else {
-                            //Error, the VM is too big;
+                            console.log("Ignoring VM " + vm.id);
                         }
                     }
                 }
+                config.nodes.push(n);
             }
         } else { //Declaration
             //TODO: Check the number of parameters
+            if (cnt.length != 3) {
+                return null;
+            }
             ids[cnt[0]] = [cnt[1], cnt[2]];
         }
     }
+    return config;
 }
 
+function dumpOld(nodes, vms) {
+    var cfg = new Configuration();
+    cfg.nodes = nodes;
+    cfg.vms = vms;
+    return dumpConfiguration(cfg);
+}
 function dumpConfiguration(cfg) {
     var buffer ="";
     for (var i in cfg.nodes) {
@@ -128,6 +143,12 @@ function randomConfiguration() {
     }
     return config;
 }
-
-$('#tab-container').easytabs({animate: false});
-document.getElementById("configuration").value = dumpConfiguration(randomConfiguration());
+function updateConfiguration(buf) {
+    var cfg = parseConfiguration(buf);
+    console.log(cfg);
+    if (cfg) {
+        nodes = cfg.nodes;
+        vms = cfg.vms;
+        drawConfiguration('canvas');
+    }
+}

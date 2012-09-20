@@ -9,12 +9,22 @@ function init() {
         console.log("New sandbox");
         step(0);
     }
+
+    	            $().ready(function() {
+                      $('#pinBox').jqm({modal:true});
+                      $('#unknownPinBox').jqm({modal:true});
+                    });
+
+$('#tab-container').easytabs({animate: false});
+document.getElementById("configuration").value = dumpOld(nodes, vms);
+
+document.getElementById("configuration").onkeyup = function(e){
+    updateConfiguration(document.getElementById("configuration").value);
+  return true;
+ }
+
 }
 
-	            $().ready(function() {
-                  $('#pinBox').jqm({modal:true});
-                  $('#unknownPinBox').jqm({modal:true});
-                });
 
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};

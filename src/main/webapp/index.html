@@ -68,18 +68,20 @@
                 <li class="tab"><a href="#config">Configuration</a></li>
                 <li class="tab"><a href="#foo">Script</a></li>
             </ul>
-            <div id="foo" class="tab-content">
+            <div class="panel-container">
+            <div id="foo">
                 <textarea id="constraints" class="lined" placeholder="insert constraints here...  " rows="8" cols="40"></textarea>
             </div>
-            <div id="config" class="tab-content">
-                <textarea id="configuration" class="lined" placeholder="write the configuration here..  " rows="8" cols="40"></textarea>
+            <div id="config">
+                <textarea id="configuration" onkeyup="updateConfiguration();" class="lined" placeholder="write the configuration here..." rows="8" cols="40"></textarea>
+            </div>
             </div>
         </div>
         <div id="script">
             <div id="output">
                 <div class="state" id="state0">
-                    <p>Customize the script on the right then let BtrPlace
-                        inspect it to check for the constraints' viability.
+                    <p>Customize the constraints on the left or the configuration
+                        then let BtrPlace inspect it to check for the placement viability.
                     </p>
 
                     <div class="check_button" onclick="check('constraints');"></div>
