@@ -249,8 +249,6 @@ function drawConfiguration(id) {
             }
         }
     }
-
-    console.log("dim= " + width + " x " + height);
     //draw it
     if (paper != undefined) {
 	    paper.remove();

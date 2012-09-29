@@ -97,13 +97,6 @@ code {
     text-align: left;
 }
 
-textarea {
-    width: 100%;
-    resize: none;
-    font-size: 10pt;
-    border: solid 1px #999;
-}
-
 #scenario li {
     text-align: left;
     margin-left: 80px;

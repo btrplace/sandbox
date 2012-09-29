@@ -5,7 +5,7 @@
 
 
 function randomConfiguration() {
-    var buf = "#The nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
+    var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
     buf += "N7,N8 = {cpu:6,mem:6}\n";
 
     var config = new Configuration();
@@ -39,7 +39,7 @@ function randomConfiguration() {
 
     }
     //VMs declaration
-    buf += "\n#Virtual Machines:\n";
+    buf += "\n# Virtual Machines:\n";
     for (var i in picked) {
         if (picked.hasOwnProperty(i)) {
             var vms = picked[i];
@@ -49,7 +49,7 @@ function randomConfiguration() {
         }
     }
     //Set idle node offline
-    buf += "\n#Assignment:\n";
+    buf += "\n# Assignment:\n";
     for (var i in config.nodes) {
 	    var n = config.nodes[i];
 	    if (n.vms.length == 0) {
@@ -64,7 +64,6 @@ function randomConfiguration() {
 
 function updateConfiguration(buf) {
     var cfg = parseConfiguration(buf);
-    console.log(cfg);
     if (cfg.nodes.length > 0) {
         config = cfg;
         drawConfiguration('canvas');
