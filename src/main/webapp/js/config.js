@@ -3,75 +3,6 @@
   @author Fabien Hermenier
 */
 
-/**
-* Script format
-VM1 5 5
-VM2 6 7
-VM3 1 1
-VM4 1 1
-VM5 2 2
-N1 10 10
-N2 10 10
-N3 10 10
-N4 10 10
-N5 8 8
-N6 8 8
-N6 8 8
-N1: VM1 VM2 VM4
-N2: VM4 VM5
-(N3)
-*/
-
-function parseConfiguration(buffer) {
-    var lines = buffer.split("\n");
-    var ids = new Object();
-    var config = new Configuration();
-    for (var i in lines) {
-        if (lines[i].length == 0 || lines[i].indexOf("//") == 0) {
-        continue;
-        }
-        var cnt = lines[i].split(" ");
-        var id = cnt[0];
-        if (id.charAt(id.length - 1) == ":") { //This is an assignment
-            var nodeId;
-            var online = true;
-            if (id[0] == "(") { //Offline node
-                nodeId = id.slice(1,-2);
-                online = false;
-            } else {
-                nodeId = id.slice(0, -1);
-            }
-            if (ids[nodeId] != null) {
-                console.log(nodeId);
-                var n = new Node(nodeId,ids[nodeId][0], ids[nodeId][1]);
-                n.online = online;
-
-                //Now the assignment
-                for (var j in cnt) {
-                    var tok = cnt[j];
-                    if (ids[tok]) {
-                        //Create if the object does not already exists
-                        var vm = new VirtualMachine(tok, ids[tok][0], ids[tok][1]);
-                        if (n.fit(vm)) {
-                            n.host(vm);
-                            config.vms.push(vm);
-                        } else {
-                            console.log("Ignoring VM " + vm.id);
-                        }
-                    }
-                }
-                config.nodes.push(n);
-            }
-        } else { //Declaration
-            //TODO: Check the number of parameters
-            if (cnt.length != 3) {
-                return null;
-            }
-            ids[cnt[0]] = [cnt[1], cnt[2]];
-        }
-    }
-    return config;
-}
 
 function dumpOld(nodes, vms) {
     var cfg = new Configuration();
@@ -230,18 +161,13 @@ function makeOrCompleteElement(id, config, cnt) {
   N2 = {offline}
 */
 function parseConfiguration2(b) {
-    //Remove space characters
+
     var lines = b.split("\n");
-    //console.log(lines);
     var elements = new Object();
     var config = new Configuration();
     for (var i in lines) {
-        //console.log("Line: '" + lines[i] + "'");
-        lines[i] = lines[i].replace(/\s/g, "");
-        //Skip blank lines and single line comments
-        if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {
-        continue;
-        }
+        lines[i] = lines[i].replace(/\s/g, ""); //Remove space characters
+        if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {continue;} //Skip blank lines and single line comments
 
         var toks = lines[i].split("=");
         if (toks.length == 2) {
@@ -255,19 +181,20 @@ function parseConfiguration2(b) {
             for (var j in ids) {
                 //Declare an element
                 makeOrCompleteElement(ids[j], config, json);
-
-                if (json.vms) { //This is a online node
-                    var n = typeElement(ids[j], config.nodes, elements, function(x, e) {
-                        return new Node(x, e.cpu, e.mem);
-                    });
-
+                if (json.vms && json.vms.length > 0) { //This is a online node
+                    var n = config.getNode(ids[0]);
+                    console.log("Place the vms " + json.vms);
                     //Now, the VMs
-                    for (var k in json.vms) {
-                        var vmId = json.vms[k];
-                        var vm = typeElement(vmId, config.vms, elements, function(x, e) {
-                            var vm = new VirtualMachine(vmId, elements[vmId].cpu, elements[vmId].mem);
+                    vms = json.vms.split(",");
+                    for (var k in vms) {
+                        var vmId = vms[k];
+                        var vm = config.getVirtualMachine(vmId);
+                        if (!vm) {
+                            console.log("Unknown virtual machine '" + vmId + "'");
+                        } else {
+                            console.log("Place '" + vm.id + "' on '" + n.id +"'");
                             n.host(vm);
-                        });
+                        }
 
                     }
                 }

@@ -24,6 +24,22 @@ var pending = false;
 function Configuration (ns,vs) {
     this.vms = vs ? vs : [];
     this.nodes = ns ? ns : [];
+
+    this.getNode = function (id) {
+        for (var i in this.nodes) {
+            if (this.nodes[i].id == id) {
+                return this.nodes[i];
+            }
+        }
+    }
+
+    this.getVirtualMachine = function (id) {
+        for (var i in this.vms) {
+            if (this.vms[i].id == id) {
+                return this.vms[i];
+            }
+        }
+    }
 }
 
 function Node(name, cpu, mem) {
@@ -135,8 +151,8 @@ function VirtualMachine(id, cpu, mem) {
 	    this.rect.attr({'fill' : this.bgColor, 'stroke' : this.strokeColor});
 	    this.box.push(this.rect);
 	    //Identifier
-	    var t = canvas.text(x + (cpu * unit_size) / 2, y - ( mem * unit_size) / 2, this.id).attr({'font-size':'12pt'});
-	    if (cpu == 1) {
+	    var t = canvas.text(x + (this.cpu * unit_size) / 2, y - ( this.mem * unit_size) / 2, this.id).attr({'font-size':'12pt'});
+	    if (this.cpu == 1) {
 	        t.rotate(-90);
 	    }
 	    this.box.push(t);
@@ -148,7 +164,7 @@ function VirtualMachine(id, cpu, mem) {
     }
 
     this.boundingBox = function() {
-	    return [cpu * unit_size, mem * unit_size];
+	    return [this.cpu * unit_size, this.mem * unit_size];
     }
  
 }
@@ -246,7 +262,8 @@ function drawConfiguration(id) {
     }
     paper = Raphael(id, width, height)
     for (var i in config.nodes) {
-        config.nodes[i].draw(paper,config.nodes[i].posX,config.nodes[i] .posY);
+        var n = config.nodes[i];
+        n.draw(paper,n.posX,n.posY);
     }
 }
 
@@ -316,11 +333,6 @@ function step(id) {
 
     if (id == 0) {
 
-        //If the URL indicates we are in the sandbox,
-        //restart indicates we go to the root URL
-        /*if (o.queryKey.id) {
-            document.location.href=location.origin + location.pathname;
-        } */
         checkable(true);
         document.getElementById('constraints').disabled=false;
         resetLines();
