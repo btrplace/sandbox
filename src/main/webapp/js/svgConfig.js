@@ -198,7 +198,7 @@ function generateConfiguration(id) {
 function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
-    var height = 500;
+    var height = 0;
 
     //Up to 4 nodes side by side
     var max_width = 800;
@@ -213,12 +213,20 @@ function drawConfiguration(id) {
         var n = config.nodes[i];
         var dim = n.boundingBox();
 
-        n.posY = 0;
+        if (dim[1] > max_height) { max_height = dim[1];}
+        n.posY = height;
         if (cur_width + dim[0] > max_width) {
-                console.log("New line starting with " + n.id);
-                console.log("previous line width was " + cur_width);
+            height += max_height;
+            //console.log("New line starting with " + n.id);
+            //console.log("previous line width was " + cur_width);
             if (width < cur_width) {width = cur_width};
+            cur_width = dim[0];
             n.posX = 0;
+            n.posY = height;
+            if (i == config.nodes.length - 1) {
+                console.log("Check height for last element " + n.id);
+                height += max_height;
+            }
         } else {
             n.posX = cur_width;
             console.log(n.id + " stay on the current line x=" + n.posX);
@@ -226,15 +234,16 @@ function drawConfiguration(id) {
             if (i == config.nodes.length - 1) {
                 console.log("Check width for last element " + n.id);
                 if (width < cur_width) {width = cur_width};
+                height += max_height;
             }
         }
     }
 
+    console.log("dim= " + width + " x " + height);
     //draw it
     if (paper != undefined) {
-	paper.remove();
+	    paper.remove();
     }
-    console.log("dim= " + width + " x " + height);
     paper = Raphael(id, width, height)
     for (var i in config.nodes) {
         config.nodes[i].draw(paper,config.nodes[i].posX,config.nodes[i] .posY);
