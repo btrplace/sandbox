@@ -33,10 +33,11 @@ function Node(name, cpu, mem) {
     this.online = true;
     this.vms = [];
     this.boundingBox = function () {
-	    return [2 * border + unit_size * cpu, 2 * border + unit_size * mem];
+	    return [2 * border + unit_size * this.cpu, 2 * border + unit_size * this.mem];
     };
 
     this.draw = function (canvas, x, y) {
+        console.log("Draw " + this.id + " at " + x+ ":" + y);
 	    this.posX = x;
 	    this.posY = y;
         this.boxStroke = canvas.set();
@@ -157,7 +158,7 @@ var config = new Configuration();
 
 function generateConfiguration(id) {
 
-    //Generate the 8 nodes
+    //Generate th
 
     config.nodes = [];
     config.vms = [];
@@ -197,34 +198,46 @@ function generateConfiguration(id) {
 function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
-    var height = 0;
+    var height = 500;
+
+    //Up to 4 nodes side by side
+    var max_width = 800;
+
+    var cur_width = 0; //width of the current line
+    var max_height = 0; //maximum height of the node on the current line
+    //How many nodes per line, how many lines
+
+    var posX = 0;
+    var posY = 0;
     for (var i in config.nodes) {
-	var n = config.nodes[i];
-	if (i < 4) {
-	    width += n.boundingBox()[0];
-	} 
+        var n = config.nodes[i];
+        var dim = n.boundingBox();
+
+        n.posY = 0;
+        if (cur_width + dim[0] > max_width) {
+                console.log("New line starting with " + n.id);
+                console.log("previous line width was " + cur_width);
+            if (width < cur_width) {width = cur_width};
+            n.posX = 0;
+        } else {
+            n.posX = cur_width;
+            console.log(n.id + " stay on the current line x=" + n.posX);
+            cur_width += dim[0];
+            if (i == config.nodes.length - 1) {
+                console.log("Check width for last element " + n.id);
+                if (width < cur_width) {width = cur_width};
+            }
+        }
     }
-    height = config.nodes[0].boundingBox()[1] * 2;
 
     //draw it
     if (paper != undefined) {
 	paper.remove();
     }
+    console.log("dim= " + width + " x " + height);
     paper = Raphael(id, width, height)
-    var posX = 0;
-    var posY = 0;
-    var nb = 0;
-    for (var i = 0; i < 2; i++) {
-	    posX = 0;
-	    for (var j = 0; j < 4; j++) {
-            if (nb >= config.nodes.length) {
-                break;
-            }
-	        n = config.nodes[nb++];
-	        n.draw(paper,posX,posY);
-	        posX += n.boundingBox()[0];
-	    }
-	    posY += n.boundingBox()[1];
+    for (var i in config.nodes) {
+        config.nodes[i].draw(paper,config.nodes[i].posX,config.nodes[i] .posY);
     }
 }
 
