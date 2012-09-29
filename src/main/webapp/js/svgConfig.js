@@ -40,6 +40,34 @@ function Configuration (ns,vs) {
             }
         }
     }
+
+    this.btrpSerialization = function() {
+        var buffer = "#list of nodes\n";
+        for (var i in this.nodes) {
+    	    var  n = this.nodes[i];
+    	    buffer = buffer + n.id + " 1 " + n.cpu + " " + n.mem + "\n";
+        }
+        buffer = buffer + "#list of VMs\n";
+        for (var  i in this.vms) {
+    	var vm = this.vms[i];
+    	buffer = buffer + "sandbox."+vm.id + " 1 " + vm.cpu + " " + vm.mem + "\n";
+        }
+        buffer += "#initial configuration\n";
+        for (var i in this.nodes) {
+    	var n = this.nodes[i];
+    	if (n.online) {
+    	    buffer += n.id;
+    	} else {
+    	    buffer = buffer + "(" + n.id + ")";
+    	}
+    	for (var j in n.vms) {
+    	    var vm = n.vms[j];
+    	    buffer = buffer + " sandbox." + vm.id;
+    	}
+    	buffer += "\n";
+        }
+        return buffer;
+    }
 }
 
 function Node(name, cpu, mem) {
@@ -237,10 +265,10 @@ function drawConfiguration(id) {
 
 function check(id) {
     var script = document.getElementById(id).value;
-    var config = toPlainTextConfiguration();
+    var cfg = config.btrpSerialization();
     var http = createXhrObject();
 
-    postToAPI("inspect","cfg="+encodeURI(config)+"&script="+encodeURI(script),
+    postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
     function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	        scenario = JSON.parse(this.responseText);
@@ -261,34 +289,6 @@ function check(id) {
 }
 
 
-function toPlainTextConfiguration() {
-    var buffer = "#list of nodes\n";
-    for (var i in nodes) {
-	    var  n = nodes[i];
-	    buffer = buffer + n.id + " 1 " + n.cpu + " " + n.mem + "\n";
-    }
-    buffer = buffer + "#list of VMs\n";
-    for (var  i in vms) {
-	var vm = vms[i];
-	buffer = buffer + "sandbox."+vm.id + " 1 " + vm.cpu + " " + vm.mem + "\n";
-    }
-    buffer += "#initial configuration\n";
-    for (var i in nodes) {
-	var n = nodes[i];
-	if (n.online) {
-	    buffer += n.id;
-	} else {
-	    buffer = buffer + "(" + n.id + ")";
-	}
-	for (var j in n.vms) {
-	    var vm = n.vms[j];
-	    buffer = buffer + " sandbox." + vm.id;
-	}
-	buffer += "\n";
-    }
-    return buffer;
-}
-
 function step(id) {
 
     for (var i = 0; i < 5; i++) {
@@ -307,7 +307,7 @@ function step(id) {
         var cfg = randomConfiguration();
         document.getElementById("configuration").value = cfg;
         updateConfiguration(cfg);
-	    generateSampleScript(document.getElementById('constraints'));
+	    generateSampleScript(config, document.getElementById('constraints'));
     } else if (id == 1) {
         //Don't show the pin button when the sandbox is already pinned
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
@@ -367,28 +367,10 @@ function output(id) {
 var spaceSplitter = /\s/g;
 
 
-function getNode(id) {
-    for (var i in nodes) {
-        if (nodes[i].id == id) {
-            return nodes[i];
-        }
-    }
-    return undefined;
-}
-
-function getVM(id) {
-    for (var i in vms) {
-        if (vms[i].id == id) {
-            return vms[i];
-        }
-    }
-    return undefined;
-}
-
-function generateSampleScript(id) {
+function generateSampleScript(cfg, id) {
     var buf = "";
-    for (var i in config.nodes) {
-        var n = config.nodes[i];
+    for (var i in cfg.nodes) {
+        var n = cfg.nodes[i];
         if (n.vms.length >= 2) {
             buf += "spread({" + n.vms[0].id + ", " + n.vms[1].id + "});\n";
             break;
@@ -398,10 +380,10 @@ function generateSampleScript(id) {
     buf += "ban({";
     var nb = 3;
     var i = 5;
-    for (i; i < config.vms.length; i++) {
-        if (config.vms[i].posX) {
+    for (i; i < cfg.vms.length; i++) {
+        if (cfg.vms[i].posX) {
             nb--;
-            buf += config.vms[i].id;
+            buf += cfg.vms[i].id;
             if (nb > 0) {
                 buf += ",";
             }
@@ -416,8 +398,8 @@ function generateSampleScript(id) {
     buf += "offline(N8);\n";
 
     //Root for the fun
-    if (config.nodes[4].vms.length > 0) {
-        buf += "root({" + config.nodes[4].vms[0].id + "});\n";
+    if (cfg.nodes[4].vms.length > 0) {
+        buf += "root({" + cfg.nodes[4].vms[0].id + "});\n";
     }
     id.value = buf;
 }

@@ -75,18 +75,18 @@ function doAction(f) {
     //console.log("do '" + scenario.actions[animationStep] + "'");
     begin(animationStep);
     var arr = scenario.actions[animationStep].split(spaceSplitter);
-    if (arr[1] == "M") {migrate(animationStep, getVM(arr[2]),getNode(arr[3]),getNode(arr[4]), f);}
-    else if (arr[1] == "H") {halt(animationStep, getNode(arr[2]), f);}
-    else if (arr[1] == "S") {boot(animationStep, getNode(arr[2]), f);}
+    if (arr[1] == "M") {migrate(animationStep, config.getVirtualMachine(arr[2]),config.getNode(arr[3]),config.getNode(arr[4]), f);}
+    else if (arr[1] == "H") {halt(animationStep, config.getNode(arr[2]), f);}
+    else if (arr[1] == "S") {boot(animationStep, config.getNode(arr[2]), f);}
 }
 
 //Undo the last committed action
 function undoAction(f) {
     begin(animationStep - 1);
     var arr = scenario.actions[animationStep - 1].split(spaceSplitter);
-    if (arr[1] == "M") {migrate(animationStep - 1, getVM(arr[2]),getNode(arr[4]),getNode(arr[3]), f);}
-    else if (arr[1] == "S") {halt(animationStep - 1, getNode(arr[2]),f);}
-    else if (arr[1] == "H") {boot(animationStep - 1, getNode(arr[2]),f);}
+    if (arr[1] == "M") {migrate(animationStep - 1, config.getVirtualMachine(arr[2]),config.getNode(arr[4]),config.getNode(arr[3]), f);}
+    else if (arr[1] == "S") {halt(animationStep - 1, config.getNode(arr[2]),f);}
+    else if (arr[1] == "H") {boot(animationStep - 1, config.getNode(arr[2]),f);}
 }
 
 //Commit the current action.
