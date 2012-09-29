@@ -53,7 +53,6 @@ function Node(name, cpu, mem) {
     };
 
     this.draw = function (canvas, x, y) {
-        console.log("Draw " + this.id + " at " + x+ ":" + y);
 	    this.posX = x;
 	    this.posY = y;
         this.boxStroke = canvas.set();
@@ -133,6 +132,13 @@ function Node(name, cpu, mem) {
 	return true;
     }
 
+    this.getVMsIds = function() {
+        var ids = [];
+        for (var v in this.vms) {
+            ids.push(this.vms[v].id);
+        }
+        return ids;
+    }
 }
 
 function VirtualMachine(id, cpu, mem) {
@@ -172,45 +178,6 @@ function VirtualMachine(id, cpu, mem) {
 
 var config = new Configuration();
 
-function generateConfiguration(id) {
-
-    //Generate th
-
-    config.nodes = [];
-    config.vms = [];
-    for (var i = 1; i <= 8; i++) {
-	var n;
-	if (i < 6) {
-	    n = new Node("N" + i, 8, 6);
-	} else {
-	    n = new Node("N" + i, 6, 6);
-	}
-	config.nodes.push(n);
-    }
-
-    //Templates
-    var tpls = [[1,2],[2,1],[2,2],[2,1],[3,2],[2,3]];
-    for (var i = 1; i <= 20; i++) {
-	var x = Math.floor(Math.random() * tpls.length);
-	var v = new VirtualMachine("VM" + i, tpls[x][0], tpls[x][1]);
-	config.vms.push(v);
-
-	//Placement
-	var nIdx = Math.floor(Math.random() * config.nodes.length);
-	if (config.nodes[nIdx].fit(v)) {
-	    config.nodes[nIdx].host(v);
-	}
-
-    }
-    //Set idle node offline
-    for (var i in config.nodes) {
-	    var n = config.nodes[i];
-	    if (n.vms.length == 0) {
-	        n.online = false;
-	    }
-    }
-}
-
 function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
@@ -240,15 +207,15 @@ function drawConfiguration(id) {
             n.posX = 0;
             n.posY = height;
             if (i == config.nodes.length - 1) {
-                console.log("Check height for last element " + n.id);
+                //console.log("Check height for last element " + n.id);
                 height += max_height;
             }
         } else {
             n.posX = cur_width;
-            console.log(n.id + " stay on the current line x=" + n.posX);
+            //console.log(n.id + " stay on the current line x=" + n.posX);
             cur_width += dim[0];
             if (i == config.nodes.length - 1) {
-                console.log("Check width for last element " + n.id);
+                //console.log("Check width for last element " + n.id);
                 if (width < cur_width) {width = cur_width};
                 height += max_height;
             }
@@ -328,19 +295,18 @@ function step(id) {
         if (id != i) {document.getElementById("state" + i).style.display="none";}
         else {document.getElementById("state" + i).style.display="block";}
     }
-            var o = parseUri(location.href);
-
+    var o = parseUri(location.href);
 
     if (id == 0) {
-
         checkable(true);
         document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
         scenario = undefined;
         pending = false;
-	    generateConfiguration();
-	    drawConfiguration('canvas');
+        var cfg = randomConfiguration();
+        document.getElementById("configuration").value = cfg;
+        updateConfiguration(cfg);
 	    generateSampleScript(document.getElementById('constraints'));
     } else if (id == 1) {
         //Don't show the pin button when the sandbox is already pinned

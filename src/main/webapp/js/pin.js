@@ -9,7 +9,9 @@ function init() {
         console.log("New sandbox");
         step(0);
     }
-    }
+
+    $('#tab-container').easytabs({animate:false});
+}
 
 function pinSandbox() {
     var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
