@@ -102,9 +102,9 @@ code {
     margin-left: 80px;
 }
 
-#available_constraints {
+.note {
     font-size: 10pt;
-    text-align: justify;
+    text-align: right;
     font-style: italic;
     clear: both;
 }
