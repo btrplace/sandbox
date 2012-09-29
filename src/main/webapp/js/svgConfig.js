@@ -21,9 +21,9 @@ var animationStep;
 //Indicate an action is in progress
 var pending = false;
 
-function Configuration () {
-    this.vms = [];
-    this.nodes = [];
+function Configuration (ns,vs) {
+    this.vms = vs ? vs : [];
+    this.nodes = ns ? ns : [];
 }
 
 function Node(name, cpu, mem) {
@@ -42,8 +42,8 @@ function Node(name, cpu, mem) {
         this.boxStroke = canvas.set();
         this.boxFill = canvas.set();
 	    this.canvas = canvas;
-	    var box_width = cpu * unit_size;
-	    var box_height = mem * unit_size;
+	    var box_width = this.cpu * unit_size;
+	    var box_height = this.mem * unit_size;
 	    var width = 2 * border + box_width;
 	    var height = 2 * border + box_height;
 	    var rc_bg = "#fff";
@@ -64,11 +64,11 @@ function Node(name, cpu, mem) {
 	    this.boxFill.push(canvas.text(x + border, y + border + box_height, name).attr({'text-anchor': 'end' ,'baseline-shift': '-2em','font-size' : '16pt', 'fill' : bgColor}));
 	
         //Resource grid
-	    for (var i = 1; i < cpu; i+=1) {
+	    for (var i = 1; i < this.cpu; i+=1) {
 	        var pos = border + i * unit_size;
 	        this.boxStroke.push(canvas.path("M " + (x + pos) + " " + (y + border) + " l " + " 0 " + " " + box_height).attr({'stroke-dasharray' : '--','stroke':bgColor}));
 	    }
-    	for (var i = 1; i < mem; i+=1) {
+    	for (var i = 1; i < this.mem; i+=1) {
 	        var pos = border + i * unit_size;
 	        this.boxStroke.push(canvas.path("M " + (x + border) + " " + (y + pos) + " l " + box_width + " 0").attr({'stroke-dasharray' : '--','stroke':bgColor}));
 	    }
@@ -152,17 +152,15 @@ function VirtualMachine(id, cpu, mem) {
  
 }
 
-var nodes = [];
-var vms = [];
+
 var config = new Configuration();
-config.nodes = nodes;
-config.vms = vms;
 
 function generateConfiguration(id) {
 
     //Generate the 8 nodes
-    nodes = [];
-    vms = [];
+
+    config.nodes = [];
+    config.vms = [];
     for (var i = 1; i <= 8; i++) {
 	var n;
 	if (i < 6) {
@@ -170,7 +168,7 @@ function generateConfiguration(id) {
 	} else {
 	    n = new Node("N" + i, 6, 6);
 	}
-	nodes.push(n);
+	config.nodes.push(n);
     }
 
     //Templates
@@ -178,18 +176,18 @@ function generateConfiguration(id) {
     for (var i = 1; i <= 20; i++) {
 	var x = Math.floor(Math.random() * tpls.length);
 	var v = new VirtualMachine("VM" + i, tpls[x][0], tpls[x][1]);
-	vms.push(v);
+	config.vms.push(v);
 
 	//Placement
-	var nIdx = Math.floor(Math.random() * nodes.length);
-	if (nodes[nIdx].fit(v)) {
-	    nodes[nIdx].host(v);
+	var nIdx = Math.floor(Math.random() * config.nodes.length);
+	if (config.nodes[nIdx].fit(v)) {
+	    config.nodes[nIdx].host(v);
 	}
 
     }
     //Set idle node offline
-    for (var i in nodes) {
-	    var n = nodes[i];
+    for (var i in config.nodes) {
+	    var n = config.nodes[i];
 	    if (n.vms.length == 0) {
 	        n.online = false;
 	    }
@@ -200,13 +198,13 @@ function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
     var height = 0;
-    for (var i in nodes) {
-	var n = nodes[i];
+    for (var i in config.nodes) {
+	var n = config.nodes[i];
 	if (i < 4) {
 	    width += n.boundingBox()[0];
 	} 
     }
-    height = nodes[0].boundingBox()[1] * 2;
+    height = config.nodes[0].boundingBox()[1] * 2;
 
     //draw it
     if (paper != undefined) {
@@ -217,13 +215,16 @@ function drawConfiguration(id) {
     var posY = 0;
     var nb = 0;
     for (var i = 0; i < 2; i++) {
-	posX = 0;
-	for (var j = 0; j < 4; j++) {
-	    n = nodes[nb++];
-	    n.draw(paper,posX,posY);
-	    posX += n.boundingBox()[0];
-	}
-	posY += n.boundingBox()[1];
+	    posX = 0;
+	    for (var j = 0; j < 4; j++) {
+            if (nb >= config.nodes.length) {
+                break;
+            }
+	        n = config.nodes[nb++];
+	        n.draw(paper,posX,posY);
+	        posX += n.boundingBox()[0];
+	    }
+	    posY += n.boundingBox()[1];
     }
 }
 
@@ -386,8 +387,8 @@ function getVM(id) {
 
 function generateSampleScript(id) {
     var buf = "";
-    for (var i in nodes) {
-        var n = nodes[i];
+    for (var i in config.nodes) {
+        var n = config.nodes[i];
         if (n.vms.length >= 2) {
             buf += "spread({" + n.vms[0].id + ", " + n.vms[1].id + "});\n";
             break;
@@ -397,10 +398,10 @@ function generateSampleScript(id) {
     buf += "ban({";
     var nb = 3;
     var i = 5;
-    for (i; i < vms.length; i++) {
-        if (vms[i].posX) {
+    for (i; i < config.vms.length; i++) {
+        if (config.vms[i].posX) {
             nb--;
-            buf += vms[i].id;
+            buf += config.vms[i].id;
             if (nb > 0) {
                 buf += ",";
             }
@@ -415,8 +416,8 @@ function generateSampleScript(id) {
     buf += "offline(N8);\n";
 
     //Root for the fun
-    if (nodes[4].vms.length > 0) {
-        buf += "root({" + nodes[4].vms[0].id + "});\n";
+    if (config.nodes[4].vms.length > 0) {
+        buf += "root({" + config.nodes[4].vms[0].id + "});\n";
     }
     id.value = buf;
 }

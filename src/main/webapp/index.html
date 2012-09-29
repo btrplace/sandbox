@@ -37,6 +37,7 @@
     <script src="js/player.js" type="text/javascript"></script>
     <script src="js/pin.js" type="text/javascript"></script>
     <script src="js/config.js" type="text/javascript"></script>
+    <script src="js/jquery.tablescroll.js" type="text/javascript"></script>
     <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
     <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
     <meta name="author" content="Fabien Hermenier"/>
@@ -73,7 +74,7 @@
                 <textarea id="constraints" class="lined" placeholder="insert constraints here...  " rows="8" cols="40"></textarea>
             </div>
             <div id="config">
-                <textarea id="configuration" onkeyup="updateConfiguration();" class="lined" placeholder="write the configuration here..." rows="8" cols="40"></textarea>
+                <textarea id="configuration" onkeyup="updateConfiguration(this.value);" class="lined" placeholder="write the configuration here..." rows="8" cols="40"></textarea>
             </div>
             </div>
         </div>

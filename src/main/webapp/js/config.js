@@ -144,11 +144,138 @@ function randomConfiguration() {
     return config;
 }
 function updateConfiguration(buf) {
-    var cfg = parseConfiguration(buf);
+    var cfg = parseConfiguration2(buf);
     console.log(cfg);
-    if (cfg) {
-        nodes = cfg.nodes;
-        vms = cfg.vms;
+    if (cfg.nodes.length > 0) {
+        config = cfg;
         drawConfiguration('canvas');
     }
+}
+
+function fillConfig(cfg) {
+  var table_obj = $('#tableNodes');
+  table_obj.append('<caption>Nodes</caption>');
+  table_obj.append('<thead><tr><td>ID</td><td>cpu</td><td>mem</td></tr></thead><tbody>');
+    $.each(cfg.nodes, function(v, n){
+         table_obj.append('<tr id="'+n.id+'"><td>'+n.id+'</td><td>' + n.cpu + "</td><td>" + n.mem + "</td></tr>");
+    });
+   table_obj.append("</tbody>");
+
+  var table_obj = $('#tableVMs');
+  table_obj.append('<caption>Virtual machines</caption>');
+  table_obj.append('<thead><tr><td>ID</td><td>cpu</td><td>mem</td></tr></thead><tbody>');
+  $.each(cfg.vms, function(v, n){
+    table_obj.append('<tr id="'+n.id+'"><td>'+n.id+'</td><td>' + n.cpu + "</td><td>" + n.mem + "</td></tr>");
+  });
+  table_obj.append("</tbody>");
+
+}
+
+function typeElement(id, known, elements, f) {
+    //Look for the element
+    for (var i in known) {
+        if (known.id == id) {
+            return known[i];
+        }
+    }
+    //The elem does not exists yet
+    if (!elements[id]) {
+        return null;
+    }
+    var e = f(id, elements[id]);
+    known.push(e);
+    return e;
+}
+
+function makeOrCompleteElement(id, config, cnt) {
+    if (id[0] == 'N') {
+        var n = new Node(id, 1, 1);
+        var b = true;
+        for (var i in config.nodes) {
+            if (config.nodes[i].id == id) {
+                n = config.nodes[i];
+                b = false;
+                break;
+            }
+        }
+        if (cnt.cpu) {n.cpu = cnt.cpu;}
+        if (cnt.mem) {n.mem = cnt.mem;}
+        if (cnt.online == 1 || cnt.online == 0) {n.online = cnt.online;}
+        if (b) {config.nodes.push(n);}
+    } else if (id[0] == 'V') {
+        var vm = new VirtualMachine(id, 1, 1);
+        var b = true;
+        for (var i in config.vms) {
+            if (config.vms[i].id == id) {
+                vm = config.vms[i];
+                b = false;
+                break;
+            }
+        }
+        if (cnt.cpu) {vm.cpu = cnt.cpu;}
+        if (cnt.mem) {vm.mem = cnt.mem;}
+        if (b) {config.vms.push(vm);}
+    } else {
+        console.log(id + " must be either a VM or a node");
+    }
+}
+
+
+/**
+ * Configuration format:
+  N1,N2,N3,N4,N5,N6,N7,N8 = { cpu:8, mem:6 };
+  VM1,VM2, VM3, VM4, ... = {cpu: X, mem:Y };
+
+  N1 = {vms: {VM1, VM2, VM3}}
+  N2 = {offline}
+*/
+function parseConfiguration2(b) {
+    //Remove space characters
+    var lines = b.split("\n");
+    //console.log(lines);
+    var elements = new Object();
+    var config = new Configuration();
+    for (var i in lines) {
+        //console.log("Line: '" + lines[i] + "'");
+        lines[i] = lines[i].replace(/\s/g, "");
+        //Skip blank lines and single line comments
+        if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {
+        continue;
+        }
+
+        var toks = lines[i].split("=");
+        if (toks.length == 2) {
+            //Get the identifiers
+            var ids = toks[0].split(",");
+
+            //Right parameter is a JSON structure
+            var json = JSON.parse(toks[1]);
+            console.log(json);
+
+            for (var j in ids) {
+                //Declare an element
+                makeOrCompleteElement(ids[j], config, json);
+
+                if (json.vms) { //This is a online node
+                    var n = typeElement(ids[j], config.nodes, elements, function(x, e) {
+                        return new Node(x, e.cpu, e.mem);
+                    });
+
+                    //Now, the VMs
+                    for (var k in json.vms) {
+                        var vmId = json.vms[k];
+                        var vm = typeElement(vmId, config.vms, elements, function(x, e) {
+                            var vm = new VirtualMachine(vmId, elements[vmId].cpu, elements[vmId].mem);
+                            n.host(vm);
+                        });
+
+                    }
+                }
+            }
+        } else {
+            console.log("Syntax error on line '" + lines[i] + "'. No '=' sign: " + toks.length);
+            return false;
+        }
+        }
+    return config;
 }
