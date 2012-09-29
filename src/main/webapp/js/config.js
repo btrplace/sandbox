@@ -5,8 +5,8 @@
 
 
 function randomConfiguration() {
-    var buf = "#The nodes:\nN1,N2,N3,N4,N5,N6 = {\"cpu\":8,\"mem\":6}\n";
-    buf += "N7,N8 = {\"cpu\":6,\"mem\":6}\n";
+    var buf = "#The nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
+    buf += "N7,N8 = {cpu:6,mem:6}\n";
 
     var config = new Configuration();
     //Generate the 8 nodes
@@ -44,7 +44,7 @@ function randomConfiguration() {
         if (picked.hasOwnProperty(i)) {
             var vms = picked[i];
             if (vms.length > 0) {
-                buf += vms.join() + " = {\"cpu\":" + tpls[i][0] + ",\"mem\":" + tpls[i][1] + "}\n";
+                buf += vms.join() + " = {cpu:" + tpls[i][0] + ",mem:" + tpls[i][1] + "}\n";
             }
         }
     }
@@ -53,9 +53,9 @@ function randomConfiguration() {
     for (var i in config.nodes) {
 	    var n = config.nodes[i];
 	    if (n.vms.length == 0) {
-	        buf += n.id + " = {\"online\": 0}\n";
+	        buf += n.id + " = {online: 0}\n";
 	    } else {
-	        buf += n.id + " = {\"vms\": \"" + n.getVMsIds().join(",")+"\"}\n";
+	        buf += n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}\n";
 	    }
     }
     return buf;
@@ -113,9 +113,12 @@ function makeOrCompleteElement(id, config, cnt) {
   N1 = {vms: {VM1, VM2, VM3}}
   N2 = {offline}
 */
+
 function parseConfiguration(b) {
 
     var lines = b.split("\n");
+    //Replace \w+: by "\w+": to make the content JSON compatible
+
     var elements = new Object();
     var config = new Configuration();
     for (var i in lines) {
@@ -128,7 +131,7 @@ function parseConfiguration(b) {
             var ids = toks[0].split(",");
 
             //Right parameter is a JSON structure
-            var json = JSON.parse(toks[1]);
+            var json = JSON.parse(toks[1].replace(/(\w+):/g,"\"$1\":"));
             //console.log(json);
 
             for (var j in ids) {
