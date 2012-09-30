@@ -32,6 +32,7 @@ Release notes
 
 ### ?? - 1.3-SNAPSHOT ###
 - bug fixes
+- the configuration can now be created manually
 
 ### 19 sep. 2012 - 1.2 ###
 - binaries are directly available on github

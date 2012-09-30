@@ -153,11 +153,11 @@ function Node(name, cpu, mem) {
 	for (var v  in this.vms) {
 	    freeCPU -= this.vms[v].cpu;
 	    freeMem -= this.vms[v].mem;
-	    if (freeCPU < 0 || freeMem < 0) {
-		    return false;
+	    if (freeMem < 0 || freeCPU < 0) {
+	        break;
 	    }
 	}
-	return true;
+	return freeMem > 0 && freeCPU > 0;
     }
 
     this.getVMsIds = function() {
@@ -354,7 +354,7 @@ function insertCatalogContent() {
             buf += ", ";
         }
     }
-    document.getElementById('available_constraints').innerHTML = buf + ".";
+    //document.getElementById('available_constraints').innerHTML = buf + ".";
 }
 
 function output(id) {
