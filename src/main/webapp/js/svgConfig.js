@@ -33,6 +33,14 @@ function Configuration (ns,vs) {
         }
     }
 
+    this.getHoster = function(id) {
+        for (var i in this.nodes) {
+            if (this.nodes[i].isHosting(id)) {
+                return this.nodes[i];
+            }
+        }
+    }
+
     this.getVirtualMachine = function (id) {
         for (var i in this.vms) {
             if (this.vms[i].id == id) {
@@ -147,17 +155,26 @@ function Node(name, cpu, mem) {
         }
     }
 
+    this.isHosting = function(id) {
+        for (var i in this.vms) {
+            if (this.vms[i].id == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     this.fit = function(vm) {
-	var freeCPU = this.cpu - vm.cpu;
-	var freeMem = this.mem - vm.mem;
-	for (var v  in this.vms) {
-	    freeCPU -= this.vms[v].cpu;
-	    freeMem -= this.vms[v].mem;
-	    if (freeMem < 0 || freeCPU < 0) {
-	        break;
+	    var freeCPU = this.cpu - vm.cpu;
+	    var freeMem = this.mem - vm.mem;
+	    for (var v  in this.vms) {
+	        freeCPU -= this.vms[v].cpu;
+	        freeMem -= this.vms[v].mem;
+	        if (freeMem < 0 || freeCPU < 0) {
+	            break;
+	        }
 	    }
-	}
-	return freeMem > 0 && freeCPU > 0;
+	    return freeMem > 0 && freeCPU > 0;
     }
 
     this.getVMsIds = function() {

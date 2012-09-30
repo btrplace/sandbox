@@ -168,11 +168,15 @@ function parseConfiguration(b) {
                                 errors.lines.push(i);
                                 errors.msgs.push("lines " + lineNumber + ": Unknown virtual machine '" + vmId + "'");
                             } else {
-                                if (n.fit(vm)) {
-                                    n.host(vm);
-                                } else {
+                                var x = config.getHoster(vm.id);
+                                if (x) {
+                                    errors.lines.push(i);
+                                    errors.msgs.push("lines " + lineNumber + ":  virtual machine '" + vmId + "' is already running on '" + x.id + "'");
+                                } else if (!n.fit(vm)) {
                                     errors.lines.push(i);
                                     errors.msgs.push("lines " + lineNumber + ": '" + vmId + "' cannot fit in '" + n.id + "'");
+                                } else {
+                                    n.host(vm);
                                 }
                             }
                         }
