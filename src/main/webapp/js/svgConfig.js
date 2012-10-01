@@ -279,7 +279,7 @@ function drawConfiguration(id) {
 
 
 function check(id) {
-    var script = document.getElementById(id).value;
+    var script = cstrsEditor.getValue();
     var cfg = config.btrpSerialization();
     var http = createXhrObject();
 
@@ -314,7 +314,6 @@ function step(id) {
 
     if (id == 0) {
         checkable(true);
-        resetLines();
         animationStep = 0;
         scenario = undefined;
         pending = false;
@@ -345,14 +344,17 @@ function step(id) {
 function colorLines(nb) {
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
+    console.log(stats);
     for (var j in stats) {
         var x = stats[j];
-        annotations.push({
-            row: x,
-            column: 0,
-            type: "error"
+        if (x < 0) {
+            annotations.push({
+                row: -1 * x,
+                column: 0,
+                type: "error",
+                text: "Unsatisfied constraint"
+            });
         }
-        );
     }
     configEditor.getSession().setAnnotations(annotations);
 
