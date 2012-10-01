@@ -2,22 +2,6 @@
   Javascript related to the edition of configuration
   @author Fabien Hermenier
 */
-
-
-/*var lined;
-$(function() {
-	lined = $("#configuration").linedtextareaNG({selectedLines : [1,2,4,8]});
-});*/
-
-/*$("#configuration").change(function() {
-     var comment_lines = $("#configuration").val().split('\n');
-     $("#line_numbers").html('');
-     for(i = 0; i < comment_lines.length; i++) {
-        $("#line_numbers").html($("#line_numbers").html() + (i+1) + "<br/>");
-     }
-   });
-*/
-
 function randomConfiguration() {
     var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
     buf += "N7,N8 = {cpu:6,mem:6}\n";
@@ -77,7 +61,6 @@ function randomConfiguration() {
 
 
 function updateConfiguration(buf) {
-    //console.log("Update the configuration with\n" + buf);
     var ret = parseConfiguration(buf);
     if (ret[0].nodes.length) {
         config = ret[0];
@@ -86,17 +69,9 @@ function updateConfiguration(buf) {
     highlightErrors(ret[1]);
 }
 
-var markers = [];
 function highlightErrors(errors) {
-    var Range = ace.require('ace/range').Range;
-
-    for (var i in markers) {
-        configEditor.getSession().removeMarker(markers[i]);
-    }
-    markers = [];
 
     var annotations = [];
-
     for (var i in errors) {
         annotations.push({
             row: errors[i][1] - 1,
@@ -108,6 +83,7 @@ function highlightErrors(errors) {
     }
     configEditor.getSession().setAnnotations(annotations);
 }
+
 function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
     if (id[0] == 'N') {
         var n = new Node(id, 1, 1);

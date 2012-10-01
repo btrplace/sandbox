@@ -343,15 +343,18 @@ function step(id) {
 }
 
 function colorLines(nb) {
-                var stats = JSON.parse(scenario.status[nb]);
-                for (var j in stats) {
-                    var nb = stats[j];
-                    if (nb < 0) {
-                        badLine(nb * -1);
-                    } else {
-                        validLine(nb);
-                    }
-                }
+    var stats = JSON.parse(scenario.status[nb]);
+    var annotations = [];
+    for (var j in stats) {
+        var x = stats[j];
+        annotations.push({
+            row: x,
+            column: 0,
+            type: "error"
+        }
+        );
+    }
+    configEditor.getSession().setAnnotations(annotations);
 
 }
 

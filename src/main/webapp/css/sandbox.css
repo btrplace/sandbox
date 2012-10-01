@@ -32,7 +32,6 @@
     width: 380px;
     margin-top: 20px;
     float: left;
-    //background: lightyellow;
     margin-bottom: 20px;
 }
 
@@ -87,8 +86,6 @@
 }
 
 #output p {
-    //width: 80%;
-    //margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
