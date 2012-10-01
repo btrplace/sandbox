@@ -20,11 +20,6 @@
  *
  */
 
-/*.linedwrap {
-	border: 1px solid #c0c0c0;
-	//padding: 3px;
-} */
-
 .linedtextarea {
 	padding: 0px;
 	margin: 0px;
@@ -64,9 +59,10 @@
 	padding-top: 0.0em;
 	text-align: right;
 	white-space: nowrap;
-	border-radius: 10px 0px 0px 10px;
 }
 
 .linedwrap .codelines .lineselect {
-	color: red;
+  background: red;
+  color: white;
+  border-radius: 5px 0 0 5px;
 }

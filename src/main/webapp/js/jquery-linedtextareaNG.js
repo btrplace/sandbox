@@ -1,36 +1,16 @@
 /**
- * jQuery Lined Textarea Plugin 
- *   http://alan.blog-city.com/jquerylinedtextarea.htm
- *
- * Copyright (c) 2010 Alan Williamson
- * 
- * Version: 
- *    $Id: jquery-linedtextarea.js 464 2010-01-08 10:36:33Z alan $
- *
- * Released under the MIT License:
- *    http://www.opensource.org/licenses/mit-license.php
- * 
- * Usage:
- *   Displays a line number count column to the left of the textarea
- *   
- *   Class up your textarea with a given class, or target it directly
- *   with JQuery Selectors
- *   
- *   $(".lined").linedtextarea({
- *   	selectedLine: 10,
- *    selectedClass: 'lineselect'
- *   });
- *
- * History:
- *   - 2010.01.08: Fixed a Google Chrome layout problem
- *   - 2010.01.07: Refactored code for speed/readability; Fixed horizontal sizing
- *   - 2010.01.06: Initial Release
- *
+ * Jquery-ui-linedtextarea
+ * @author: Fabien Hermenier
+ * A ui to insert line numbers before a textarea then provide method to highlight them.
  */
 
 (function($) {
 
-	$.fn.linedtextarea = function(options) {
+    $.fn.highlight = function(lineNos) {
+        console.log("Need to highlight lines " + lineNos);
+    };
+
+	$.fn.linedtextareaNG = function(options) {
 		
 		// Get the Options
 		var opts = $.extend({}, $.fn.linedtextarea.defaults, options);
@@ -42,7 +22,15 @@
 		 */
 		var fillOutLines = function(codeLines, h, lineNo){
 			while ( (codeLines.height() - h ) <= 0 ){
-				if ( opts.selectedLine == lineNo ) {
+			    var found = false;
+			    for (var i in opts.selectedLines) {
+			        if (lineNo == opts.selectedLines[i]) {
+			            found = true;
+			            break;
+			        }
+			    }
+				if (found ) {
+                    console.log("Highlight " + lineNo);
 					codeLines.append("<div class='lineno lineselect'>" + lineNo + "</div>");
 				} else {
 					codeLines.append("<div class='lineno'>" + lineNo + "</div>");
@@ -120,8 +108,8 @@
 	};
 
   // default options
-  $.fn.linedtextarea.defaults = {
-  	selectedLine: -1,
+  $.fn.linedtextareaNG.defaults = {
+  	selectedLines: [-1],
   	selectedClass: 'lineselect'
   };
 })(jQuery);

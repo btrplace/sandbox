@@ -314,15 +314,15 @@ function step(id) {
 
     if (id == 0) {
         checkable(true);
-        document.getElementById('constraints').disabled=false;
         resetLines();
         animationStep = 0;
         scenario = undefined;
         pending = false;
         var cfg = randomConfiguration();
-        document.getElementById("configuration").value = cfg;
         updateConfiguration(cfg);
-	    generateSampleScript(config, document.getElementById('constraints'));
+        //document.getElementById('configuration').value = cfg;
+        configEditor.setValue(cfg);
+	    cstrsEditor.setValue(generateSampleScript(config));
     } else if (id == 1) {
         //Don't show the pin button when the sandbox is already pinned
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
@@ -382,7 +382,7 @@ function output(id) {
 var spaceSplitter = /\s/g;
 
 
-function generateSampleScript(cfg, id) {
+function generateSampleScript(cfg) {
     var buf = "";
     for (var i in cfg.nodes) {
         var n = cfg.nodes[i];
@@ -416,7 +416,7 @@ function generateSampleScript(cfg, id) {
     if (cfg.nodes[4].vms.length > 0) {
         buf += "root({" + cfg.nodes[4].vms[0].id + "});\n";
     }
-    id.value = buf;
+    return buf;
 }
 
 function showScenario() {

@@ -23,9 +23,6 @@ function resetLines() {
     }
 }
 
-$(function() {
-	$(".lined").linedtextarea();
-});
 
 $(document).ready(function() {
     insertCatalogContent();

@@ -4,6 +4,20 @@
 */
 
 
+/*var lined;
+$(function() {
+	lined = $("#configuration").linedtextareaNG({selectedLines : [1,2,4,8]});
+});*/
+
+/*$("#configuration").change(function() {
+     var comment_lines = $("#configuration").val().split('\n');
+     $("#line_numbers").html('');
+     for(i = 0; i < comment_lines.length; i++) {
+        $("#line_numbers").html($("#line_numbers").html() + (i+1) + "<br/>");
+     }
+   });
+*/
+
 function randomConfiguration() {
     var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
     buf += "N7,N8 = {cpu:6,mem:6}\n";
@@ -63,16 +77,37 @@ function randomConfiguration() {
 
 
 function updateConfiguration(buf) {
+    //console.log("Update the configuration with\n" + buf);
     var ret = parseConfiguration(buf);
     if (ret[0].nodes.length) {
         config = ret[0];
         drawConfiguration('canvas');
     }
-    if (ret[1].lines.length > 0) {
-        console.log(ret[1].msgs);
-    }
+    highlightErrors(ret[1]);
 }
 
+var markers = [];
+function highlightErrors(errors) {
+    var Range = ace.require('ace/range').Range;
+
+    for (var i in markers) {
+        configEditor.getSession().removeMarker(markers[i]);
+    }
+    markers = [];
+
+    var annotations = [];
+
+    for (var i in errors) {
+        annotations.push({
+            row: errors[i][1] - 1,
+            column: 0,
+            text: errors[i][2],
+            type: errors[i][0]
+        }
+        );
+    }
+    configEditor.getSession().setAnnotations(annotations);
+}
 function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
     if (id[0] == 'N') {
         var n = new Node(id, 1, 1);
@@ -98,12 +133,11 @@ function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
                 break;
             }
         }
-        if (cnt.cpu) {vm.cpu = cnt.cpu;}
-        if (cnt.mem) {vm.mem = cnt.mem;}
+        if (cnt.cpu > 0) {vm.cpu = cnt.cpu;}
+        if (cnt.mem > 0) {vm.mem = cnt.mem;}
         if (b) {config.vms.push(vm);}
     } else {
-        errors.lines.push(lineNumber);
-        errors.msgs.push("lines " + lineNumber + ": Type error: '" + id + "' must start with a 'N' or a 'V' to specify a node or a virtual machine");
+        errors.push([lineNumber, "Unable to type '" + id + "'. It must start by a 'N' or a 'V' to indicate a node or a virtual machine"]);
     }
 }
 
@@ -124,9 +158,7 @@ function parseConfiguration(b) {
 
     var elements = new Object();
     var config = new Configuration();
-    var errors = new Object();
-    errors.lines = [];
-    errors.msgs = [];
+    var errors = [];
     for (var i in lines) {
         var lineNumber = parseInt(i) + 1;
         lines[i] = lines[i].replace(/\s/g, ""); //Remove space characters
@@ -145,52 +177,48 @@ function parseConfiguration(b) {
 
             //Check for positive value here to avoid duplicate error messages
             if ((typeof(json.cpu) !== 'undefined' && json.cpu <= 0) || (typeof(json.mem) !== 'undefined' && json.mem <= 0)) {
-                errors.lines.push(lineNumber);
-                errors.msgs.push("lines " + lineNumber + ":     The memory or the resource consumption must be strictly positive");
+                errors.push(["warning",lineNumber, "Resources usage must be strictly positive"]);
             }
 
             for (var j in ids) {
-                //Declare an element
-                if (ids[j][0] != 'V' && ids[j][0] != 'N') {
-                }
                 makeOrCompleteElement(ids[j], config, errors, lineNumber, json);
                 if (json.vms && json.vms.length > 0) { //This is a online node
                     var n = config.getNode(ids[0]);
                     if (n.online == 0) {
-                        errors.lines.push(i);
-                        errors.msgs.push("lines " + lineNumber + ": '" + n.id + "' is online. It can not host VMs");
+                        errors.push(["error", lineNumber, "'" + n.id + "' is online. It cannot host VMs"]);
                     } else {
                         vms = json.vms.split(",");
+                        var unknownVMs = [];
                         for (var k in vms) {
                             var vmId = vms[k];
                             var vm = config.getVirtualMachine(vmId);
                             if (!vm) {
-                                errors.lines.push(i);
-                                errors.msgs.push("lines " + lineNumber + ": Unknown virtual machine '" + vmId + "'");
+                                unknownVMs.push(vmId);
                             } else {
                                 var x = config.getHoster(vm.id);
                                 if (x) {
-                                    errors.lines.push(i);
-                                    errors.msgs.push("lines " + lineNumber + ":  virtual machine '" + vmId + "' is already running on '" + x.id + "'");
+                                    errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
                                 } else if (!n.fit(vm)) {
-                                    errors.lines.push(i);
-                                    errors.msgs.push("lines " + lineNumber + ": '" + vmId + "' cannot fit in '" + n.id + "'");
+                                    //vm and after cannot fit.
+                                    errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
+                                    break;
                                 } else {
                                     n.host(vm);
                                 }
                             }
                         }
+                        if (unknownVMs.length > 0) {
+                            errors.push(["error", lineNumber, "Unknown virtual machine(s): " + unknownVMs.join()]);
+                        }
                     }
                 }
             }
         } else {
-            errors.lines.push(i);
-            errors.msgs.push("lines " + lineNumber + ": The line does not respect the format '<li>identifiers</li> = <li>content</li>");
+            errors.push(["error", lineNumber, "The line does not respect the format '<li>identifiers</li> = <li>content</li>"]);
         }
     }
     if (config.nodes.length == 0) {
-            errors.lines.push(lines.length - 1);
-            errors.msgs.push("lines " + lines.length + ": The configuration must be composed of at least 1 node.");
+        errors.push(["error", lineNumber, "The configuration must be composed of at least 1 node"]);
     }
     return [config,errors];
 }

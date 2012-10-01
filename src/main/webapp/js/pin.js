@@ -1,7 +1,15 @@
 //Check for an id
 
+
+var configEditor;
+var cstrsEditor;
 function init() {
     var o = parseUri(location.href);
+
+    configEditor = ace.edit("configuration");
+
+    cstrsEditor = ace.edit("constraints");
+
     if (o.queryKey.id) {
         console.log("re-using sandbox " + o.queryKey.id);
         loadExperiment(o.queryKey.id);
@@ -11,6 +19,8 @@ function init() {
     }
 
     $('#tab-container').easytabs({animate:false});
+
+    configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
 }
 
 function pinSandbox() {
