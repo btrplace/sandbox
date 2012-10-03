@@ -33,7 +33,7 @@ Release notes
 ### ?? - 1.3-SNAPSHOT ###
 - bug fixes
 - the configuration can now be created manually
-
+- double click on the configuration to download the associated svg
 ### 19 sep. 2012 - 1.2 ###
 - binaries are directly available on github
 - bug fixes and UI improvements

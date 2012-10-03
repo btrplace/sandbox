@@ -32,7 +32,6 @@
     <script src="js/console.js" type="text/javascript"></script>
     <script src="js/analytics.js" type="text/javascript"></script>
     <script src="js/jqModal.js" type="text/javascript"></script>
-    <!--<script src="js/jquery.easytabs.min.js" type="text/javascript"></script>-->
     <script src="js/player.js" type="text/javascript"></script>
     <script src="js/pin.js" type="text/javascript"></script>
     <script src="js/config.js" type="text/javascript"></script>
@@ -61,23 +60,12 @@
 
         <div class="export_button" id="txt_export"></div>
         <div class="export_button" id="svg_export"></div>
-        <div id="canvas"></div>
+        <div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
         <div id="tab-container" class="tab-container">
             <ul class="etabs">
                 <li class="tab" id="cstrs-mode"><a onclick="setMode('cstrs');">Placement script</a></li>
                 <li class="tab" id="config-mode"><a onclick="setMode('configuration');">Configuration</a></li>
             </ul>
-            <!--<div class="panel-container">
-
-            <div id="cstrs">
-                <div id="constraints"></div>
-                <div class="note">how to write a script ?</div>
-            </div>
-            <div id="cfg">
-                <div id="configuration"></div>
-                <div class="note">how-to write a configuration ?</div>
-            </div>
-            </div> -->
             <div class="panel-container">
                 <div id="editor"></div>
                 <div class="note">How to</div>
