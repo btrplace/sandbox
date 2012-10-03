@@ -3,13 +3,20 @@
 
 var configEditor;
 var cstrsEditor;
+var editor;
+
 function init() {
     var o = parseUri(location.href);
 
-    configEditor = ace.edit("configuration");
+    //configEditor = ace.edit("configuration");
 
-    cstrsEditor = ace.edit("constraints");
+    //cstrsEditor = ace.edit("constraints");
+    editor = ace.edit("editor");
 
+    var EditSession = ace.require('ace/edit_session').EditSession;
+
+    configEditor = new EditSession("");
+    cstrsEditor = new EditSession("");
     if (o.queryKey.id) {
         console.log("re-using sandbox " + o.queryKey.id);
         loadExperiment(o.queryKey.id);
@@ -18,8 +25,11 @@ function init() {
         step(0);
     }
 
-    $('#tab-container').easytabs({animate:false});
-
+    if (o.anchor == "cfg") {
+        setMode("cfg");
+    } else {
+        setMode("cstrs");
+    }
     configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
 }
 

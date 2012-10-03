@@ -47,7 +47,7 @@
     float: left;
 }
 
-  #configuration,#constraints {
+#editor,#configuration,#constraints {
         position: relative;
         width: 100%;
         height: 180px;

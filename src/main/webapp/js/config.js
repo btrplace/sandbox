@@ -47,13 +47,13 @@ function randomConfiguration() {
         }
     }
     //Set idle node offline
-    buf += "\n# Assignment:\n";
+    buf += "\n# Assignment:";
     for (var i in config.nodes) {
 	    var n = config.nodes[i];
 	    if (n.vms.length == 0) {
-	        buf += n.id + " = {online: 0}\n";
+	        buf += "\n" + n.id + " = {online: 0}";
 	    } else {
-	        buf += n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}\n";
+	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
 	    }
     }
     return buf;
@@ -81,7 +81,7 @@ function highlightErrors(errors) {
         }
         );
     }
-    configEditor.getSession().setAnnotations(annotations);
+    configEditor.setAnnotations(annotations);
 }
 
 function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {

@@ -319,7 +319,6 @@ function step(id) {
         pending = false;
         var cfg = randomConfiguration();
         updateConfiguration(cfg);
-        //document.getElementById('configuration').value = cfg;
         configEditor.setValue(cfg);
 	    cstrsEditor.setValue(generateSampleScript(config));
     } else if (id == 1) {
@@ -356,7 +355,7 @@ function colorLines(nb) {
             });
         }
     }
-    configEditor.getSession().setAnnotations(annotations);
+    cstrsEditor.setAnnotations(annotations);
 
 }
 
@@ -419,7 +418,7 @@ function generateSampleScript(cfg) {
 
     //Root for the fun
     if (cfg.nodes[4].vms.length > 0) {
-        buf += "root({" + cfg.nodes[4].vms[0].id + "});\n";
+        buf += "root({" + cfg.nodes[4].vms[0].id + "});";
     }
     return buf;
 }
@@ -455,3 +454,32 @@ function showSyntaxErrors() {
     e.innerHTML = b;
 }
 
+
+
+Element.prototype.hasClass = function (cls) {
+  return this.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+Element.prototype.addClass = function(cls) {
+  if (!this.hasClass(cls)) this.className += " "+cls;
+}
+
+Element.prototype.removeClass = function(cls) {
+  if (this.hasClass(cls)) {
+      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+      this.className=this.className.replace(reg,' ');
+  }
+}
+
+function setMode(id) {
+    console.log("Switch to mode '" + id + "'");
+    if (id == "configuration") {
+        $("#config-mode")[0].addClass("active");
+        $("#cstrs-mode")[0].removeClass("active");
+        editor.setSession(configEditor);
+    } else {
+        $("#cstrs-mode")[0].addClass("active");
+        $("#config-mode")[0].removeClass("active");
+        editor.setSession(cstrsEditor);
+    }
+}
