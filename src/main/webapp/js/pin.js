@@ -31,6 +31,8 @@ function init() {
         setMode("cstrs");
     }
     configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
+
+    insertCatalogContent();
 }
 
 function pinSandbox() {
