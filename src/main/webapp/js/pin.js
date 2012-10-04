@@ -8,13 +8,8 @@ var editor;
 function init() {
     var o = parseUri(location.href);
 
-    //configEditor = ace.edit("configuration");
-
-    //cstrsEditor = ace.edit("constraints");
     editor = ace.edit("editor");
-
     var EditSession = ace.require('ace/edit_session').EditSession;
-
     configEditor = new EditSession("");
     cstrsEditor = new EditSession("");
     if (o.queryKey.id) {

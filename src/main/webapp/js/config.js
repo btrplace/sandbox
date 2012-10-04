@@ -122,7 +122,88 @@ function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
     }
 }
 
+function createElements(ids, config, errors, lineNumber, cnt) {
 
+    //Accepted: cpu,mem,vms
+
+    if ((typeof(cnt.cpu) !== 'undefined' && cnt.cpu <= 0) || (typeof(cnt.mem) !== 'undefined' && cnt.mem <= 0)) {
+        errors.push(["error",lineNumber, "Resources usage must be strictly positive"]);
+        return;
+    }
+
+    for (var x in ids) {
+        var id = ids[x];
+        if (id.length == 0) {
+            errors.push(["error",lineNumber, "Missing identifier"]);
+        } else if (id[0] == 'N') {
+            var n = new Node(id, 0, 0); //0 to detect undeclared node when having N1 = {vms:".."} without any cpu or mem declaration
+            var b = true;
+            for (var i in config.nodes) {
+                if (config.nodes[i].id == id) {
+                    n = config.nodes[i];
+                    b = false;
+                    break;
+                }
+            }
+            if (cnt.cpu) {n.cpu = cnt.cpu;}
+            if (cnt.mem) {n.mem = cnt.mem;}
+            if (cnt.online == 1 || cnt.online == 0) {n.online = cnt.online;}
+            if (b) {config.nodes.push(n);}
+        } else if (id[0] == 'V') {
+            var vm = new VirtualMachine(id, 1, 1);
+            var b = true;
+            for (var i in config.vms) {
+                if (config.vms[i].id == id) {
+                    vm = config.vms[i];
+                    b = false;
+                    break;
+                }
+            }
+            if (cnt.cpu > 0) {vm.cpu = cnt.cpu;}
+            if (cnt.mem > 0) {vm.mem = cnt.mem;}
+            if (b) {config.vms.push(vm);}
+        } else {
+            errors.push([lineNumber, "Unable to type '" + id + "'. It must start by a 'N' or a 'V' to indicate a node or a virtual machine"]);
+        }
+    }
+}
+
+
+function createPlacement(nid, config, vms, errors, lineNumber) {
+    var n = config.getNode(nid);
+    if (!n || n.cpu == 0 || n.mem == 0) {
+        console.log("Line " + lineNumber);
+        errors.push(["error", lineNumber, "Unknown node '" + nid + "'"]);
+        return;
+    } else if (n.online == 0) {
+        errors.push(["error", lineNumber, "'" + n.id + "' is declared as offline. It cannot host VMs"]);
+        return;
+    } else {
+        var unknownVMs = [];
+        for (var k in vms) {
+            var vmId = vms[k];
+            var vm = config.getVirtualMachine(vmId);
+            if (!vm) {
+                unknownVMs.push(vmId);
+            } else {
+                var x = config.getHoster(vm.id);
+                if (x) {
+                    errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
+                }
+            }
+            if (!n.fit(vm)) {
+                //vm and after cannot fit.
+                errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
+                break;
+            } else {
+                n.host(vm);
+            }
+        }
+    }
+    if (unknownVMs.length > 0) {
+        errors.push(["error", lineNumber, "Unknown virtual machine(s): " + unknownVMs.join()]);
+    }
+}
 
 /**
  * Configuration format:
@@ -133,14 +214,12 @@ function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
   N2 = {offline}
 */
 function parseConfiguration(b) {
-
     var lines = b.split("\n");
-    //Replace \w+: by "\w+": to make the content JSON compatible
-
     var elements = new Object();
     var config = new Configuration();
     var errors = [];
     for (var i in lines) {
+        lines[i].replace(/\s/g, "");
         var lineNumber = parseInt(i) + 1;
         if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {continue;} //Skip blank lines and single line comments
 
@@ -151,50 +230,18 @@ function parseConfiguration(b) {
 
             //Right parameter is a JSON structure
             var proper = toks[1].replace(/(\w+):/g,"\"$1\":");
-            //console.log(proper);
-            var json = JSON.parse(proper);
-
-                //Check for positive value here to avoid duplicate error messages
-                if ((typeof(json.cpu) !== 'undefined' && json.cpu <= 0) || (typeof(json.mem) !== 'undefined' && json.mem <= 0)) {
-                    errors.push(["error",lineNumber, "Resources usage must be strictly positive"]);
+            try {
+                var json = JSON.parse(proper);
+                createElements(ids, config, errors, lineNumber, json);
+                if (json.vms && json.vms.length > 0) {
+                    createPlacement(ids[0], config, json.vms.split(","), errors, lineNumber);
                 }
+            } catch (err) {
+                errors.push(["error",lineNumber, err.message]);
+            }
 
-                for (var j in ids) {
-                    makeOrCompleteElement(ids[j], config, errors, lineNumber, json);
-                        if (json.vms && json.vms.length > 0) { //This is a online node
-                            var n = config.getNode(ids[0]);
-                            if (n.online == 0) {
-                                errors.push(["error", lineNumber, "'" + n.id + "' is online. It cannot host VMs"]);
-                            } else {
-                                vms = json.vms.replace(/\s/g, "").split(",");
-                                //lines[i] = ; //Remove space characters
-                                var unknownVMs = [];
-                                for (var k in vms) {
-                                    var vmId = vms[k];
-                                    var vm = config.getVirtualMachine(vmId);
-                                    if (!vm) {
-                                       unknownVMs.push(vmId);
-                                    } else {
-                                       var x = config.getHoster(vm.id);
-                                                if (x) {
-                                                    errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
-                                                } else if (!n.fit(vm)) {
-                                                    //vm and after cannot fit.
-                                                    errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
-                                                    break;
-                                                } else {
-                                                    n.host(vm);
-                                                }
-                                            }
-                                        }
-                                        if (unknownVMs.length > 0) {
-                                            errors.push(["error", lineNumber, "Unknown virtual machine(s): " + unknownVMs.join()]);
-                                        }
-                                    }
-                                }
-                            }
         } else {
-            errors.push(["error", lineNumber, "The line does not respect the format '<li>identifiers</li> = <li>content</li>"]);
+            errors.push(["error", lineNumber, "The line does not respect the format 'identifiers = content"]);
         }
     }
     if (config.nodes.length == 0) {
