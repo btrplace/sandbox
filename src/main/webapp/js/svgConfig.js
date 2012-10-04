@@ -325,9 +325,9 @@ function step(id) {
         //Don't show the pin button when the sandbox is already pinned
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
         else {document.getElementById('pin_button').style.visibility="hidden";}
-        document.getElementById('constraints').disabled=true;
+        //document.getElementById('constraints').disabled=true;
         showScenario();
-        document.getElementById('constraints').readonly="readonly";
+        //document.getElementById('constraints').readonly="readonly";
         animationStep = 0;
         colorLines(0);
     } else if (id == 2 || id == 3) {
@@ -343,7 +343,6 @@ function step(id) {
 function colorLines(nb) {
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
-    console.log(stats);
     for (var j in stats) {
         var x = stats[j];
         if (x < 0) {

@@ -81,6 +81,9 @@ function highlightErrors(errors) {
         }
         );
     }
+    if (errors.length > 0) {
+        ("#log").innerHTML = errors.length + " errors";
+    }
     configEditor.setAnnotations(annotations);
 }
 
