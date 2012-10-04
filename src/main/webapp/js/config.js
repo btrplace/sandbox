@@ -82,7 +82,9 @@ function highlightErrors(errors) {
         );
     }
     if (errors.length > 0) {
-        ("#log").innerHTML = errors.length + " errors";
+        $("#log")[0].innerHTML = "<div class=\"ace_error\"></div> " + errors.length + " error(s)";
+    } else {
+        $("#log")[0].innerHTML = "";
     }
     configEditor.setAnnotations(annotations);
 }
@@ -121,6 +123,7 @@ function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
 }
 
 
+
 /**
  * Configuration format:
   N1,N2,N3,N4,N5,N6,N7,N8 = { cpu:8, mem:6 };
@@ -129,7 +132,6 @@ function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
   N1 = {vms: {VM1, VM2, VM3}}
   N2 = {offline}
 */
-
 function parseConfiguration(b) {
 
     var lines = b.split("\n");
@@ -140,58 +142,57 @@ function parseConfiguration(b) {
     var errors = [];
     for (var i in lines) {
         var lineNumber = parseInt(i) + 1;
-        lines[i] = lines[i].replace(/\s/g, ""); //Remove space characters
         if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {continue;} //Skip blank lines and single line comments
 
         var toks = lines[i].split("=");
         if (toks.length == 2 && toks[1].length > 1 && toks[0].length > 0) {
             //Get the identifiers
-            var ids = toks[0].split(",");
+            var ids = toks[0].replace(/\s/g, "").split(",");
 
             //Right parameter is a JSON structure
             var proper = toks[1].replace(/(\w+):/g,"\"$1\":");
             //console.log(proper);
             var json = JSON.parse(proper);
-            //console.log(json);
 
-            //Check for positive value here to avoid duplicate error messages
-            if ((typeof(json.cpu) !== 'undefined' && json.cpu <= 0) || (typeof(json.mem) !== 'undefined' && json.mem <= 0)) {
-                errors.push(["warning",lineNumber, "Resources usage must be strictly positive"]);
-            }
+                //Check for positive value here to avoid duplicate error messages
+                if ((typeof(json.cpu) !== 'undefined' && json.cpu <= 0) || (typeof(json.mem) !== 'undefined' && json.mem <= 0)) {
+                    errors.push(["error",lineNumber, "Resources usage must be strictly positive"]);
+                }
 
-            for (var j in ids) {
-                makeOrCompleteElement(ids[j], config, errors, lineNumber, json);
-                if (json.vms && json.vms.length > 0) { //This is a online node
-                    var n = config.getNode(ids[0]);
-                    if (n.online == 0) {
-                        errors.push(["error", lineNumber, "'" + n.id + "' is online. It cannot host VMs"]);
-                    } else {
-                        vms = json.vms.split(",");
-                        var unknownVMs = [];
-                        for (var k in vms) {
-                            var vmId = vms[k];
-                            var vm = config.getVirtualMachine(vmId);
-                            if (!vm) {
-                                unknownVMs.push(vmId);
+                for (var j in ids) {
+                    makeOrCompleteElement(ids[j], config, errors, lineNumber, json);
+                        if (json.vms && json.vms.length > 0) { //This is a online node
+                            var n = config.getNode(ids[0]);
+                            if (n.online == 0) {
+                                errors.push(["error", lineNumber, "'" + n.id + "' is online. It cannot host VMs"]);
                             } else {
-                                var x = config.getHoster(vm.id);
-                                if (x) {
-                                    errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
-                                } else if (!n.fit(vm)) {
-                                    //vm and after cannot fit.
-                                    errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
-                                    break;
-                                } else {
-                                    n.host(vm);
+                                vms = json.vms.replace(/\s/g, "").split(",");
+                                //lines[i] = ; //Remove space characters
+                                var unknownVMs = [];
+                                for (var k in vms) {
+                                    var vmId = vms[k];
+                                    var vm = config.getVirtualMachine(vmId);
+                                    if (!vm) {
+                                       unknownVMs.push(vmId);
+                                    } else {
+                                       var x = config.getHoster(vm.id);
+                                                if (x) {
+                                                    errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
+                                                } else if (!n.fit(vm)) {
+                                                    //vm and after cannot fit.
+                                                    errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
+                                                    break;
+                                                } else {
+                                                    n.host(vm);
+                                                }
+                                            }
+                                        }
+                                        if (unknownVMs.length > 0) {
+                                            errors.push(["error", lineNumber, "Unknown virtual machine(s): " + unknownVMs.join()]);
+                                        }
+                                    }
                                 }
                             }
-                        }
-                        if (unknownVMs.length > 0) {
-                            errors.push(["error", lineNumber, "Unknown virtual machine(s): " + unknownVMs.join()]);
-                        }
-                    }
-                }
-            }
         } else {
             errors.push(["error", lineNumber, "The line does not respect the format '<li>identifiers</li> = <li>content</li>"]);
         }

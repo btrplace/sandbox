@@ -245,22 +245,17 @@ function drawConfiguration(id) {
         n.posY = height;
         if (cur_width + dim[0] > max_width) {
             height += max_height;
-            //console.log("New line starting with " + n.id);
-            //console.log("previous line width was " + cur_width);
             if (width < cur_width) {width = cur_width};
             cur_width = dim[0];
             n.posX = 0;
             n.posY = height;
             if (i == config.nodes.length - 1) {
-                //console.log("Check height for last element " + n.id);
                 height += max_height;
             }
         } else {
             n.posX = cur_width;
-            //console.log(n.id + " stay on the current line x=" + n.posX);
             cur_width += dim[0];
             if (i == config.nodes.length - 1) {
-                //console.log("Check width for last element " + n.id);
                 if (width < cur_width) {width = cur_width};
                 height += max_height;
             }
@@ -325,9 +320,7 @@ function step(id) {
         //Don't show the pin button when the sandbox is already pinned
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
         else {document.getElementById('pin_button').style.visibility="hidden";}
-        //document.getElementById('constraints').disabled=true;
         showScenario();
-        //document.getElementById('constraints').readonly="readonly";
         animationStep = 0;
         colorLines(0);
     } else if (id == 2 || id == 3) {
@@ -355,7 +348,9 @@ function colorLines(nb) {
         }
     }
     cstrsEditor.setAnnotations(annotations);
-
+    if (errors.length > 0) {
+        $("#log")[0].innerHTML = "<div class=\"ace_error\"></div> " + errors.length + " error(s)";
+    }
 }
 
 function checkable(b) {
@@ -374,7 +369,6 @@ function insertCatalogContent() {
             buf += ", ";
         }
     }
-    //document.getElementById('available_constraints').innerHTML = buf + ".";
 }
 
 function output(id) {
