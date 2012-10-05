@@ -307,6 +307,7 @@ function step(id) {
     }
     var o = parseUri(location.href);
 
+    editor.setReadOnly(false);
     if (id == 0) {
         checkable(true);
         animationStep = 0;
@@ -318,6 +319,7 @@ function step(id) {
 	    cstrsEditor.setValue(generateSampleScript(config));
     } else if (id == 1) {
         //Don't show the pin button when the sandbox is already pinned
+        editor.setReadOnly(true);
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
         else {document.getElementById('pin_button').style.visibility="hidden";}
         showScenario();
@@ -342,20 +344,19 @@ function colorLines(nb) {
             annotations.push({
                 row: -1 * x,
                 column: 0,
-                type: "error",
+                type: "warning",
                 text: "Unsatisfied constraint"
             });
         }
     }
-    cstrsEditor.setAnnotations(annotations);
-
-        if (errors.length > 0) {
+    if (annotations.length > 0) {
             $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
-            $("#cstrs-mode > a").get()[0].style.color="red";
-        } else {
+            $("#cstrs-mode > a").get()[0].style.color="#D6D629";
+    } else {
             $("#cstrs-mode > a").get()[0].style.fontWeight="";
             $("#cstrs-mode > a").get()[0].style.color="";
-        }
+    }
+    cstrsEditor.setAnnotations(annotations);
 }
 
 function checkable(b) {
@@ -450,6 +451,14 @@ function showSyntaxErrors() {
         }
     b += "</ul>";
     e.innerHTML = b;
+
+    if (errors.length > 0) {
+        $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
+        $("#cstrs-mode > a").get()[0].style.color="red";
+    } else {
+        $("#cstrs-mode > a").get()[0].style.fontWeight="";
+        $("#cstrs-mode > a").get()[0].style.color="";
+    }
 }
 
 

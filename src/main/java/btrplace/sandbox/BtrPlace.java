@@ -274,7 +274,6 @@ public class BtrPlace {
 
         //Remove the vjob identifier and shift the lines
         int shift = cfg.getAllVirtualMachines().size() + 1; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
-        //System.err.println("Shift= " + shift);
 
         Matcher m = syntaxError.matcher(res);
 
