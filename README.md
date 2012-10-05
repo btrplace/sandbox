@@ -34,6 +34,7 @@ Release notes
 - bug fixes
 - the configuration can now be created manually
 - double click on the configuration to download the associated svg
+- it is now possible to lock and unlock a sandbox
 
 ### 19 sep. 2012 - 1.2 ###
 - binaries are directly available on github

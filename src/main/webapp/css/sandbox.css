@@ -6,6 +6,33 @@
 .state {
     text-align: center;
 }
+
+#state0 {
+    display: block;
+}
+
+#state0 {
+    display: none;
+}
+
+#state1 {
+    display: none;
+}
+
+#state2 {
+    display: none;
+}
+
+#state3 {
+    display: none;
+}
+
+#state4 {
+    display: none;
+}
+
+
+
 #intro {
     text-align: right;
 }
@@ -182,7 +209,7 @@ code {
     display: none;
     padding: 2px 3px;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 10pt;
 }
 
