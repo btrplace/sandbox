@@ -151,9 +151,11 @@ function createPlacement(nid, config, vms, errors, lineNumber) {
     } else {
         var unknownVMs = [];
         for (var k in vms) {
-            var vmId = vms[k];
+            var vmId = vms[k].trim();
             var vm = config.getVirtualMachine(vmId);
-            if (!vm) {
+            if (vmId.indexOf(' ') > 0) {
+                errors.push(["error",lineNumber, "Space characters not allowed here"]);
+            } else if (!vm) {
                 unknownVMs.push(vmId);
             } else {
                 var x = config.getHoster(vm.id);
