@@ -349,7 +349,7 @@ function colorLines(nb) {
         var x = stats[j];
         if (x < 0) {
             annotations.push({
-                row: -1 * x,
+                row: -1 * x -1,
                 column: 0,
                 type: "warning",
                 text: "Unsatisfied constraint"
