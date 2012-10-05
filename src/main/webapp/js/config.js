@@ -66,6 +66,13 @@ function updateConfiguration(buf) {
         config = ret[0];
         drawConfiguration('canvas');
     }
+
+    //Hide inspect button if errors
+    if (ret[1].length > 0) {
+        $(".check_button").get()[0].style.visibility="hidden";
+    } else {
+        $(".check_button").get()[0].style.visibility="visible";
+    }
     highlightErrors(ret[1]);
 }
 
