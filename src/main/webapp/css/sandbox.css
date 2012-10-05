@@ -163,6 +163,16 @@ code {
     visibility: visible;
 }
 
+#lock_button {
+    background-position-x: -140px;
+    visibility: visible;
+}
+
+#unlock_button {
+    background-position-x: -160px;
+    visibility: visible;
+}
+
 .jqmWindow .logo {
     width: 48px;
     float: left;

@@ -320,8 +320,14 @@ function step(id) {
         showSyntaxErrors();
         //Don't show the pin button when the sandbox is already pinned
         editor.setReadOnly(true);
-        if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
-        else {document.getElementById('pin_button').style.visibility="hidden";}
+        if (!o.queryKey.id) {
+            document.getElementById('lock_button').style.visibility="visible";
+            document.getElementById('unlock_button').style.visibility="hidden";
+        }
+        else {
+            document.getElementById('lock_button').style.visibility="hidden";
+            document.getElementById('unlock_button').style.visibility="visible";
+        }
         showScenario();
         animationStep = 0;
         colorLines(0);

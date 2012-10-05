@@ -31,8 +31,9 @@ function init() {
 }
 
 function pinSandbox() {
-    var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
-    document.getElementById('pin_button').style.visibility="hidden";
+    var experiment = {"cfg":serialize(config), "scenario" : scenario,"script" : document.getElementById('constraints').value};
+    document.getElementById('lock_button').style.visibility="hidden";
+    document.getElementById('unlock_button').style.visibility="visible";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
@@ -58,7 +59,7 @@ function loadExperiment(id) {
     	        if (this.status == 200) {
     	            var experiment = JSON.parse(this.responseText);
     	            scenario = experiment.scenario;
-    	            unserialize(experiment.cfg);
+    	            config = unserialize(experiment.cfg);
     	            document.getElementById('constraints').value = experiment.script;
     	            drawConfiguration('canvas');
     	            step(1);
@@ -72,10 +73,10 @@ function loadExperiment(id) {
         http.send(null);
 }
 
-function serialize(nodes) {
+function serialize(cfg) {
     var cpy = [];
-    for (var i in nodes) {
-        var n = nodes[i];
+    for (var i in cfg.nodes) {
+        var n = cfg.nodes[i];
         cpy[i] = new Node(n.id, n.cpu, n.mem);
 
         for (var j in n.vms) {
@@ -88,8 +89,7 @@ function serialize(nodes) {
 }
 
 function unserialize(src) {
-    nodes = [];
-    vms = [];
+    var c = new Configuration();
     for (var i in src) {
         s = src[i];
         var n = new Node(s.id, s.cpu, s.mem);
@@ -97,8 +97,9 @@ function unserialize(src) {
             v = s.vms[j];
             vv = new VirtualMachine(v.id, v.cpu, v.mem);
             n.host(vv);
-            vms.push(vv);
+            c.vms.push(vv);
         }
-        nodes.push(n);
+        c.nodes.push(n);
     }
+    return c;
 }

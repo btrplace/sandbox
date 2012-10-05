@@ -1,8 +1,6 @@
 //
 var playing = false;
 
-var currentTime = 0;
-
 //Go very fast
 var fast = false;
 
