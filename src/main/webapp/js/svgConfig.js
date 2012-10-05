@@ -348,9 +348,14 @@ function colorLines(nb) {
         }
     }
     cstrsEditor.setAnnotations(annotations);
-    if (errors.length > 0) {
-        $("#log")[0].innerHTML = "<div class=\"ace_error\"></div> " + errors.length + " error(s)";
-    }
+
+        if (errors.length > 0) {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
+            $("#cstrs-mode > a").get()[0].style.color="red";
+        } else {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="";
+            $("#cstrs-mode > a").get()[0].style.color="";
+        }
 }
 
 function checkable(b) {

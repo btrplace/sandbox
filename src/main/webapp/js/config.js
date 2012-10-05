@@ -82,9 +82,11 @@ function highlightErrors(errors) {
         );
     }
     if (errors.length > 0) {
-        $("#log")[0].innerHTML = "<div class=\"ace_error\"></div> " + errors.length + " error(s)";
+        $("#config-mode > a").get()[0].style.fontWeight="bold";
+        $("#config-mode > a").get()[0].style.color="red";
     } else {
-        $("#log")[0].innerHTML = "";
+        $("#config-mode > a").get()[0].style.fontWeight="";
+        $("#config-mode > a").get()[0].style.color="";
     }
     configEditor.setAnnotations(annotations);
 }
@@ -172,7 +174,6 @@ function createElements(ids, config, errors, lineNumber, cnt) {
 function createPlacement(nid, config, vms, errors, lineNumber) {
     var n = config.getNode(nid);
     if (!n || n.cpu == 0 || n.mem == 0) {
-        console.log("Line " + lineNumber);
         errors.push(["error", lineNumber, "Unknown node '" + nid + "'"]);
         return;
     } else if (n.online == 0) {
@@ -244,6 +245,7 @@ function parseConfiguration(b) {
             errors.push(["error", lineNumber, "The line does not respect the format 'identifiers = content"]);
         }
     }
+
     if (config.nodes.length == 0) {
         errors.push(["error", lineNumber, "The configuration must be composed of at least 1 node"]);
     }
