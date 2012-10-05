@@ -50,9 +50,10 @@ function pinSandbox() {
 }
 
 function unpinSandbox() {
+    step(1);
     document.getElementById('lock_button').style.display="inline";
     document.getElementById('unlock_button').style.display="none";
-    step(1);
+
 }
 
 
