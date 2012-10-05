@@ -457,29 +457,14 @@ function showSyntaxErrors() {
             });
     }
     if (annotations.length > 0) {
-            $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
-            $("#cstrs-mode > a").get()[0].style.color="red";
+            var node = $("#cstrs-mode > a").get()[0];
+            node.style.fontWeight="bold";
+            node.style.color="red";
     } else {
             $("#cstrs-mode > a").get()[0].style.fontWeight="";
             $("#cstrs-mode > a").get()[0].style.color="";
     }
     cstrsEditor.setAnnotations(annotations);
-/*
-    var e = document.getElementById("syntax_error");
-    var b = "<ul>";
-        for (var i in scenario.errors) {
-            b += "<li>" + scenario.errors[i] + "</li>";
-        }
-    b += "</ul>";
-    e.innerHTML = b;
-
-    if (errors.length > 0) {
-        $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
-        $("#cstrs-mode > a").get()[0].style.color="red";
-    } else {
-        $("#cstrs-mode > a").get()[0].style.fontWeight="";
-        $("#cstrs-mode > a").get()[0].style.color="";
-    }             */
 }
 
 function setMode(id) {
