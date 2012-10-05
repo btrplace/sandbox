@@ -288,7 +288,7 @@ function check(id) {
 	            } else { //Some constraints are not satisfied
 	                step(1);
 	            }
-	        } else if (scenario.errors[0] == "no solution") {
+	        } else if (scenario.errors[0].message == "no solution") {
 	            step(3);
 	        } else if (scenario.errors.length > 0) {
 	            step(4);
@@ -335,7 +335,7 @@ function step(id) {
     }
 }
 
-function colorLines(nb) {
+function colorLines(type, nb) {
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
     for (var j in stats) {
@@ -444,6 +444,26 @@ function rephrase(a) {
 }
 
 function showSyntaxErrors() {
+
+    var annotations = [];
+    for (var j in scenario.errors) {
+        var err = scenario.errors[j];
+        annotations.push({
+                row: err.lineNo - 1,
+                column: 0,
+                type: "error",
+                text: err.message
+            });
+    }
+    if (annotations.length > 0) {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
+            $("#cstrs-mode > a").get()[0].style.color="red";
+    } else {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="";
+            $("#cstrs-mode > a").get()[0].style.color="";
+    }
+    cstrsEditor.setAnnotations(annotations);
+/*
     var e = document.getElementById("syntax_error");
     var b = "<ul>";
         for (var i in scenario.errors) {
@@ -458,24 +478,7 @@ function showSyntaxErrors() {
     } else {
         $("#cstrs-mode > a").get()[0].style.fontWeight="";
         $("#cstrs-mode > a").get()[0].style.color="";
-    }
-}
-
-
-
-Element.prototype.hasClass = function (cls) {
-  return this.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
-}
-
-Element.prototype.addClass = function(cls) {
-  if (!this.hasClass(cls)) this.className += " "+cls;
-}
-
-Element.prototype.removeClass = function(cls) {
-  if (this.hasClass(cls)) {
-      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-      this.className=this.className.replace(reg,' ');
-  }
+    }             */
 }
 
 function setMode(id) {

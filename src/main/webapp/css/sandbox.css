@@ -105,11 +105,6 @@ code {
     font-style: italic;
 }
 
-#syntax_error {
-    text-align: left;
-    margin-left: 20px;
-}
-
 #pinURL {
     border: solid #aaa 1px;
     background-color: white;

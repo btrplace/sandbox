@@ -78,6 +78,12 @@ public class BtrPlace {
 
     private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
 
+    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
+
+    private static Pattern syntaxError = Pattern.compile("\\((\\d+):(\\d+)\\)\\ssandbox:\\s(.+)");
+
+    private static Pattern lexError = Pattern.compile("line\\s(\\d+):(-?\\d+)\\s(.+)");
+
     public BtrPlace(@Context ServletContext context) {
         try {
             PropertiesHelper p = new PropertiesHelper(context.getRealPath("config/durations.properties"));
@@ -117,7 +123,7 @@ public class BtrPlace {
         List<Integer> nonViables = new ArrayList<Integer>();
         List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
         TimedReconfigurationPlan plan = null;
-        List<String> errors = new ArrayList<String>();
+        List<Error> errors = new ArrayList<Error>();
         Configuration src;
         try {
             src = confReader.unSerialize(new BufferedReader(new StringReader(cfg)));
@@ -170,7 +176,7 @@ public class BtrPlace {
                             new SimpleManagedElementSet<Node>(),
                             vjobs);
                 } catch (Exception e) {
-                    errors.add("no solution");
+                    errors.add(new Error(-1,"no solution"));
                 }
             } else {
                 plan = new DefaultTimedReconfigurationPlan(src);
@@ -185,7 +191,7 @@ public class BtrPlace {
         }
     }
 
-    private JSONObject buildReponse(Configuration src, List<String> errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan) throws JSONException {
+    private JSONObject buildReponse(Configuration src, List<Error> errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan) throws JSONException {
         JSONObject o = new JSONObject();
         List<List<Integer>> status = new ArrayList<List<Integer>>();
         o.put("errors", errors);
@@ -249,6 +255,7 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
+        System.out.println(o);
         return o;
     }
 
@@ -260,10 +267,8 @@ public class BtrPlace {
         return n.getName();
     }
 
-    private static Pattern syntaxError = Pattern.compile("\\((\\d+):(\\d+)\\)\\ssandbox:\\s(.+)");
-    private static Pattern lexError = Pattern.compile("line\\s(\\d+):(-?\\d+)\\s(.+)");
 
-    private String simplifyErrorMessage(Configuration cfg, String s) {
+    private Error simplifyErrorMessage(Configuration cfg, String s) {
         //remove any "sandbox."
         String res = s.replaceAll("sandbox\\.", "");
 
@@ -278,16 +283,28 @@ public class BtrPlace {
         Matcher m = syntaxError.matcher(res);
 
         if (m.matches()) {
-            return "(" + (Integer.parseInt(m.group(1)) - shift) + ":" + m.group(2) + ") " + m.group(3);
+            return new Error(Integer.parseInt(m.group(1)) - shift, m.group(3));
         } else {
             m = lexError.matcher(res);
             if (m.matches()) {
-                return "(" + (Integer.parseInt(m.group(1)) - shift) + ":" + m.group(2) + ") " + m.group(3);
+                return new Error(Integer.parseInt(m.group(1)) - shift, m.group(3));
             }
         }
 
-        return res;
+        return new Error(-1, res);
     }
 
-    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
+    class Error extends JSONObject {
+        int lineNo;
+        String message;
+
+        Error(int no, String msg) {
+            this.lineNo = no;
+            this.message = msg;
+        }
+
+        public String toString() {
+            return "{\"lineNo\":" + lineNo + ", \"message\":\"" + message + "\"}";
+        }
+    }
 }
