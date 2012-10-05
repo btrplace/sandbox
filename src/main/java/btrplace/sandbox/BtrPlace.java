@@ -100,11 +100,14 @@ public class BtrPlace {
 
     }
 
-    private String complete(Configuration cfg, String constraints) {
+    private String complete(Configuration cfg, String constraints, int padding) {
         StringBuilder n = new StringBuilder();
         n.append("namespace sandbox;\n");
         for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
+        }
+        for (int i = 0; i < padding; i++) {
+            n.append('\n');
         }
         n.append(constraints).append("\n");
 
@@ -143,8 +146,9 @@ public class BtrPlace {
 
             VJob vjob = new DefaultVJob("sandbox");
             vjobBuilder.getElementBuilder().useConfiguration(src);
+            int padding = 0;
             for (String cstr : constraints) {
-                String buffer = complete(src, cstr);
+                String buffer = complete(src, cstr, padding);
                 try {
                     VJob v = vjobBuilder.build(buffer);
                     PlacementConstraint c = v.getConstraints().iterator().next();
@@ -156,9 +160,13 @@ public class BtrPlace {
                     nb++;
                 } catch (Exception e) {
                     for (String m : e.getMessage().split("\n")) {
-                        errors.add(simplifyErrorMessage(src, m));
+                  //      System.out.println("Before simplify: |||" + m + "|||");
+                        Error err = simplifyErrorMessage(src, m);
+                    //    System.out.println("After |||" + err.lineNo + " ||| " + err.message + "|||");
+                        errors.add(err);
                     }
                 }
+                padding++;
             }
             if (errors.isEmpty() && !nonViables.isEmpty()) {
                 ChocoCustomRP rp = new ChocoCustomRP(durEv);
@@ -255,7 +263,7 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        System.out.println(o);
+        //System.out.println(o);
         return o;
     }
 

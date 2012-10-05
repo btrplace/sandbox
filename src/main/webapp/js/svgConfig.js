@@ -306,7 +306,6 @@ function step(id) {
         else {document.getElementById("state" + i).style.display="block";}
     }
     var o = parseUri(location.href);
-
     editor.setReadOnly(false);
     if (id == 0) {
         checkable(true);
@@ -318,6 +317,7 @@ function step(id) {
         configEditor.setValue(cfg);
 	    cstrsEditor.setValue(generateSampleScript(config));
     } else if (id == 1) {
+        showSyntaxErrors();
         //Don't show the pin button when the sandbox is already pinned
         editor.setReadOnly(true);
         if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
@@ -326,11 +326,12 @@ function step(id) {
         animationStep = 0;
         colorLines(0);
     } else if (id == 2 || id == 3) {
+        showSyntaxErrors();
         checkable(true);
         colorLines(0);
     } else if (id ==4) {
-        checkable(true);
         showSyntaxErrors();
+        checkable(true);
         colorLines(0);
     }
 }
