@@ -125,7 +125,14 @@ function createElements(ids, config, errors, lineNumber, cnt) {
             }
             if (cnt.cpu) {n.cpu = cnt.cpu;}
             if (cnt.mem) {n.mem = cnt.mem;}
-            if (cnt.online == 1 || cnt.online == 0) {n.online = cnt.online;}
+            if (typeof(cnt.online) !== 'undefined') {
+                if (cnt.online == 1 || cnt.online == 0) {
+                    n.online = cnt.online;
+                } else {
+                    errors.push(["error",lineNumber, "I ncorrect value: '1' for an online node, '0' otherwise"]);
+                    break;
+                }
+            }
             if (b) {config.nodes.push(n);}
         } else if (id[0] == 'V') {
             var vm = new VirtualMachine(id, 1, 1);
