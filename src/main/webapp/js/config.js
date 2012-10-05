@@ -91,39 +91,6 @@ function highlightErrors(errors) {
     configEditor.setAnnotations(annotations);
 }
 
-function makeOrCompleteElement(id, config, errors, lineNumber, cnt) {
-    if (id[0] == 'N') {
-        var n = new Node(id, 1, 1);
-        var b = true;
-        for (var i in config.nodes) {
-            if (config.nodes[i].id == id) {
-                n = config.nodes[i];
-                b = false;
-                break;
-            }
-        }
-        if (cnt.cpu && cnt.cpu > 0) {n.cpu = cnt.cpu;}
-        if (cnt.mem && cnt.mem > 0) {n.mem = cnt.mem;}
-        if (cnt.online == 1 || cnt.online == 0) {n.online = cnt.online;}
-        if (b) {config.nodes.push(n);}
-    } else if (id[0] == 'V') {
-        var vm = new VirtualMachine(id, 1, 1);
-        var b = true;
-        for (var i in config.vms) {
-            if (config.vms[i].id == id) {
-                vm = config.vms[i];
-                b = false;
-                break;
-            }
-        }
-        if (cnt.cpu > 0) {vm.cpu = cnt.cpu;}
-        if (cnt.mem > 0) {vm.mem = cnt.mem;}
-        if (b) {config.vms.push(vm);}
-    } else {
-        errors.push([lineNumber, "Unable to type '" + id + "'. It must start by a 'N' or a 'V' to indicate a node or a virtual machine"]);
-    }
-}
-
 function createElements(ids, config, errors, lineNumber, cnt) {
 
     //Accepted: cpu,mem,vms
@@ -134,9 +101,11 @@ function createElements(ids, config, errors, lineNumber, cnt) {
     }
 
     for (var x in ids) {
-        var id = ids[x];
+        var id = ids[x].trim();
         if (id.length == 0) {
             errors.push(["error",lineNumber, "Missing identifier"]);
+        } else if (id.indexOf(' ') > 0) {
+            errors.push(["error",lineNumber, "Space characters not allowed here"]);
         } else if (id[0] == 'N') {
             var n = new Node(id, 0, 0); //0 to detect undeclared node when having N1 = {vms:".."} without any cpu or mem declaration
             var b = true;
@@ -190,14 +159,12 @@ function createPlacement(nid, config, vms, errors, lineNumber) {
                 var x = config.getHoster(vm.id);
                 if (x) {
                     errors.push(["error", lineNumber, "'" + vmId + "' is already running on '" + x.id + "'"]);
+                } else if (!n.fit(vm)) {
+                    errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
+                    break;
+                } else {
+                    n.host(vm);
                 }
-            }
-            if (!n.fit(vm)) {
-                //vm and after cannot fit.
-                errors.push(["error", lineNumber, "Virtual Machines '" + vms.slice(k).join() + "' cannot fit on '" + n.id + "'"]);
-                break;
-            } else {
-                n.host(vm);
             }
         }
     }
@@ -220,22 +187,21 @@ function parseConfiguration(b) {
     var config = new Configuration();
     var errors = [];
     for (var i in lines) {
-        lines[i].replace(/\s/g, "");
+        //lines[i].replace(/\s/g, "");
         var lineNumber = parseInt(i) + 1;
-        if (lines[i].length == 0 || lines[i].indexOf("#") == 0) {continue;} //Skip blank lines and single line comments
+        if (lines[i].trim().length == 0 || lines[i].indexOf('#') == 0) {continue;} //Skip blank lines and single line comments
 
         var toks = lines[i].split("=");
-        if (toks.length == 2 && toks[1].length > 1 && toks[0].length > 0) {
+        if (toks.length == 2 && toks[1].trim().length > 1 && toks[0].trim().length > 0) {
             //Get the identifiers
-            var ids = toks[0].replace(/\s/g, "").split(",");
-
+            var ids = toks[0].split(",");
             //Right parameter is a JSON structure
             var proper = toks[1].replace(/(\w+):/g,"\"$1\":");
             try {
                 var json = JSON.parse(proper);
                 createElements(ids, config, errors, lineNumber, json);
                 if (json.vms && json.vms.length > 0) {
-                    createPlacement(ids[0], config, json.vms.split(","), errors, lineNumber);
+                    createPlacement(ids[0].trim(), config, json.vms.split(","), errors, lineNumber);
                 }
             } catch (err) {
                 errors.push(["error",lineNumber, err.message]);
@@ -247,7 +213,7 @@ function parseConfiguration(b) {
     }
 
     //Beware of nodes with cpu == 0 (used to detect undeclared node
-    config.nodes = config.nodes.filter(function(n) { console.log("Check for " + n.id + " cpu=" + n.cpu);return n.cpu > 0;})
+    config.nodes = config.nodes.filter(function(n) {return n.cpu > 0;})
     if (config.nodes.length == 0) {
         errors.push(["error", lineNumber, "The configuration must be composed of at least 1 node"]);
     }
