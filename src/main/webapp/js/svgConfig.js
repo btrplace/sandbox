@@ -306,7 +306,6 @@ function step(id) {
         else {document.getElementById("state" + i).style.display="block";}
     }
     var o = parseUri(location.href);
-    editor.setReadOnly(false);
     if (id == 0) {
         checkable(true);
         animationStep = 0;
@@ -319,15 +318,6 @@ function step(id) {
     } else if (id == 1) {
         showSyntaxErrors();
         //Don't show the pin button when the sandbox is already pinned
-        editor.setReadOnly(true);
-        if (!o.queryKey.id) {
-            document.getElementById('lock_button').style.display="inline";
-            document.getElementById('unlock_button').style.display="none";
-        }
-        else {
-            document.getElementById('lock_button').style.display="none";
-            document.getElementById('unlock_button').style.display="inline";
-        }
         showScenario();
         animationStep = 0;
         colorLines(0);
@@ -474,7 +464,6 @@ function showSyntaxErrors() {
 }
 
 function setMode(id) {
-    console.log("Switch to mode '" + id + "'");
     if (id == "configuration") {
         $("#config-mode")[0].addClass("active");
         $("#cstrs-mode")[0].removeClass("active");

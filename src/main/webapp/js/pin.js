@@ -12,11 +12,21 @@ function init() {
     var EditSession = ace.require('ace/edit_session').EditSession;
     configEditor = new EditSession("");
     cstrsEditor = new EditSession("");
-    if (o.queryKey.id) {
-        console.log("re-using sandbox " + o.queryKey.id);
-        loadExperiment(o.queryKey.id);
-    } else {
+    if (o.queryKey.lock) {
+        console.log("re-using sandbox " + o.queryKey.lock);
+        loadExperiment(o.queryKey.lock);
+        document.getElementById('lock_button').style.display="none";
+        document.getElementById('unlock_button').style.display="inline";
+        editor.setReadOnly(true);
+    } else if (o.queryKey.unlock) {
+        console.log("Unlocked sandbox from " + o.queryKey.unlock);
+        loadExperiment(o.queryKey.unlock);
+        document.getElementById('lock_button').style.display="inline";
+        document.getElementById('unlock_button').style.display="none";
+        editor.setReadOnly(false);
+    } else  {
         console.log("New sandbox");
+        editor.setReadOnly(false);
         step(0);
     }
 
@@ -50,10 +60,8 @@ function pinSandbox() {
 }
 
 function unpinSandbox() {
-    step(1);
-    document.getElementById('lock_button').style.display="inline";
-    document.getElementById('unlock_button').style.display="none";
-
+    var o = parseUri(location.href);
+    location.href=location.origin + location.pathname + "?unlock=" + o.queryKey.lock;
 }
 
 
@@ -69,6 +77,7 @@ function loadExperiment(id) {
     	            scenario = experiment.scenario;
     	            config = parseConfiguration(experiment.cfg)[0];
     	            cstrsEditor.setValue(experiment.script);
+    	            configEditor.setValue(experiment.cfg);
     	            drawConfiguration('canvas');
     	            step(1);
     	        } else {

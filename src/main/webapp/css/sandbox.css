@@ -160,17 +160,15 @@ code {
 
 #pin_button {
     background-position-x: -120px;
-    visibility: visible;
 }
 
 #lock_button {
     background-position-x: -140px;
-    visibility: visible;
 }
 
 #unlock_button {
     background-position-x: -160px;
-    visibility: visible;
+    display: none;
 }
 
 .jqmWindow .logo {
