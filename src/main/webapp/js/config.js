@@ -246,6 +246,8 @@ function parseConfiguration(b) {
         }
     }
 
+    //Beware of nodes with cpu == 0 (used to detect undeclared node
+    config.nodes = config.nodes.filter(function(n) { console.log("Check for " + n.id + " cpu=" + n.cpu);return n.cpu > 0;})
     if (config.nodes.length == 0) {
         errors.push(["error", lineNumber, "The configuration must be composed of at least 1 node"]);
     }
