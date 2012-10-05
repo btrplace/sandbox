@@ -342,7 +342,7 @@ function step(id) {
     }
 }
 
-function colorLines(type, nb) {
+function colorLines(nb) {
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
     for (var j in stats) {

@@ -40,6 +40,7 @@ function pinSandbox() {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
+                $('#pinbox').jqm();
                 $('#pinBox').jqmShow();
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
