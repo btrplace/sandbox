@@ -31,7 +31,7 @@ function init() {
 }
 
 function pinSandbox() {
-    var experiment = {"cfg":serialize(config), "scenario" : scenario,"script" : cstrsEditor.getValue()};
+    var experiment = {"cfg":configEditor.getValue(), "scenario" : scenario,"script" : cstrsEditor.getValue()};
     document.getElementById('lock_button').style.display="none";
     document.getElementById('unlock_button').style.display="inline";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
@@ -40,7 +40,7 @@ function pinSandbox() {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
-                $('#pinbox').jqm();
+                $('#pinBox').jqm();
                 $('#pinBox').jqmShow();
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
@@ -66,8 +66,8 @@ function loadExperiment(id) {
     	        if (this.status == 200) {
     	            var experiment = JSON.parse(this.responseText);
     	            scenario = experiment.scenario;
-    	            config = unserialize(experiment.cfg);
-    	            document.getElementById('constraints').value = experiment.script;
+    	            config = parseConfiguration(experiment.cfg)[0];
+    	            cstrsEditor.setValue(experiment.script);
     	            drawConfiguration('canvas');
     	            step(1);
     	        } else {
@@ -78,35 +78,4 @@ function loadExperiment(id) {
     	    }
         }
         http.send(null);
-}
-
-function serialize(cfg) {
-    var cpy = [];
-    for (var i in cfg.nodes) {
-        var n = cfg.nodes[i];
-        cpy[i] = new Node(n.id, n.cpu, n.mem);
-
-        for (var j in n.vms) {
-            var v = n.vms[j];
-            var x = new VirtualMachine(v.id, v.cpu, v.mem);
-            cpy[i].host(x);
-        }
-    }
-    return cpy;
-}
-
-function unserialize(src) {
-    var c = new Configuration();
-    for (var i in src) {
-        s = src[i];
-        var n = new Node(s.id, s.cpu, s.mem);
-        for (var j in s.vms) {
-            v = s.vms[j];
-            vv = new VirtualMachine(v.id, v.cpu, v.mem);
-            n.host(vv);
-            c.vms.push(vv);
-        }
-        c.nodes.push(n);
-    }
-    return c;
 }
