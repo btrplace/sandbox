@@ -31,9 +31,9 @@ function init() {
 }
 
 function pinSandbox() {
-    var experiment = {"cfg":serialize(config), "scenario" : scenario,"script" : document.getElementById('constraints').value};
-    document.getElementById('lock_button').style.visibility="hidden";
-    document.getElementById('unlock_button').style.visibility="visible";
+    var experiment = {"cfg":serialize(config), "scenario" : scenario,"script" : cstrsEditor.getValue()};
+    document.getElementById('lock_button').style.display="none";
+    document.getElementById('unlock_button').style.display="inline";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
@@ -46,6 +46,12 @@ function pinSandbox() {
 	        }
 	    }
     });
+}
+
+function unpinSandbox() {
+    document.getElementById('lock_button').style.display="inline";
+    document.getElementById('unlock_button').style.display="none";
+    step(1);
 }
 
 

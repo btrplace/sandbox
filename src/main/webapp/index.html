@@ -108,7 +108,7 @@
                             <div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span></div>
                             <!--<div class="player_button" id="pin_button" onclick="pinSandbox()"><span class="tt">Pin this sandbox</span></div>-->
                             <div class="player_button" id="lock_button" onclick="pinSandbox()"><span class="tt">Lock</span></div>
-                            <div class="player_button" id="unlock_button" onclick="pinSandbox()" style="visibility:hidden;"><span class="tt">Unlock</span></div>
+                            <div class="player_button" id="unlock_button" onclick="unpinSandbox()"><span class="tt">Unlock</span></div>
 
 
                             <br>
@@ -148,7 +148,7 @@
 </div>
 <div id="pinBox" class="jqmWindow">
     <img src="img/info.png" class="logo"/>
-      <p>The sandbox is now pinned and can be accessed at the following address:</p>
+      <p>The sandbox is now locked. It can be accessed at the following address:</p>
       <a id="goToPin" href="#"><code id="pinURL"></code></a>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
