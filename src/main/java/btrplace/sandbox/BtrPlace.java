@@ -19,7 +19,7 @@
 
 package btrplace.sandbox;
 
-import btrpsl.BtrPlaceVJobBuilder;
+import btrpsl.*;
 import btrpsl.constraint.ConstraintsCatalog;
 import btrpsl.constraint.ConstraintsCatalogBuilderFromProperties;
 import btrpsl.template.VirtualMachineTemplateStub;
@@ -126,7 +126,7 @@ public class BtrPlace {
         List<Integer> nonViables = new ArrayList<Integer>();
         List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
         TimedReconfigurationPlan plan = null;
-        List<Error> errors = new ArrayList<Error>();
+        ErrorReporter errReporter = new JSonErrorReporter();
         Configuration src;
         try {
             src = confReader.unSerialize(new BufferedReader(new StringReader(cfg)));
@@ -141,7 +141,6 @@ public class BtrPlace {
             VJobElementBuilder eb = new DefaultVJobElementBuilder(vtpls, ptpls);
 
             BtrPlaceVJobBuilder vjobBuilder = new BtrPlaceVJobBuilder(eb, catalog);
-
             int nb = 0;
 
             VJob vjob = new DefaultVJob("sandbox");
@@ -158,17 +157,15 @@ public class BtrPlace {
                     vjob.addConstraint(c);
                     cstrs.add(c);
                     nb++;
-                } catch (Exception e) {
-                    for (String m : e.getMessage().split("\n")) {
-                  //      System.out.println("Before simplify: |||" + m + "|||");
-                        Error err = simplifyErrorMessage(src, m);
-                    //    System.out.println("After |||" + err.lineNo + " ||| " + err.message + "|||");
-                        errors.add(err);
+                } catch (BtrpPlaceVJobBuilderException e) {
+                    ErrorReporter rep = e.getErrorReporter();
+                    if (rep != null) {
+                        errReporter.getErrors().addAll(rep.getErrors());
                     }
                 }
                 padding++;
             }
-            if (errors.isEmpty() && !nonViables.isEmpty()) {
+            if (errReporter.getErrors().isEmpty() && !nonViables.isEmpty()) {
                 ChocoCustomRP rp = new ChocoCustomRP(durEv);
                 rp.doOptimize(false);
                 rp.setRepairMode(false);
@@ -184,7 +181,7 @@ public class BtrPlace {
                             new SimpleManagedElementSet<Node>(),
                             vjobs);
                 } catch (Exception e) {
-                    errors.add(new Error(-1,"no solution"));
+                        errReporter.append(0, 0, "no solution");
                 }
             } else {
                 plan = new DefaultTimedReconfigurationPlan(src);
@@ -193,15 +190,20 @@ public class BtrPlace {
             plan = new DefaultTimedReconfigurationPlan(src);
         }
         try {
-            return Response.ok(buildReponse(src, errors, cstrs, nonViables, plan).toString()).build();
+            return Response.ok(buildReponse(src, errReporter, cstrs, nonViables, plan).toString()).build();
         } catch (Exception x) {
             return Response.status(400).build();
         }
     }
 
-    private JSONObject buildReponse(Configuration src, List<Error> errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan) throws JSONException {
+    private JSONObject buildReponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan) throws JSONException {
         JSONObject o = new JSONObject();
         List<List<Integer>> status = new ArrayList<List<Integer>>();
+        int shift = src.getAllVirtualMachines().size() + 1; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
+        for (ErrorMessage err : errors.getErrors()) {
+            err.message = err.message.replaceAll("sandbox\\.", "");
+            err.lineNo -= shift;
+        }
         o.put("errors", errors);
         if (plan == null) {
 
@@ -263,7 +265,7 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        //System.out.println(o);
+        System.out.println(o);
         return o;
     }
 

@@ -288,7 +288,7 @@ function check(id) {
 	            } else { //Some constraints are not satisfied
 	                step(1);
 	            }
-	        } else if (scenario.errors[0].message == "no solution") {
+	        } else if (scenario.errors[0].msg == "no solution") {
 	            step(3);
 	        } else if (scenario.errors.length > 0) {
 	            step(4);
@@ -328,7 +328,6 @@ function step(id) {
     } else if (id ==4) {
         showSyntaxErrors();
         checkable(true);
-        colorLines(0);
     }
 }
 
@@ -449,7 +448,7 @@ function showSyntaxErrors() {
                 row: err.lineNo - 1,
                 column: 0,
                 type: "error",
-                text: err.message
+                text: err.msg
             });
     }
     if (annotations.length > 0) {

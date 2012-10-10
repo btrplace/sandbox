@@ -59,7 +59,7 @@
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>btrpsl</artifactId>
-            <version>0.105</version>
+            <version>0.107-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
