@@ -148,13 +148,9 @@ public class BtrPlace {
                     VJob v = vjobBuilder.build(buffer);
                     PlacementConstraint c = v.getConstraints().iterator().next();
                     cstrToLine.put(c, nb + 1);
-                    //System.err.print("Line " + nb + ": " + c + "\t");
                     if (!c.isSatisfied(src)) {
-                      //  System.err.println("!");
                         nonViables.add(nb);
-                    }/* else {
-                        System.err.println("ok");
-                    }  */
+                    }
 
                     vjob.addConstraint(c);
                     cstrs.add(c);
@@ -259,7 +255,7 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        System.out.println(o);
+        //System.out.println(o);
         return o;
     }
 
