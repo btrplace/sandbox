@@ -197,7 +197,7 @@ public class BtrPlace {
     private JSONObject buildResponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
         JSONObject o = new JSONObject();
         List<List<Integer>> status = new ArrayList<List<Integer>>();
-        int shift = src.getAllVirtualMachines().size() + 1; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
+        int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
         for (ErrorMessage err : errors.getErrors()) {
             err.message = err.message.replaceAll("sandbox\\.", "");
             err.lineNo -= shift;
