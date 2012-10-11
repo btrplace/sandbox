@@ -206,8 +206,12 @@ public class BtrPlace {
         if (plan == null) {
 
             List<Integer> stat = new ArrayList<Integer>();
-            for (int idx : nonViables) {
-                    stat.add(-1 * idx);
+            for (PlacementConstraint c : cstrs) {
+                if (!c.isSatisfied(src)) {
+                    stat.add(-1 * cstrToLine.get(c));
+                } else {
+                    stat.add(cstrToLine.get(c));
+                }
             }
             status.add(stat);
         } else {
@@ -255,7 +259,7 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
-        //System.out.println(o);
+        System.out.println(o);
         return o;
     }
 
