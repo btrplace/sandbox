@@ -79,15 +79,29 @@ function updateConfiguration(buf) {
 function highlightErrors(errors) {
 
     var annotations = [];
-    for (var i in errors) {
-        annotations.push({
-            row: errors[i][1] - 1,
-            column: 0,
-            text: errors[i][2],
-            type: errors[i][0]
+
+    var msgs = [];
+
+    for (var j in errors) {
+        var err = errors[j];
+            var lineNo = err[1] - 1;
+            if (!msgs[lineNo]) {
+                msgs[lineNo] = err[2];
+            } else {
+                msgs[lineNo] += "\n" + err[2];
+            }
         }
-        );
+
+    for (var j in msgs) {
+        var msg = msgs[j];
+        annotations.push({
+            row: j,
+            column: 0,
+            type: "error",
+            text: msg
+        });
     }
+
     if (errors.length > 0) {
         $("#config-mode > a").get()[0].style.fontWeight="bold";
         $("#config-mode > a").get()[0].style.color="red";

@@ -442,14 +442,26 @@ function rephrase(a) {
 function showSyntaxErrors() {
 
     var annotations = [];
+
+    var msgs = [];
+
     for (var j in scenario.errors) {
         var err = scenario.errors[j];
+        var lineNo = err.lineNo - 1;
+        if (!msgs[lineNo]) {
+            msgs[lineNo] = err.msg;
+        } else {
+            msgs[lineNo] += "\n" + err.msg;
+        }
+    }
+    for (var j in msgs) {
+        var msg = msgs[j];
         annotations.push({
-                row: err.lineNo - 1,
-                column: 0,
-                type: "error",
-                text: err.msg
-            });
+            row: j,
+            column: 0,
+            type: "error",
+            text: msg
+        });
     }
     if (annotations.length > 0) {
             var node = $("#cstrs-mode > a").get()[0];

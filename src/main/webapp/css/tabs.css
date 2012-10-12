@@ -55,3 +55,7 @@
         background-color: #f5F5F5;
         font-size: 10px;
   }
+
+.ace_gutter_tooltip {
+      white-space: pre-line;
+}
