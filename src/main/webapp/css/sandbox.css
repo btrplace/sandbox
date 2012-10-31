@@ -169,6 +169,11 @@ code {
     background-position-y: -20px;
 }
 
+#player .invalid {
+    background-position-y: -40px;
+}
+
+
 #prev_button {
     background-position-x: -20px;
 }

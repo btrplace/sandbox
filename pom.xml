@@ -101,25 +101,18 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>downloads-maven-plugin</artifactId>
-                <version>0.6</version>
-                <configuration>
-                    <description>Release ${project.version} of ${project.artifactId}-${project.groupId}</description>
-                    <override>true</override>
-                    <includeAttached>true</includeAttached>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
-    <repositories>
-        <!-- local repository for dependencies not available on central repositories -->
+    <distributionManagement>
         <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/repository</url>
+            <uniqueVersion>false</uniqueVersion>
+            <id>btrp</id>
+            <name>Corporate Repository</name>
+            <url>
+                scpexe://btrp.inria.fr:/home/maven/repos/releases
+            </url>
+            <layout>default</layout>
         </repository>
-    </repositories>
+    </distributionManagement>
 </project>
