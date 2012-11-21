@@ -7,7 +7,7 @@ some placement constraints and check BtrPlace fix the configuration when
 it is stated as not viable.
 
 - author: Fabien Hermenier
-- contact: fabien.hermenier@gmail.com
+- contact: fabien.hermenier@unice.fr
 
 Installation Notes
 -------------------------------
@@ -30,7 +30,7 @@ The webapp will then be available at [localhost:8080] (http://localhost:8080).
 Release notes
 -------------------------------
 
-### ?? - 1.3-SNAPSHOT ###
+### 21 nov. 2012 - 1.2.1 ###
 - bug fixes
 
 ### 19 sep. 2012 - 1.2 ###
@@ -57,4 +57,4 @@ Release notes
 
 Copyright
 -------------------------------
-Copyright (c) 2012 Fabien Hermenier. See `LICENSE.txt` for details.
+Copyright (c) 2012 University of Nice-Sophia Antipolis. See `LICENSE.txt` for details.
