@@ -38,6 +38,9 @@ function pinSandbox() {
 function loadExperiment(id) {
         var http = createXhrObject();
         //Remove the possible index.html at the end
+        if (!location.origin) {
+            location.origin = location.protocol + "//" + location.host;
+        }
         var url = location.origin + location.pathname;
         http.open("GET", url + "/cache/" + id, true);
         http.onreadystatechange = function() {
