@@ -38,7 +38,7 @@
     <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
     <meta name="author" content="Fabien Hermenier"/>
     <meta charset="UTF-8"/>
-    <link href="atom.xml" type="application/atom+xml" rel="alternate" title="Btrplace Sandbox updates" />
+    <link href="atom.xml" type="application/atom+xml" rel="alternate" title="Btrplace Sandbox updates"/>
 </head>
 <body onload="init()">
 <div id="content">
@@ -74,6 +74,7 @@
 
                     <div class="check_button" onclick="check('constraints');"></div>
                     <br/>
+
                     <div id="available_constraints"></div>
                 </div>
                 <div class="state" id="state1">
@@ -86,12 +87,18 @@
                     <div id="scenario">
                         <div id="plan"></div>
                         <div id="player">
-                            <div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span></div>
-                            <div class="player_button" id="prev_button" onclick="prev()"><span class="tt">Previous</span></div>
-                            <div class="player_button" id="play_button" onclick="playOrPause();"><span class="tt">Play</span></div>
-                            <div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span></div>
-                            <div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span></div>
-                            <div class="player_button" id="pin_button" onclick="pinSandbox()"><span class="tt">Pin this sandbox</span></div>
+                            <div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span>
+                            </div>
+                            <div class="player_button" id="prev_button" onclick="prev()"><span
+                                    class="tt">Previous</span></div>
+                            <div class="player_button" id="play_button" onclick="playOrPause();"><span
+                                    class="tt">Play</span></div>
+                            <div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span>
+                            </div>
+                            <div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span>
+                            </div>
+                            <div class="player_button" id="pin_button" onclick="pinSandbox()"><span class="tt">Pin this sandbox</span>
+                            </div>
                             <br>
                         </div>
 
@@ -126,19 +133,21 @@
             <div class="restart_button" onclick="step(0);"></div>
         </div>
         <div id="footer">
-            BtrPlace-sandbox version 1.2
-            © <a href="mailto:fabien.hermenier@inria.fr">Fabien Hermenier</a> 2012
+            BtrPlace-sandbox version 1.2.1
+            © <a href="mailto:fabien.hermenier@unice.fr">Fabien Hermenier</a> 2012
         </div>
 
     </div>
 </div>
 <div id="pinBox" class="jqmWindow">
     <img src="img/info.png" class="logo"/>
-      <p>The sandbox is now pinned and can be accessed at the following address:</p>
-      <a id="goToPin" href="#"><code id="pinURL"></code></a>
+
+    <p>The sandbox is now pinned and can be accessed at the following address:</p>
+    <a id="goToPin" href="#"><code id="pinURL"></code></a>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
     <img src="img/error.png" class="logo"/>
+
     <p>Unable to retrieve the asked sandbox</p>
     <a href=".">Ok</a>
 </div>
