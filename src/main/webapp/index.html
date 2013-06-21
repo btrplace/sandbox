@@ -82,16 +82,13 @@
             </div>
             <script type="text/javascript">
                 $(document).ready(function(){
-                    //$(".panel-container").resizable({
                     $(".panel-container").resizable({
                     grid:50,
                     handles: "se, e, s",
+                    minWidth:200,
                     maxWidth:480,
                     minHeight:90,
                     resize:function(event, ui){
-                        /*var heightDelta = ui.size.height - ui.originalSize.height ,
-                            previousHeight = $("#editor").height();
-                        */
                         $("#editor").height(ui.size.height-45);
                         editor.resize(true);
                     }

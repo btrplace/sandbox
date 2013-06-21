@@ -46,6 +46,7 @@
 }
 .tab-container {
     float: left;
+    margin-bottom:30px;
 }
 
 #editor,#configuration,#constraints {
