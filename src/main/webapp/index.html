@@ -51,23 +51,23 @@
     <link href="atom.xml" type="application/atom+xml" rel="alternate" title="Btrplace Sandbox updates" />
 </head>
 <body onload="init()">
-<div id="content">
-    <img src="img/logo_sandbox.png" alt="Projet logo"/>
+<div id="intro_wrapper" class="centered">
+    <img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/>
     <!--<h1>BtrPlace sandbox</h1>   -->
-
+    <div id="intro">
+        <p>
+            This sandbox allows to test the effect of constraints restricting the placement of VMs on servers.
+            The following figure depicts a sample configuration. Each grid represents a server with a finite amount
+            of CPU and memory resources to share among virtual machines.
+            Each gray rectangle denotes a virtual machine that consumes some resources on its server.
+            Customize the script with some of the available constraints
+            and observe BtrPlace fixing a non-viable placement for you !
+        </p>
+        <a href="about.html" target="_blank">Read more &#9654;</a>
+    </div>
+</div>
+<div id="content" class="centered">
     <div id="sandbox">
-        <div id="intro">
-            <p>
-                This sandbox allows to test the effect of constraints restricting the placement of VMs on servers.
-                The following figure depicts a sample configuration. Each grid represents a server with a finite amount
-                of CPU and memory resources to share among virtual machines.
-                Each gray rectangle denotes a virtual machine that consumes some resources on its server.
-                Customize the script with some of the available constraints
-                and observe BtrPlace fixing a non-viable placement for you !
-            </p>
-            <a href="about.html" target="_blank">Read more &#9654;</a>
-        </div>
-
         <div class="export_button" id="txt_export"></div>
         <div class="export_button" id="svg_export"></div>
         <div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
@@ -136,12 +136,11 @@
                 </div>
             </div>
         </div>
-        <div id="footer">
-            BtrPlace-sandbox version 1.3
-            © <a href="mailto:fabien.hermenier@unice.fr">Fabien Hermenier</a> 2012
-        </div>
-
     </div>
+</div>
+<div id="footer">
+    BtrPlace-sandbox version 1.3
+    © <a href="mailto:fabien.hermenier@unice.fr">Fabien Hermenier</a> 2012
 </div>
 <div id="pinBox" class="jqmWindow">
     <img src="img/info.png" class="logo"/>

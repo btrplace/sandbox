@@ -3,6 +3,14 @@
  padding: 0;
 }
 
+body {
+    color: #222;
+    padding-top: 40px;
+    border-top: solid #aab089 6px;
+    line-height: 180%;
+    background: #eee;
+}
+
 .state {
     text-align: center;
 }
@@ -31,15 +39,32 @@
     display: none;
 }
 
+#sandbox_logo_wrapper {
 
+}
+
+#intro_wrapper {
+    overflow:auto;
+}
+
+img#sandbox_logo {
+    width:300px;
+    display:block;
+    margin:0 auto;
+    float:left;
+}
 
 #intro {
     text-align: right;
+    float:left;
+    font-size:13px;
+    width:500px;
 }
 
 #intro p {
     text-indent: 20px;
     text-align: justify;
+    margin-bottom:0px;
 }
 
 #intro a {
@@ -47,6 +72,10 @@
     font-size: 9pt;
     color: #666;
     margin-right: 20px;
+}
+
+#sandbox {
+
 }
 
 #canvas {
@@ -103,6 +132,7 @@
     float: right;
 }
 
+/*
 #footer {
    padding-top: 20px;
    clear: both;
@@ -110,7 +140,18 @@
    font-size: 10pt;
    padding-bottom: 5px;
    margin-right: 20px;
+}     */
+#footer {
+    padding-top: 1em;
+    font-size: 12px;
+    background-color: #d2d8b1;
+    border-top: solid 1px #aab089;
+    color: #222;
+    clear: both;
+    text-align: center;
+    margin-top:10px;
 }
+
 
 #output p {
     margin-top: 20px;
