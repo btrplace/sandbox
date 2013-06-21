@@ -126,10 +126,30 @@ img#sandbox_logo {
     cursor: pointer;
 }
 
+#input_zone_wrapper {
+    border-top: solid 1px #aab089;
+    background-color:#d2d8b1;
+    margin-top:10px;
+    -moz-box-shadow: 5px 5px 5px #999;
+    -webkit-box-shadow: 5px 5px 5px #999;
+    box-shadow: 5px 5px 5px #999;
+}
+
+#input_zone {
+    padding-top:10px;
+    padding-bottom:10px;
+    overflow:auto;
+}
+
+#script {
+    float:right;
+}
+
+
+
 #output {
     margin-bottom: 20px;
     width: 380px;
-    float: right;
 }
 
 /*
@@ -142,7 +162,6 @@ img#sandbox_logo {
    margin-right: 20px;
 }     */
 #footer {
-    padding-top: 1em;
     font-size: 12px;
     background-color: #d2d8b1;
     border-top: solid 1px #aab089;

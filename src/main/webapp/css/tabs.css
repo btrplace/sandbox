@@ -42,6 +42,7 @@
     padding: 10px;
     border-radius: 0 4px 4px 4px;
     width: 380px;
+    line-height:normal;
 }
 .tab-container {
     float: left;
