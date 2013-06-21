@@ -45,7 +45,6 @@ import entropy.vjob.builder.DefaultVJobElementBuilder;
 import entropy.vjob.builder.VJobElementBuilder;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import sun.org.mozilla.javascript.internal.ErrorReporter;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
@@ -197,7 +196,7 @@ public class BtrPlace {
         return null ;
     }
 
-    private JSONObject buildResponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
+    private JSONObject buildResponse(Configuration src, Object errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
         JSONObject o = new JSONObject();
       /*List<List<Integer>> status = new ArrayList<List<Integer>>();
         int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
