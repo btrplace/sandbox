@@ -45,6 +45,7 @@ import entropy.vjob.builder.DefaultVJobElementBuilder;
 import entropy.vjob.builder.VJobElementBuilder;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import sun.org.mozilla.javascript.internal.ErrorReporter;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
@@ -117,7 +118,7 @@ public class BtrPlace {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String script) {
-        List<Integer> nonViables = new ArrayList<Integer>();
+       /* List<Integer> nonViables = new ArrayList<Integer>();
         List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
         TimedReconfigurationPlan plan = null;
         ErrorReporter errReporter = new JSonErrorReporter();
@@ -192,11 +193,13 @@ public class BtrPlace {
             x.printStackTrace();
             return Response.status(400).build();
         }
+        */
+        return null ;
     }
 
     private JSONObject buildResponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
         JSONObject o = new JSONObject();
-        List<List<Integer>> status = new ArrayList<List<Integer>>();
+      /*List<List<Integer>> status = new ArrayList<List<Integer>>();
         int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
         for (ErrorMessage err : errors.getErrors()) {
             err.message = err.message.replaceAll("sandbox\\.", "");
@@ -260,6 +263,7 @@ public class BtrPlace {
         }
         o.put("status", status);
         System.out.println(o);
+        */
         return o;
     }
 

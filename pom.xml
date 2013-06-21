@@ -59,7 +59,7 @@
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>btrpsl</artifactId>
-            <version>0.107-SNAPSHOT</version>
+            <version>0.105</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -115,4 +115,13 @@
             <layout>default</layout>
         </repository>
     </distributionManagement>
+
+    <repositories>
+        <!-- local repository for dependencies not available on central repositories -->
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repository</url>
+        </repository>
+    </repositories>
 </project>
