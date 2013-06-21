@@ -1,3 +1,21 @@
+String.prototype.trim = String.prototype.trim || function trim() { return this.replace(/^\s\s*/, '').replace(/\s\s*$/, ''); };
+
+
+Element.prototype.hasClass = function (cls) {
+  return this.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+Element.prototype.addClass = function(cls) {
+  if (!this.hasClass(cls)) this.className += " "+cls;
+}
+
+Element.prototype.removeClass = function(cls) {
+  if (this.hasClass(cls)) {
+      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+      this.className=this.className.replace(reg,' ');
+  }
+}
+
 // parseUri 1.2.2
 // (c) Steven Levithan <stevenlevithan.com>
 // MIT License

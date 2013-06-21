@@ -3,16 +3,68 @@
  padding: 0;
 }
 
+body {
+    color: #222;
+    padding-top: 40px;
+    border-top: solid #aab089 6px;
+    line-height: 180%;
+    background: #eee;
+}
+
 .state {
     text-align: center;
 }
+
+#state0 {
+    display: block;
+}
+
+#state0 {
+    display: none;
+}
+
+#state1 {
+    display: none;
+}
+
+#state2 {
+    display: none;
+}
+
+#state3 {
+    display: none;
+}
+
+#state4 {
+    display: none;
+}
+
+#sandbox_logo_wrapper {
+
+}
+
+#intro_wrapper {
+    overflow:auto;
+}
+
+img#sandbox_logo {
+    width:300px;
+    display:block;
+    margin:0 auto;
+    float:left;
+}
+
 #intro {
     text-align: right;
+    float:right;
+    font-size:13px;
+    width:500px;
 }
 
 #intro p {
     text-indent: 20px;
     text-align: justify;
+    margin-bottom:0px;
 }
 
 #intro a {
@@ -22,17 +74,20 @@
     margin-right: 20px;
 }
 
+#sandbox {
+
+}
+
 #canvas {
     text-align: center;
-    height: 300px;
+    //height: 300px;
     margin-top: 25px;
 }
 
 #input {
     width: 380px;
     margin-top: 20px;
-    float: right;
-    background: lightyellow;
+    float: left;
     margin-bottom: 20px;
 }
 
@@ -71,12 +126,31 @@
     cursor: pointer;
 }
 
+#input_zone_wrapper {
+    border-top: solid 1px #aab089;
+    background-color:#d2d8b1;
+    margin-top:10px;
+    -moz-box-shadow: 5px 5px 5px #999;
+    -webkit-box-shadow: 5px 5px 5px #999;
+    box-shadow: 5px 5px 5px #999;
+}
+
+#input_zone {
+    padding-top:10px;
+    padding-bottom:10px;
+    overflow:auto;
+}
+
+#script {
+    float:right;
+}
+
 #output {
     margin-bottom: 20px;
     width: 380px;
-    float: left;
 }
 
+/*
 #footer {
    padding-top: 20px;
    clear: both;
@@ -84,11 +158,19 @@
    font-size: 10pt;
    padding-bottom: 5px;
    margin-right: 20px;
+}     */
+#footer {
+    font-size: 12px;
+    background-color: #d2d8b1;
+    border-top: solid 1px #aab089;
+    color: #222;
+    clear: both;
+    text-align: center;
+    margin-top:2em;
 }
 
+
 #output p {
-    //width: 80%;
-    //margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -97,29 +179,15 @@ code {
     text-align: left;
 }
 
-textarea {
-    width: 100%;
-    resize: none;
-    font-size: 10pt;
-    outline: none;
-    background: lightyellow;
-}
-
 #scenario li {
     text-align: left;
     margin-left: 80px;
 }
 
-#available_constraints {
+.note {
     font-size: 10pt;
-    text-align: justify;
+    text-align: right;
     font-style: italic;
-    clear: both;
-}
-
-#syntax_error {
-    text-align: left;
-    margin-left: 20px;
 }
 
 #pinURL {
@@ -159,6 +227,11 @@ textarea {
     background-position-y: -20px;
 }
 
+#player .invalid {
+    background-position-y: -40px;
+}
+
+
 #prev_button {
     background-position-x: -20px;
 }
@@ -177,7 +250,15 @@ textarea {
 
 #pin_button {
     background-position-x: -120px;
-    visibility: visible;
+}
+
+#lock_button {
+    background-position-x: -140px;
+}
+
+#unlock_button {
+    background-position-x: -160px;
+    display: none;
 }
 
 .jqmWindow .logo {
@@ -191,7 +272,7 @@ textarea {
     display: none;
     padding: 2px 3px;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 10pt;
 }
 
@@ -201,5 +282,4 @@ textarea {
     background: #ffffff;
     border: solid #cccccc 1px;
     color: #6c6c6c;
-
 }

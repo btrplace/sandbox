@@ -1,37 +1,67 @@
 //Check for an id
 
+
+var configEditor;
+var cstrsEditor;
+var editor;
+
 function init() {
     var o = parseUri(location.href);
-    if (o.queryKey.id) {
-        console.log("re-using sandbox " + o.queryKey.id);
-        loadExperiment(o.queryKey.id);
-    } else {
+
+    editor = ace.edit("editor");
+    var EditSession = ace.require('ace/edit_session').EditSession;
+    configEditor = new EditSession("");
+    cstrsEditor = new EditSession("");
+    if (o.queryKey.lock) {
+        console.log("re-using sandbox " + o.queryKey.lock);
+        loadExperiment(o.queryKey.lock);
+        document.getElementById('lock_button').style.display="none";
+        document.getElementById('unlock_button').style.display="inline";
+        editor.setReadOnly(true);
+    } else if (o.queryKey.unlock) {
+        console.log("Unlocked sandbox from " + o.queryKey.unlock);
+        loadExperiment(o.queryKey.unlock);
+        document.getElementById('lock_button').style.display="inline";
+        document.getElementById('unlock_button').style.display="none";
+        editor.setReadOnly(false);
+    } else  {
         console.log("New sandbox");
+        editor.setReadOnly(false);
         step(0);
     }
+
+    if (o.anchor == "cfg") {
+        setMode("cfg");
+    } else {
+        setMode("cstrs");
+    }
+    configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
+
+    insertCatalogContent();
 }
 
-	            $().ready(function() {
-                  $('#pinBox').jqm({modal:true});
-                  $('#unknownPinBox').jqm({modal:true});
-                });
-
-
 function pinSandbox() {
-    var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
-    document.getElementById('pin_button').style.visibility="hidden";
+    var experiment = {"cfg":configEditor.getValue(), "scenario" : scenario,"script" : cstrsEditor.getValue()};
+    document.getElementById('lock_button').style.display="none";
+    document.getElementById('unlock_button').style.display="inline";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
+                $('#pinBox').jqm();
                 $('#pinBox').jqmShow();
 	        } else {
 	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }
 	    }
     });
+}
+
+function unpinSandbox() {
+    var o = parseUri(location.href);
+    location.href=location.origin + location.pathname + "?unlock=" + o.queryKey.lock;
 }
 
 
@@ -48,8 +78,9 @@ function loadExperiment(id) {
     	        if (this.status == 200) {
     	            var experiment = JSON.parse(this.responseText);
     	            scenario = experiment.scenario;
-    	            unserialize(experiment.cfg);
-    	            document.getElementById('constraints').value = experiment.script;
+    	            config = parseConfiguration(experiment.cfg)[0];
+    	            cstrsEditor.setValue(experiment.script);
+    	            configEditor.setValue(experiment.cfg);
     	            drawConfiguration('canvas');
     	            step(1);
     	        } else {
@@ -60,35 +91,4 @@ function loadExperiment(id) {
     	    }
         }
         http.send(null);
-}
-
-function serialize(nodes) {
-    var cpy = [];
-    for (var i in nodes) {
-        var n = nodes[i];
-        cpy[i] = new Node(n.id, n.cpu, n.mem);
-
-        for (var j in n.vms) {
-            var v = n.vms[j];
-            var x = new VirtualMachine(v.id, v.cpu, v.mem);
-            cpy[i].host(x);
-        }
-    }
-    return cpy;
-}
-
-function unserialize(src) {
-    nodes = [];
-    vms = [];
-    for (var i in src) {
-        s = src[i];
-        var n = new Node(s.id, s.cpu, s.mem);
-        for (var j in s.vms) {
-            v = s.vms[j];
-            vv = new VirtualMachine(v.id, v.cpu, v.mem);
-            n.host(vv);
-            vms.push(vv);
-        }
-        nodes.push(n);
-    }
 }

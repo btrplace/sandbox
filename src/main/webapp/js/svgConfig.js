@@ -21,6 +21,63 @@ var animationStep;
 //Indicate an action is in progress
 var pending = false;
 
+function Configuration (ns,vs) {
+    this.vms = vs ? vs : [];
+    this.nodes = ns ? ns : [];
+
+    this.getNode = function (id) {
+        for (var i in this.nodes) {
+            if (this.nodes[i].id == id) {
+                return this.nodes[i];
+            }
+        }
+    }
+
+    this.getHoster = function(id) {
+        for (var i in this.nodes) {
+            if (this.nodes[i].isHosting(id)) {
+                return this.nodes[i];
+            }
+        }
+    }
+
+    this.getVirtualMachine = function (id) {
+        for (var i in this.vms) {
+            if (this.vms[i].id == id) {
+                return this.vms[i];
+            }
+        }
+    }
+
+    this.btrpSerialization = function() {
+        var buffer = "#list of nodes\n";
+        for (var i in this.nodes) {
+    	    var  n = this.nodes[i];
+    	    buffer = buffer + n.id + " 1 " + n.cpu + " " + n.mem + "\n";
+        }
+        buffer = buffer + "#list of VMs\n";
+        for (var  i in this.vms) {
+    	var vm = this.vms[i];
+    	buffer = buffer + "sandbox."+vm.id + " 1 " + vm.cpu + " " + vm.mem + "\n";
+        }
+        buffer += "#initial configuration\n";
+        for (var i in this.nodes) {
+    	var n = this.nodes[i];
+    	if (n.online) {
+    	    buffer += n.id;
+    	} else {
+    	    buffer = buffer + "(" + n.id + ")";
+    	}
+    	for (var j in n.vms) {
+    	    var vm = n.vms[j];
+    	    buffer = buffer + " sandbox." + vm.id;
+    	}
+    	buffer += "\n";
+        }
+        return buffer;
+    }
+}
+
 function Node(name, cpu, mem) {
     this.id = name;
     this.cpu = cpu;
@@ -28,7 +85,7 @@ function Node(name, cpu, mem) {
     this.online = true;
     this.vms = [];
     this.boundingBox = function () {
-	    return [2 * border + unit_size * cpu, 2 * border + unit_size * mem];
+	    return [2 * border + unit_size * this.cpu, 2 * border + unit_size * this.mem];
     };
 
     this.draw = function (canvas, x, y) {
@@ -37,8 +94,8 @@ function Node(name, cpu, mem) {
         this.boxStroke = canvas.set();
         this.boxFill = canvas.set();
 	    this.canvas = canvas;
-	    var box_width = cpu * unit_size;
-	    var box_height = mem * unit_size;
+	    var box_width = this.cpu * unit_size;
+	    var box_height = this.mem * unit_size;
 	    var width = 2 * border + box_width;
 	    var height = 2 * border + box_height;
 	    var rc_bg = "#fff";
@@ -59,11 +116,11 @@ function Node(name, cpu, mem) {
 	    this.boxFill.push(canvas.text(x + border, y + border + box_height, name).attr({'text-anchor': 'end' ,'baseline-shift': '-2em','font-size' : '16pt', 'fill' : bgColor}));
 	
         //Resource grid
-	    for (var i = 1; i < cpu; i+=1) {
+	    for (var i = 1; i < this.cpu; i+=1) {
 	        var pos = border + i * unit_size;
 	        this.boxStroke.push(canvas.path("M " + (x + pos) + " " + (y + border) + " l " + " 0 " + " " + box_height).attr({'stroke-dasharray' : '--','stroke':bgColor}));
 	    }
-    	for (var i = 1; i < mem; i+=1) {
+    	for (var i = 1; i < this.mem; i+=1) {
 	        var pos = border + i * unit_size;
 	        this.boxStroke.push(canvas.path("M " + (x + border) + " " + (y + pos) + " l " + box_width + " 0").attr({'stroke-dasharray' : '--','stroke':bgColor}));
 	    }
@@ -98,19 +155,35 @@ function Node(name, cpu, mem) {
         }
     }
 
-    this.fit = function(vm) {
-	var freeCPU = this.cpu - vm.cpu;
-	var freeMem = this.mem - vm.mem;
-	for (var v  in this.vms) {
-	    freeCPU -= this.vms[v].cpu;
-	    freeMem -= this.vms[v].mem;
-	    if (freeCPU < 0 || freeMem < 0) {
-		    return false;
-	    }
-	}
-	return true;
+    this.isHosting = function(id) {
+        for (var i in this.vms) {
+            if (this.vms[i].id == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    this.fit = function(vm) {
+	    var freeCPU = this.cpu - vm.cpu;
+	    var freeMem = this.mem - vm.mem;
+	    for (var v  in this.vms) {
+	        freeCPU -= this.vms[v].cpu;
+	        freeMem -= this.vms[v].mem;
+	        if (freeMem < 0 || freeCPU < 0) {
+	            break;
+	        }
+	    }
+	    return freeMem > 0 && freeCPU > 0;
+    }
+
+    this.getVMsIds = function() {
+        var ids = [];
+        for (var v in this.vms) {
+            ids.push(this.vms[v].id);
+        }
+        return ids;
+    }
 }
 
 function VirtualMachine(id, cpu, mem) {
@@ -129,8 +202,8 @@ function VirtualMachine(id, cpu, mem) {
 	    this.rect.attr({'fill' : this.bgColor, 'stroke' : this.strokeColor});
 	    this.box.push(this.rect);
 	    //Identifier
-	    var t = canvas.text(x + (cpu * unit_size) / 2, y - ( mem * unit_size) / 2, this.id).attr({'font-size':'12pt'});
-	    if (cpu == 1) {
+	    var t = canvas.text(x + (this.cpu * unit_size) / 2, y - ( this.mem * unit_size) / 2, this.id).attr({'font-size':'12pt'});
+	    if (this.cpu == 1) {
 	        t.rotate(-90);
 	    }
 	    this.box.push(t);
@@ -142,91 +215,70 @@ function VirtualMachine(id, cpu, mem) {
     }
 
     this.boundingBox = function() {
-	    return [cpu * unit_size, mem * unit_size];
+	    return [this.cpu * unit_size, this.mem * unit_size];
     }
  
 }
 
-    var nodes = [];
-    var vms = [];
 
-
-function generateConfiguration(id) {
-
-    //Generate the 8 nodes
-    nodes = [];
-    vms = [];
-    for (var i = 1; i <= 8; i++) {
-	var n;
-	if (i < 6) {
-	    n = new Node("N" + i, 8, 6);
-	} else {
-	    n = new Node("N" + i, 6, 6);
-	}
-	nodes.push(n);
-    }
-
-    //Templates
-    var tpls = [[1,2],[2,1],[2,2],[2,1],[3,2],[2,3]];
-    for (var i = 1; i <= 20; i++) {
-	var x = Math.floor(Math.random() * tpls.length);
-	var v = new VirtualMachine("VM" + i, tpls[x][0], tpls[x][1]);
-	vms.push(v);
-
-	//Placement
-	var nIdx = Math.floor(Math.random() * nodes.length);
-	if (nodes[nIdx].fit(v)) {
-	    nodes[nIdx].host(v);
-	}
-
-    }
-    //Set idle node offline
-    for (var i in nodes) {
-	    var n = nodes[i];
-	    if (n.vms.length == 0) {
-	        n.online = false;
-	    }
-    }
-}
+var config = new Configuration();
 
 function drawConfiguration(id) {
     //Compute the SVG size
     var width = 0;
     var height = 0;
-    for (var i in nodes) {
-	var n = nodes[i];
-	if (i < 4) {
-	    width += n.boundingBox()[0];
-	} 
-    }
-    height = nodes[0].boundingBox()[1] * 2;
 
-    //draw it
-    if (paper != undefined) {
-	paper.remove();
-    }
-    paper = Raphael(id, width, height)
+    //Up to 4 nodes side by side
+    var max_width = 800;
+
+    var cur_width = 0; //width of the current line
+    var max_height = 0; //maximum height of the node on the current line
+    //How many nodes per line, how many lines
+
     var posX = 0;
     var posY = 0;
-    var nb = 0;
-    for (var i = 0; i < 2; i++) {
-	posX = 0;
-	for (var j = 0; j < 4; j++) {
-	    n = nodes[nb++];
-	    n.draw(paper,posX,posY);
-	    posX += n.boundingBox()[0];
-	}
-	posY += n.boundingBox()[1];
+    for (var i in config.nodes) {
+        var n = config.nodes[i];
+        var dim = n.boundingBox();
+
+        if (dim[1] > max_height) { max_height = dim[1];}
+        n.posY = height;
+        if (cur_width + dim[0] > max_width) {
+            height += max_height;
+            if (width < cur_width) {width = cur_width};
+            cur_width = dim[0];
+            n.posX = 0;
+            n.posY = height;
+            if (i == config.nodes.length - 1) {
+                height += max_height;
+            }
+        } else {
+            n.posX = cur_width;
+            cur_width += dim[0];
+            if (i == config.nodes.length - 1) {
+                if (width < cur_width) {width = cur_width};
+                height += max_height;
+            }
+        }
+    }
+    //draw it
+    if (paper != undefined) {
+	    paper.remove();
+    }
+    paper = Raphael(id, width, height)
+    for (var i in config.nodes) {
+        var n = config.nodes[i];
+        n.draw(paper,n.posX,n.posY);
     }
 }
 
 
 function check(id) {
-    var script = document.getElementById(id).value;
-    var config = toPlainTextConfiguration();
+    var script = cstrsEditor.getValue();
+    var cfg = config.btrpSerialization();
     var http = createXhrObject();
 
-    postToAPI("inspect","cfg="+encodeURI(config)+"&script="+encodeURI(script),
+    postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
     function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	        scenario = JSON.parse(this.responseText);
@@ -236,7 +288,7 @@ function check(id) {
 	            } else { //Some constraints are not satisfied
 	                step(1);
 	            }
-	        } else if (scenario.errors[0] == "no solution") {
+	        } else if (scenario.errors[0].msg == "no solution") {
 	            step(3);
 	        } else if (scenario.errors.length > 0) {
 	            step(4);
@@ -247,89 +299,60 @@ function check(id) {
 }
 
 
-function toPlainTextConfiguration() {
-    var buffer = "#list of nodes\n";
-    for (var i in nodes) {
-	    var  n = nodes[i];
-	    buffer = buffer + n.id + " 1 " + n.cpu + " " + n.mem + "\n";
-    }
-    buffer = buffer + "#list of VMs\n";
-    for (var  i in vms) {
-	var vm = vms[i];
-	buffer = buffer + "sandbox."+vm.id + " 1 " + vm.cpu + " " + vm.mem + "\n";
-    }
-    buffer += "#initial configuration\n";
-    for (var i in nodes) {
-	var n = nodes[i];
-	if (n.online) {
-	    buffer += n.id;
-	} else {
-	    buffer = buffer + "(" + n.id + ")";
-	}
-	for (var j in n.vms) {
-	    var vm = n.vms[j];
-	    buffer = buffer + " sandbox." + vm.id;
-	}
-	buffer += "\n";
-    }
-    return buffer;
-}
-
 function step(id) {
 
     for (var i = 0; i < 5; i++) {
         if (id != i) {document.getElementById("state" + i).style.display="none";}
         else {document.getElementById("state" + i).style.display="block";}
     }
-            var o = parseUri(location.href);
-
-
+    var o = parseUri(location.href);
     if (id == 0) {
-
-        //If the URL indicates we are in the sandbox,
-        //restart indicates we go to the root URL
-        /*if (o.queryKey.id) {
-            document.location.href=location.origin + location.pathname;
-        } */
         checkable(true);
-        document.getElementById('constraints').disabled=false;
-        resetLines();
         animationStep = 0;
         scenario = undefined;
         pending = false;
-	    generateConfiguration();
-	    drawConfiguration('canvas');
-	    generateSampleScript(document.getElementById('constraints'));
+        var cfg = randomConfiguration();
+        updateConfiguration(cfg);
+        configEditor.setValue(cfg);
+	    cstrsEditor.setValue(generateSampleScript(config));
     } else if (id == 1) {
+        showSyntaxErrors();
         //Don't show the pin button when the sandbox is already pinned
-        if (!o.queryKey.id) {document.getElementById('pin_button').style.visibility="visible";}
-        else {document.getElementById('pin_button').style.visibility="hidden";}
-        document.getElementById('constraints').disabled=true;
         showScenario();
-        document.getElementById('constraints').readonly="readonly";
         animationStep = 0;
         colorLines(0);
     } else if (id == 2 || id == 3) {
+        showSyntaxErrors();
         checkable(true);
         colorLines(0);
     } else if (id ==4) {
-        checkable(true);
         showSyntaxErrors();
-        colorLines(0);
+        checkable(true);
     }
 }
 
 function colorLines(nb) {
-                var stats = JSON.parse(scenario.status[nb]);
-                for (var j in stats) {
-                    var nb = stats[j];
-                    if (nb < 0) {
-                        badLine(nb * -1);
-                    } else {
-                        validLine(nb);
-                    }
-                }
-
+    var stats = JSON.parse(scenario.status[nb]);
+    var annotations = [];
+    for (var j in stats) {
+        var x = stats[j];
+        if (x < 0) {
+            annotations.push({
+                row: -1 * x -1,
+                column: 0,
+                type: "warning",
+                text: "Unsatisfied constraint"
+            });
+        }
+    }
+    if (annotations.length > 0) {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="bold";
+            $("#cstrs-mode > a").get()[0].style.color="#D6D629";
+    } else {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="";
+            $("#cstrs-mode > a").get()[0].style.color="";
+    }
+    cstrsEditor.setAnnotations(annotations);
 }
 
 function checkable(b) {
@@ -348,7 +371,6 @@ function insertCatalogContent() {
             buf += ", ";
         }
     }
-    document.getElementById('available_constraints').innerHTML = buf + ".";
 }
 
 function output(id) {
@@ -359,28 +381,10 @@ function output(id) {
 var spaceSplitter = /\s/g;
 
 
-function getNode(id) {
-    for (var i in nodes) {
-        if (nodes[i].id == id) {
-            return nodes[i];
-        }
-    }
-    return undefined;
-}
-
-function getVM(id) {
-    for (var i in vms) {
-        if (vms[i].id == id) {
-            return vms[i];
-        }
-    }
-    return undefined;
-}
-
-function generateSampleScript(id) {
+function generateSampleScript(cfg) {
     var buf = "";
-    for (var i in nodes) {
-        var n = nodes[i];
+    for (var i in cfg.nodes) {
+        var n = cfg.nodes[i];
         if (n.vms.length >= 2) {
             buf += "spread({" + n.vms[0].id + ", " + n.vms[1].id + "});\n";
             break;
@@ -390,10 +394,10 @@ function generateSampleScript(id) {
     buf += "ban({";
     var nb = 3;
     var i = 5;
-    for (i; i < vms.length; i++) {
-        if (vms[i].posX) {
+    for (i; i < cfg.vms.length; i++) {
+        if (cfg.vms[i].posX) {
             nb--;
-            buf += vms[i].id;
+            buf += cfg.vms[i].id;
             if (nb > 0) {
                 buf += ",";
             }
@@ -408,10 +412,10 @@ function generateSampleScript(id) {
     buf += "offline(N8);\n";
 
     //Root for the fun
-    if (nodes[4].vms.length > 0) {
-        buf += "root({" + nodes[4].vms[0].id + "});\n";
+    if (cfg.nodes[4].vms.length > 0) {
+        buf += "root({" + cfg.nodes[4].vms[0].id + "});";
     }
-    id.value = buf;
+    return buf;
 }
 
 function showScenario() {
@@ -436,12 +440,64 @@ function rephrase(a) {
 }
 
 function showSyntaxErrors() {
-    var e = document.getElementById("syntax_error");
-    var b = "<ul>";
-        for (var i in scenario.errors) {
-            b += "<li>" + scenario.errors[i] + "</li>";
+
+    var annotations = [];
+
+    var msgs = [];
+
+    for (var j in scenario.errors) {
+        var err = scenario.errors[j];
+        var lineNo = err.lineNo - 1;
+        if (!msgs[lineNo]) {
+            msgs[lineNo] = err.msg;
+        } else {
+            msgs[lineNo] += "\n" + err.msg;
         }
-    b += "</ul>";
-    e.innerHTML = b;
+    }
+    for (var j in msgs) {
+        var msg = msgs[j];
+        annotations.push({
+            row: j,
+            column: 0,
+            type: "error",
+            text: msg
+        });
+    }
+    if (annotations.length > 0) {
+            var node = $("#cstrs-mode > a").get()[0];
+            node.style.fontWeight="bold";
+            node.style.color="red";
+    } else {
+            $("#cstrs-mode > a").get()[0].style.fontWeight="";
+            $("#cstrs-mode > a").get()[0].style.color="";
+    }
+    cstrsEditor.setAnnotations(annotations);
 }
+
+function setMode(id) {
+    if (id == "configuration") {
+        $("#config-mode")[0].addClass("active");
+        $("#cstrs-mode")[0].removeClass("active");
+        editor.setSession(configEditor);
+    } else {
+        $("#cstrs-mode")[0].addClass("active");
+        $("#config-mode")[0].removeClass("active");
+        editor.setSession(cstrsEditor);
+    }
+}
+
+/**
+* Save the configuration into SVG format
+*/
+function saveSVG() {
+    var text = $("#canvas").get()[0].innerHTML;
+        a = document.createElement('a');
+        a.download = 'configuration.svg';
+        a.type = 'image/svg+xml';
+        bb = new(window.BlobBuilder || WebKitBlobBuilder);
+        bb.append(text);
+        blob = bb.getBlob('image/svg+xml');
+        a.href = (window.URL || webkitURL).createObjectURL(blob);
+        a.click();
+    }
 

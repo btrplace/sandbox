@@ -19,7 +19,7 @@
 
 package btrplace.sandbox;
 
-import btrpsl.BtrPlaceVJobBuilder;
+import btrpsl.*;
 import btrpsl.constraint.ConstraintsCatalog;
 import btrpsl.constraint.ConstraintsCatalogBuilderFromProperties;
 import btrpsl.template.VirtualMachineTemplateStub;
@@ -54,9 +54,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +76,8 @@ public class BtrPlace {
 
     private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
 
+    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
+
     public BtrPlace(@Context ServletContext context) {
         try {
             PropertiesHelper p = new PropertiesHelper(context.getRealPath("config/durations.properties"));
@@ -94,11 +94,14 @@ public class BtrPlace {
 
     }
 
-    private String complete(Configuration cfg, String constraints) {
+    private String complete(Configuration cfg, String constraints, int padding) {
         StringBuilder n = new StringBuilder();
         n.append("namespace sandbox;\n");
         for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
+        }
+        for (int i = 0; i <= padding; i++) {
+            n.append('\n');
         }
         n.append(constraints).append("\n");
 
@@ -114,10 +117,10 @@ public class BtrPlace {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String script) {
-        List<Integer> nonViables = new ArrayList<Integer>();
+       /* List<Integer> nonViables = new ArrayList<Integer>();
         List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
         TimedReconfigurationPlan plan = null;
-        List<String> errors = new ArrayList<String>();
+        ErrorReporter errReporter = new JSonErrorReporter();
         Configuration src;
         try {
             src = confReader.unSerialize(new BufferedReader(new StringReader(cfg)));
@@ -126,35 +129,40 @@ public class BtrPlace {
             return Response.status(400).build();
         }
 
+        Map<PlacementConstraint, Integer> cstrToLine = new HashMap<PlacementConstraint, Integer>();
+
         if (!script.isEmpty()) {
+
             String[] constraints = script.split("\n");
-
             VJobElementBuilder eb = new DefaultVJobElementBuilder(vtpls, ptpls);
-
             BtrPlaceVJobBuilder vjobBuilder = new BtrPlaceVJobBuilder(eb, catalog);
-
-            int nb = 0;
 
             VJob vjob = new DefaultVJob("sandbox");
             vjobBuilder.getElementBuilder().useConfiguration(src);
-            for (String cstr : constraints) {
-                String buffer = complete(src, cstr);
+
+            for (int nb = 0; nb < constraints.length; nb++) {
+                String cstr = constraints[nb];
+                if (cstr != null && !cstr.trim().isEmpty()) {
+                String buffer = complete(src, cstr, nb);
                 try {
                     VJob v = vjobBuilder.build(buffer);
                     PlacementConstraint c = v.getConstraints().iterator().next();
+                    cstrToLine.put(c, nb + 1);
                     if (!c.isSatisfied(src)) {
                         nonViables.add(nb);
                     }
+
                     vjob.addConstraint(c);
                     cstrs.add(c);
-                    nb++;
-                } catch (Exception e) {
-                    for (String m : e.getMessage().split("\n")) {
-                        errors.add(simplifyErrorMessage(src, m));
+                } catch (BtrpPlaceVJobBuilderException e) {
+                    ErrorReporter rep = e.getErrorReporter();
+                    if (rep != null) {
+                        errReporter.getErrors().addAll(rep.getErrors());
                     }
                 }
+                }
             }
-            if (errors.isEmpty() && !nonViables.isEmpty()) {
+            if (errReporter.getErrors().isEmpty() && !nonViables.isEmpty()) {
                 ChocoCustomRP rp = new ChocoCustomRP(durEv);
                 rp.doOptimize(false);
                 rp.setRepairMode(false);
@@ -170,7 +178,7 @@ public class BtrPlace {
                             new SimpleManagedElementSet<Node>(),
                             vjobs);
                 } catch (Exception e) {
-                    errors.add("no solution");
+                        errReporter.append(0, 0, "no solution");
                 }
             } else {
                 plan = new DefaultTimedReconfigurationPlan(src);
@@ -179,27 +187,33 @@ public class BtrPlace {
             plan = new DefaultTimedReconfigurationPlan(src);
         }
         try {
-            return Response.ok(buildReponse(src, errors, cstrs, nonViables, plan).toString()).build();
+            return Response.ok(buildResponse(src, errReporter, cstrs, nonViables, plan, cstrToLine).toString()).build();
         } catch (Exception x) {
+            x.printStackTrace();
             return Response.status(400).build();
         }
+        */
+        return null ;
     }
 
-    private JSONObject buildReponse(Configuration src, List<String> errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan) throws JSONException {
+    private JSONObject buildResponse(Configuration src, Object errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
         JSONObject o = new JSONObject();
-        List<List<Integer>> status = new ArrayList<List<Integer>>();
+      /*List<List<Integer>> status = new ArrayList<List<Integer>>();
+        int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
+        for (ErrorMessage err : errors.getErrors()) {
+            err.message = err.message.replaceAll("sandbox\\.", "");
+            err.lineNo -= shift;
+        }
         o.put("errors", errors);
         if (plan == null) {
 
             List<Integer> stat = new ArrayList<Integer>();
-            int j = 1;
             for (PlacementConstraint c : cstrs) {
                 if (!c.isSatisfied(src)) {
-                    stat.add(-1 * j);
+                    stat.add(-1 * cstrToLine.get(c));
                 } else {
-                    stat.add(j);
+                    stat.add(cstrToLine.get(c));
                 }
-                j++;
             }
             status.add(stat);
         } else {
@@ -230,14 +244,12 @@ public class BtrPlace {
             Configuration cur = src.clone();
             while (true) {
                 List<Integer> stat = new ArrayList<Integer>();
-                int j = 1;
                 for (PlacementConstraint c : cstrs) {
                     if (!c.isSatisfied(cur)) {
-                        stat.add(-1 * j);
+                        stat.add(-1 * cstrToLine.get(c));
                     } else {
-                        stat.add(j);
+                        stat.add(cstrToLine.get(c));
                     }
-                    j++;
                 }
                 status.add(stat);
                 if (i == longActions.size()) {
@@ -249,6 +261,8 @@ public class BtrPlace {
             }
         }
         o.put("status", status);
+        System.out.println(o);
+        */
         return o;
     }
 
@@ -259,36 +273,4 @@ public class BtrPlace {
     private String name(Node n) {
         return n.getName();
     }
-
-    private static Pattern syntaxError = Pattern.compile("\\((\\d+):(\\d+)\\)\\ssandbox:\\s(.+)");
-    private static Pattern lexError = Pattern.compile("line\\s(\\d+):(-?\\d+)\\s(.+)");
-
-    private String simplifyErrorMessage(Configuration cfg, String s) {
-        //remove any "sandbox."
-        String res = s.replaceAll("sandbox\\.", "");
-
-        //Remove the list of available constraints.
-        if (res.contains("Unknown constraint")) {
-            res = res.substring(0, res.indexOf('.'));
-        }
-
-        //Remove the vjob identifier and shift the lines
-        int shift = cfg.getAllVirtualMachines().size() + 1; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
-        //System.err.println("Shift= " + shift);
-
-        Matcher m = syntaxError.matcher(res);
-
-        if (m.matches()) {
-            return "(" + (Integer.parseInt(m.group(1)) - shift) + ":" + m.group(2) + ") " + m.group(3);
-        } else {
-            m = lexError.matcher(res);
-            if (m.matches()) {
-                return "(" + (Integer.parseInt(m.group(1)) - shift) + ":" + m.group(2) + ") " + m.group(3);
-            }
-        }
-
-        return res;
-    }
-
-    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
 }
