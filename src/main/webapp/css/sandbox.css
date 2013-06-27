@@ -314,6 +314,58 @@ code {
 	position:relative;
 	top:14px;
     z-index:-1;
+    margin-left:-15px;
+}
+
+#timeLineBar {
+	border-top:1px solid #222;
+	position:relative;
+	margin-left:-15px;
+	top:10px;
+	height:20px;
+	z-index:10;
+}
+
+
+#graduations {
+	position:absolute;
+	width:100%;
+	height:6px;
+}
+
+.timeLineGrad {
+	position:absolute;
+	bottom:-10px;
+	height:100%;
+	border-left: 1px solid gray ;
+	box-sizing: initial;
+}
+
+.timeLineGradLabel {
+	position:absolute;
+	bottom:-2.5em;
+	margin-left:-3px;
+	color:gray;
+}
+
+.timeLineGradLabel.withEvent {
+	color:black;
+	font-weight:bold;
+}
+
+
+.timeLineMark {
+ 	position:absolute;
+ 	height:10px;
+ 	border:1px solid #666;
+ 	border-bottom:none;
+ 	width:3px;
+ 	margin-left:-1px;
+ 	background-color:#444;
+ 	border-top-left-radius:2px;
+ 	border-top-right-radius:2px;
+ 	z-index:1;
+ 	cursor:pointer;
 }
 
 .actionBar {

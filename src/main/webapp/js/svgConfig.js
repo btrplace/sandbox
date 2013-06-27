@@ -296,6 +296,9 @@ function check(id) {
         console.log("Server response : ",this);
 	    if (this.readyState == 4 && this.status == 200) {
 	        scenario = JSON.parse(this.responseText);
+	        loadActions(scenario);
+	        // Return here for testing purposes
+	        return ;
 	        console.log("Scenario : ", scenario);
 	        if (scenario.errors.length == 0) {
 	            if (scenario.actions.length == 0) { //Every constraints are satisfied
