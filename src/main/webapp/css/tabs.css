@@ -26,6 +26,7 @@
     display: block;
     padding: 0 10px;
     outline: none;
+    background-color: #AAA;
 }
 .tab a:hover {
     text-decoration: underline;
@@ -34,10 +35,12 @@
 .active > a, .active > a:hover {
     color: gray;
     border-bottom-color: transparent;
+    background-color:#DDD;
+
 }
 
 .panel-container {
-    background: #f5f5f5;
+    background: #DDD;
     //border: solid #f5f5f5 1px;
     padding: 10px;
     border-radius: 0 4px 4px 4px;

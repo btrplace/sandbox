@@ -2,7 +2,117 @@
   Javascript related to the edition of configuration
   @author Fabien Hermenier
 */
+
+function generateGettingStarted(){
+    // Génération du getting started
+
+    var buf = "# Nodes:\nN0,N1,N2,N3 = {cpu:8,mem:7}\n";
+
+        var config = new Configuration();
+        // Création de 4 noeuds
+        for (var i = 0; i < 4; i++) {
+    	    var n = new Node("N" + i, 8, 7);
+    	    config.nodes.push(n);
+        }
+
+        //Templates
+        var tpls = [[1,2],[2,1],[2,2],[2,1],[3,2],[2,3]];
+        var picked = [];
+
+        for (var i = 0; i < 6; i++) {
+            var v = new VirtualMachine("VM" + i);
+            config.vms.push(v);
+        }
+
+
+
+        config.vms[0].cpu = 2 ;
+        config.vms[0].mem = 2 ;
+        config.vms[1].cpu = 3 ;
+        config.vms[1].mem = 2 ;
+        config.vms[2].cpu = 4 ;
+        config.vms[2].mem = 4 ;
+        config.vms[3].cpu = 3 ;
+        config.vms[3].mem = 3 ;
+        config.vms[4].cpu = 1 ;
+        config.vms[4].mem = 1 ;
+        config.vms[5].cpu = 5 ;
+        config.vms[5].mem = 4 ;
+
+        config.nodes[0].host(config.vms[2]);
+        config.nodes[1].host(config.vms[1]);
+        config.nodes[2].host(config.vms[0]);
+        config.nodes[2].host(config.vms[3]);
+        config.nodes[3].host(config.vms[5]);
+
+
+        //VMs declaration
+        buf += "\n# Virtual Machines:\n";
+        for(var i in config.vms){
+            var vm = config.vms[i];
+            buf += vm.id + " = {cpu:" + vm.cpu + ",mem:" + vm.mem + "}\n";
+        }
+
+
+        //Set idle node offline
+        buf += "\n# Assignment:";
+        for (var i in config.nodes) {
+    	    var n = config.nodes[i];
+    	    if (n.vms.length == 0) {
+    	        buf += "\n" + n.id + " = {online: 0}";
+    	    } else {
+    	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
+    	    }
+        }
+
+
+        console.log("MyBuff = \n"+buf);
+        return buf ;
+
+        // On prend un index au hasard dans tpls
+        var x = Math.floor(Math.random() * tpls.length);
+        var v = new VirtualMachine("VM" + i, tpls[x][0], tpls[x][1]);
+        config.vms.push(v);
+
+        //Placement
+        var nIdx = Math.floor(Math.random() * config.nodes.length);
+        if (config.nodes[nIdx].fit(v)) {
+            config.nodes[nIdx].host(v);
+            if (!picked[x]) {
+                picked[x] = [v.id];
+            }
+            else {
+                picked[x].push(v.id);
+            }
+
+        }
+
+        //VMs declaration
+        buf += "\n# Virtual Machines:\n";
+        for (var i in picked) {
+            if (picked.hasOwnProperty(i)) {
+                var vms = picked[i];
+                if (vms.length > 0) {
+                    buf += vms.join() + " = {cpu:" + tpls[i][0] + ",mem:" + tpls[i][1] + "}\n";
+                }
+            }
+        }
+        //Set idle node offline
+        buf += "\n# Assignment:";
+        for (var i in config.nodes) {
+    	    var n = config.nodes[i];
+    	    if (n.vms.length == 0) {
+    	        buf += "\n" + n.id + " = {online: 0}";
+    	    } else {
+    	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
+    	    }
+        }
+        return buf;
+}
+
 function randomConfiguration() {
+    return generateGettingStarted();
+
     var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
     buf += "N7,N8 = {cpu:6,mem:6}\n";
 
@@ -34,8 +144,9 @@ function randomConfiguration() {
             else {picked[x].push(v.id);}
 
 	    }
-
     }
+
+    console.log("Picked : ", picked);
     //VMs declaration
     buf += "\n# Virtual Machines:\n";
     for (var i in picked) {
@@ -56,12 +167,15 @@ function randomConfiguration() {
 	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
 	    }
     }
+    console.log("Buff = \n"+ buf);
     return buf;
 }
 
 
 function updateConfiguration(buf) {
     var ret = parseConfiguration(buf);
+    //var configurationJSON = '{"views":[{"id":"shareableResource","rcId":"mem","nodes":{},"defCapacity":7,"vms":{"3":3,"2":4,"1":2,"0":2,"5":4},"defConsumption":0},{"id":"shareableResource","rcId":"cpu","nodes":{},"defCapacity":8,"vms":{"3":3,"2":4,"1":3,"0":2,"5":5},"defConsumption":0}],"mapping":{"onlineNodes":{"3":{"runningVMs":[5],"sleepingVMs":[]},"2":{"runningVMs":[0,3],"sleepingVMs":[]},"1":{"runningVMs":[1],"sleepingVMs":[]},"0":{"runningVMs":[2],"sleepingVMs":[]}},"offlineNodes":[],"readyVMs":[4]},"attributes":{"nodes":{},"vms":{}}}';
+    //var configuration = parseConfigurationJSON(configurationJSON);
     if (ret[0].nodes.length) {
         config = ret[0];
         drawConfiguration('canvas');
