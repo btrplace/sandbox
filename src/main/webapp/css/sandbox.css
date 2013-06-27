@@ -9,6 +9,33 @@ body {
 	background: #eee;
 }
 
+.blackButton {
+	color: #eee;
+	background: #666;
+	border: solid 1px #444;
+	margin-top: .2em;
+	font-size: 1.5em;
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	padding: .5em 1em;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+.greenButton {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	padding: .6em 1em;
+	border: solid 1px #aab089;
+	text-decoration: none;
+	background: #d2d8b1;
+	border-radius: 4px;
+	font-size: 1.75em;
+	color: #444;
+}
+
 .state {
 	text-align: center;
 }
@@ -287,9 +314,37 @@ code {
 	position:relative;
 }
 
+#solution {
+	overflow:hidden;
+	line-height:normal;
+}
+
+#solutionBottomControls {
+	clear:both;
+	padding-top:15px;
+	text-align:center;
+}
+
 #diagram {
 	position:relative;
 	padding-top:15px;
+	width:600px;
+	float:right;
+	margin-left:20px;
+	padding-bottom:15px;
+	padding-right:15px;
+	line-height:180%;
+}
+#userInput {
+	float:left;
+	width:250px;
+	border:1px solid #666;
+	background-color:#DDD;
+	padding:4px;
+	color:#222;
+	border-radius:2px;
+	font-family:Monaco, Menlo, 'Ubuntu Mono', 'Droid Sans Mono', Consolas, monospace;
+	text-align:left;
 }
 
 #diagram * {
@@ -374,6 +429,7 @@ code {
 	background-color: #d2d8b1;
 	border-radius:2px;
 	padding-left:10px;
+	font-size:10px;
 }
 
 .finishedAction {
