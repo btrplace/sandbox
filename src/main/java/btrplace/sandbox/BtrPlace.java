@@ -19,32 +19,25 @@
 
 package btrplace.sandbox;
 
-import btrpsl.*;
-import btrpsl.constraint.ConstraintsCatalog;
-import btrpsl.constraint.ConstraintsCatalogBuilderFromProperties;
-import btrpsl.template.VirtualMachineTemplateStub;
-import entropy.PropertiesHelper;
-import entropy.configuration.Configuration;
-import entropy.configuration.Node;
-import entropy.configuration.SimpleManagedElementSet;
-import entropy.configuration.VirtualMachine;
-import entropy.configuration.parser.PlainTextConfigurationSerializer;
-import entropy.plan.DefaultTimedReconfigurationPlan;
-import entropy.plan.TimedReconfigurationPlan;
-import entropy.plan.action.*;
-import entropy.plan.action.Shutdown;
-import entropy.plan.choco.ChocoCustomRP;
-import entropy.plan.durationEvaluator.DurationEvaluator;
-import entropy.plan.durationEvaluator.FastDurationEvaluatorFactory;
-import entropy.platform.DefaultPlatformFactory;
-import entropy.template.DefaultVirtualMachineTemplateFactory;
-import entropy.vjob.DefaultVJob;
-import entropy.vjob.PlacementConstraint;
-import entropy.vjob.VJob;
-import entropy.vjob.builder.DefaultVJobElementBuilder;
-import entropy.vjob.builder.VJobElementBuilder;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+
+import btrplace.btrpsl.constraint.ConstraintsCatalog;
+import btrplace.btrpsl.constraint.DefaultConstraintsCatalog;
+import btrplace.json.JSONConverterException;
+import btrplace.json.model.ModelConverter;
+import btrplace.json.plan.ReconfigurationPlanConverter;
+import btrplace.model.*;
+import btrplace.model.constraint.SatConstraint;
+import btrplace.plan.DependencyBasedPlanApplier;
+import btrplace.plan.ReconfigurationPlan;
+import btrplace.plan.TimeBasedPlanApplier;
+import btrplace.solver.SolverException;
+import btrplace.solver.choco.ChocoReconfigurationAlgorithm;
+import btrplace.solver.choco.DefaultChocoReconfigurationAlgorithm;
+import btrplace.solver.choco.durationEvaluator.DurationEvaluators;
+import net.minidev.json.JSONObject;
+
+//import org.codehaus.jettison.json.JSONObject;
+//import sun.org.mozilla.javascript.internal.ErrorReporter;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
@@ -53,6 +46,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -66,20 +60,21 @@ import java.util.regex.Pattern;
 @Path("/inspect")
 public class BtrPlace {
 
-    private DurationEvaluator durEv;
+    private DurationEvaluators durEv;
 
     private ConstraintsCatalog catalog;
 
-    private DefaultVirtualMachineTemplateFactory vtpls;
+    /*private DefaultVirtualMachineTemplateFactory vtpls;
 
     private DefaultPlatformFactory ptpls;
 
     private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
 
-    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);
+    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);   */
 
     public BtrPlace(@Context ServletContext context) {
-        try {
+        catalog = new DefaultConstraintsCatalog();
+        /*try {
             PropertiesHelper p = new PropertiesHelper(context.getRealPath("config/durations.properties"));
             durEv = FastDurationEvaluatorFactory.readFromProperties(p);
             PropertiesHelper p2 = new PropertiesHelper(context.getRealPath("config/catalog.properties"));
@@ -91,13 +86,15 @@ public class BtrPlace {
         vtpls.add(new VirtualMachineTemplateStub("mockVM"));
 
         ptpls = new DefaultPlatformFactory();
+        */
 
     }
 
+    /*
     private String complete(Configuration cfg, String constraints, int padding) {
         StringBuilder n = new StringBuilder();
         n.append("namespace sandbox;\n");
-        for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
+        /*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
         }
         for (int i = 0; i <= padding; i++) {
@@ -112,11 +109,76 @@ public class BtrPlace {
             s = s.replaceAll(node.getName(), "@" + node.getName());
         }
         return s;
+        * /
+        return null;
     }
+    */
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String script) {
+        System.out.println("======= Sending mock response to client.");
+        GettingStarted gs = new GettingStarted();
+        //gs.run();
+
+        Model model = gs.makeModel();
+        List<SatConstraint> constraints = gs.makeConstraints();
+
+
+        ArrayList<Integer> unsatisfiedConstrains = new ArrayList<Integer>();
+        Integer currentConstrain = 0 ;
+        for(SatConstraint c : constraints){
+            if(!c.isSatisfied(model)){
+                unsatisfiedConstrains.add(currentConstrain);
+            }
+            currentConstrain++;
+        }
+
+        ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
+        try {
+            ReconfigurationPlan plan = ra.solve(model, constraints);
+            System.out.println("=========== PLAN JSON ==========");
+            ReconfigurationPlanConverter planConverter = new ReconfigurationPlanConverter();
+            try {
+                JSONObject response = planConverter.toJSON(plan);
+                System.out.println(response.toString());
+                return Response.ok(response).build();
+            } catch (JSONConverterException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+            System.out.println("=== Time-based plan: ====");
+            new TimeBasedPlanApplier().apply(plan);
+            System.out.println(new TimeBasedPlanApplier().toString(plan));
+            System.out.println("\n ====== Dependency based plan: ===== ");
+            System.out.println(new DependencyBasedPlanApplier().toString(plan));
+            //return (plan != null);
+        } catch (SolverException ex) {
+            System.err.println(ex.getMessage());
+            //return false;
+        }
+        /*
+        System.out.println("CLIENT REQUEST ! Parsing : \n"+cfg);
+
+        ModelConverter modelConverter = new ModelConverter();
+        JSONObject json = new JSONObject();
+
+        try {
+            Model model = modelConverter.fromJSON(cfg);
+            System.out.println("Parsing done.");
+            System.out.println(model.toString());
+        } catch (IOException e) {
+            System.err.println("IO Exception");
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (JSONConverterException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        if( ! script.isEmpty() ){
+            String[] constraints = script.split("\n");
+        }
+        */
+
        /* List<Integer> nonViables = new ArrayList<Integer>();
         List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
         TimedReconfigurationPlan plan = null;
@@ -193,10 +255,12 @@ public class BtrPlace {
             return Response.status(400).build();
         }
         */
-        return null ;
+        return null;
     }
 
-    private JSONObject buildResponse(Configuration src, Object errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
+    /*private JSONObject buildResponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
+    //private JSONObject buildResponse() throws JSONException {
+>>>>>>> tomtom/feature-editConfig
         JSONObject o = new JSONObject();
       /*List<List<Integer>> status = new ArrayList<List<Integer>>();
         int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
@@ -262,15 +326,17 @@ public class BtrPlace {
         }
         o.put("status", status);
         System.out.println(o);
-        */
+
         return o;
     }
+    */
 
+    /*
     private String name(VirtualMachine vm) {
         return vm.getName().substring(vm.getName().indexOf('.') + 1);
     }
 
     private String name(Node n) {
         return n.getName();
-    }
+    }                */
 }

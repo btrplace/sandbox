@@ -49,6 +49,16 @@ function Configuration (ns,vs) {
         }
     }
 
+    this.btrpToJSON = function(){
+        var json = {};
+        var nodes = {};
+        for(var i in this.nodes){
+            var n = this.nodes[i],
+                nJSON = {};
+
+        }
+    }
+
     this.btrpSerialization = function() {
         var buffer = "#list of nodes\n";
         for (var i in this.nodes) {
@@ -102,8 +112,9 @@ function Node(name, cpu, mem) {
 
 	    var bgColor = this.online ? "black" : "#bbb";
 
-	    //clean
-	    canvas.rect(x,y,width, height).attr({'stroke':'white','fill' : 'white'});
+	    //cleaning is now done before the draw-each-node loop
+        //canvas.rect(x,y,width, height).attr({'stroke':'white','fill' : 'transparent'});
+        //canvas.rect(x,y,width, height).attr({'stroke':'white','fill' : 'transparent'});
 
  	    //lightgray for the resources area
 	    this.boxStroke.push(canvas.rect(x + border, y + border, box_width, box_height).attr({'stroke':bgColor}));
@@ -265,7 +276,9 @@ function drawConfiguration(id) {
     if (paper != undefined) {
 	    paper.remove();
     }
-    paper = Raphael(id, width, height)
+    paper = Raphael(id, width, height);
+    // emptying the paper
+    paper.clear();
     for (var i in config.nodes) {
         var n = config.nodes[i];
         n.draw(paper,n.posX,n.posY);
@@ -275,13 +288,15 @@ function drawConfiguration(id) {
 
 function check(id) {
     var script = cstrsEditor.getValue();
-    var cfg = config.btrpSerialization();
+    var cfg = config.btrpToJSON();
     var http = createXhrObject();
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
     function() {
+        console.log("Server response : ",this);
 	    if (this.readyState == 4 && this.status == 200) {
 	        scenario = JSON.parse(this.responseText);
+	        console.log("Scenario : ", scenario);
 	        if (scenario.errors.length == 0) {
 	            if (scenario.actions.length == 0) { //Every constraints are satisfied
 	                step(2);
@@ -412,9 +427,9 @@ function generateSampleScript(cfg) {
     buf += "offline(N8);\n";
 
     //Root for the fun
-    if (cfg.nodes[4].vms.length > 0) {
+    /*if (cfg.nodes[4].vms.length > 0) {
         buf += "root({" + cfg.nodes[4].vms[0].id + "});";
-    }
+    } */
     return buf;
 }
 
