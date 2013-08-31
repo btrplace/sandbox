@@ -78,6 +78,15 @@ function doAction(f) {
     else if (arr[1] == "S") {boot(animationStep, config.getNode(arr[2]), f);}
 }
 
+function actionHandler(action, callback){
+	var name = action.id;
+	if( name == "bootVM22" ){
+		boot(0, config.nodes[action.to], callback);
+	}
+	else if( name == "shutdownNode" ){ halt(0, config.nodes[action.node], callback);}
+	else if( name == "migrateVM" ){ migrate(0, config.vms[action.vm], config.nodes[action.from], config.nodes[action.to], callback)};
+}
+
 //Undo the last committed action
 function undoAction(f) {
     begin(animationStep - 1);

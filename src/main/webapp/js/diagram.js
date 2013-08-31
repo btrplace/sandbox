@@ -1,3 +1,8 @@
+/*
+Javascript to generate and navigate in a time-line diagram from a given scenario
+@author Tom Guillermin
+*/
+
 var TIME_UNIT_SIZE = 100 ;
 
 // List of the marks in the X graduation (to avoid duplicates)
@@ -151,8 +156,10 @@ function getScenarioDuration(scenario){
 	return maxTime ;
 }
 
-var scenarioDuration = 0 ;
+var currentScenario,
+	scenarioDuration = 0 ;
 function createDiagram(scenario){
+	currentScenario = scenario;
 	scenarioDuration = getScenarioDuration(scenario) ;
 	console.log("Duration = ",scenarioDuration);
 	TIME_UNIT_SIZE = computeTimeUnitSize(scenarioDuration);
@@ -168,6 +175,9 @@ function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
 	diagramRewind();
+	isPlaying = false;
+	doPause = false;
+	diagramNextTarget = 1;
 }
 
 var diagramNextTarget = 1,
@@ -238,14 +248,16 @@ function diagramStepMove(direction){
 		return ;
 	}
 
-	var start, end;
+	var start, end, step;
 	if( direction == 1 ){
 		start = diagramNextTarget-1;
 		end = diagramNextTarget;
+		step = start;
 	}
 	else if( direction == -1 ){
 		start = diagramNextTarget-1;
 		end = diagramNextTarget-2;
+		step = end;
 	}
 
 	// Some validation
@@ -254,6 +266,13 @@ function diagramStepMove(direction){
 	}
 
 	isPlaying = true ;
+	//console.log("Playing step #"+step+" : ",getActionsStartingAt(step));
+
+	var actions = getActionsStartingAt(step);
+	for(var i in actions){
+		var action = actions[i];
+		actionHandler(action,function(){});
+	}
 
 	timeLineAnimation(start,end, 1000, function(){
 		isPlaying = false;
@@ -281,4 +300,16 @@ function diagramNextStep(){
 
 function diagramPreviousStep(){
 	diagramStepMove(-1);
+}
+
+function getActionsStartingAt(time){
+	var result = [];
+	var actions = currentScenario.actions;
+	for(var i in actions){
+		var action = actions[i];
+		if( action.start == time ){
+			result.push(action);
+		}
+	}
+	return result;
 }
