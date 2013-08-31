@@ -186,7 +186,6 @@ var diagramNextTarget = 1,
 
 function setPlayerMode(mode){
 	if( mode == "play" ){
-		isPlaying = true ;
 		$("#playButton").hide();
 		$("#pauseButton").show();
 	}
@@ -216,7 +215,7 @@ function diagramPlay(){
 	// Start the scenario loop
 	diagramPlayLoop();
 }
-function diagramPlayLoop(callback){
+function diagramPlayLoop_old(callback){
 	doPause = false;
 	// Don't get further than the scenario ;)
 	if( diagramNextTarget > scenarioDuration ){
@@ -243,9 +242,39 @@ function diagramPlayLoop(callback){
 	});
 }
 
-function diagramStepMove(direction){
+function diagramPlayLoop(callback){
+	doPause = false;
+	// Play the animation & set the next step as a callback to the animation
+	var canPlay = diagramStepMove(1, 1000, function(){
+		if( doPause ){
+			setPlayerMode("pause");
+			$("#pauseButton").removeClass("disabled");
+			doPause = false;
+			return false;
+		}
+
+		// play it
+		diagramPlayLoop();
+	});
+
+	if( !canPlay ){
+		console.log("Can't play now...");
+		if( callback ){
+    			callback();
+    	}
+    	setPlayerMode("pause");
+   		return false;
+	}
+	else {
+		console.log("Can play !");
+	}
+}
+
+
+function diagramStepMove(direction, duration, callback){
 	if( isPlaying ){
-		return ;
+		console.log("Is already playing !");
+		return false ;
 	}
 
 	var start, end, step;
@@ -262,6 +291,7 @@ function diagramStepMove(direction){
 
 	// Some validation
 	if( end < 0 || end > scenarioDuration){
+		console.log("Didn't pass validation");
 		return false;
 	}
 
@@ -277,7 +307,11 @@ function diagramStepMove(direction){
 	timeLineAnimation(start,end, 1000, function(){
 		isPlaying = false;
 		diagramNextTarget += direction;
+		if( callback ){
+			callback();
+		}
 	});
+	return true;
 
 }
 
