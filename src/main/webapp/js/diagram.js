@@ -237,7 +237,6 @@ function diagramStepMove(direction){
 	if( isPlaying ){
 		return ;
 	}
-	isPlaying = true ;
 
 	var start, end;
 	if( direction == 1 ){
@@ -248,6 +247,14 @@ function diagramStepMove(direction){
 		start = diagramNextTarget-1;
 		end = diagramNextTarget-2;
 	}
+
+	// Some validation
+	if( end < 0 || end > scenarioDuration){
+		return false;
+	}
+
+	isPlaying = true ;
+
 	timeLineAnimation(start,end, 1000, function(){
 		isPlaying = false;
 		diagramNextTarget += direction;
