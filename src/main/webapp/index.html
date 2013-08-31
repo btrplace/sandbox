@@ -162,12 +162,21 @@
 </div>
 <div id="solution" class="centered">
 	<div id="userInput">LOREM IPSUM LQSDFM MF QF MQKJFDSKJ JKLKMJJKMF D</div>
-	<div id="diagram">
-		<div id="actionLines"></div>
-		<div id="currentFrameLine"></div>
-		<div id="timeLine">
-			<div id="graduations"></div>
-			<div id="timeLineBar"></div>
+	<div id="diagramWrapper">
+		<div id="diagram">
+			<div id="actionLines"></div>
+			<div id="currentFrameLine"></div>
+			<div id="timeLine">
+				<div id="graduations"></div>
+				<div id="timeLineBar"></div>
+			</div>
+		</div>
+		<div id="playerControls">
+			<div id="rewindButton" class="greenButton" onclick="diagramPlay();"><<</div>
+			<div id="previousStepButton" class="greenButton" onclick="diagramPlay();"><</div>
+			<div id="playButton" class="greenButton" onclick="diagramPlay();">Play</div>
+			<div class="greenButton" onclick="diagramPause();">Pause</div>
+			<div id="nextStepButton" class="greenButton" onclick="diagramPlay();">></div>
 		</div>
 	</div>
 	<div id="solutionBottomControls">

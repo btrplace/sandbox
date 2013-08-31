@@ -325,16 +325,25 @@ code {
 	text-align:center;
 }
 
+#diagramWrapper {
+	float:right;
+}
+
 #diagram {
 	position:relative;
 	padding-top:15px;
 	width:600px;
-	float:right;
+	/*float:right; */
 	margin-left:20px;
 	padding-bottom:15px;
 	padding-right:15px;
 	line-height:180%;
 }
+
+#playerControls {
+    font-size:0.5em;
+}
+
 #userInput {
 	float:left;
 	width:250px;

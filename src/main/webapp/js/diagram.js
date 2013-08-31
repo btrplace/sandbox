@@ -54,6 +54,12 @@ function actionToString(action){
 	}
 }
 
+/*
+ * Adds an action in the diagram
+ * @param string Label of the action
+ * @param number Starting time of the action
+ * @param number Ending time of the action
+ */
 function addAction(label, start, end){
     var actionContainer = $("<div></div>").addClass("actionContainer"),
 		actionBar = $("<div></div>").addClass("actionBar"),
@@ -81,33 +87,58 @@ function addAction(label, start, end){
 	addTimeLineMark(start);
 }
 
+/*
+ * Marks a time graduation label with an event (text set to bold)
+ * @param instant number Time with event.
+ */
 function addTimeLineMark(instant){
 	$(".timeLineGradLabel").eq(instant).addClass("withEvent");
-	/*var x = instant * TIME_UNIT_SIZE,
-		grad = $("<div></div>").addClass("timeLineMark");
-    grad.css({left:x});
-   	$("#graduations").append(grad);*/
 }
 
+/*
+ * Updates the position of the time-line to a match given time
+ * @param newTime number Time to which the time-line has to be set.
+ */
 function updateTimeLinePosition(newTime){
 	var newPos = newTime * TIME_UNIT_SIZE;
 	$("#currentFrameLine").css({left:Math.round(newPos)});
 }
 
-function timeLineAnimation(duration){
-    $({value:0}).animate({value:duration},{
+/*
+ * Performs the time-line animation from a <i>start</i> to an </i>end</i> time
+ * for a given <i>duration</i>.
+ * @param duration number Duration of the animation in ms.
+ */
+function timeLineAnimation(start, end, duration, callback){
+    $({value:start}).animate({value:end},{
     	duration:duration,
     	easing:"linear",
     	step:function(){
-    		updateTimeLinePosition(this.value/1000);
+    		updateTimeLinePosition(this.value);
+    	},
+    	complete:function(){
+    		updateTimeLinePosition(end);
+    		console.log("Complete !");
+    		// Call the callback if any
+    		if(callback){
+    			callback();
+    		}
     	}
     })
 };
 
+/*
+ * Computes the pixel size of a time unit
+ */
 function computeTimeUnitSize(duration){
 	return $("#diagram").width()/duration ;
 }
 
+/*
+ * Calculates the duration of a given <i>scenario</i>
+ * @param scenario Object The scenario object.
+ * @return The duration of the scenario.
+ */
 function getScenarioDuration(scenario){
 	var maxTime = 0 ,
 		actions = scenario.actions ;
@@ -120,19 +151,73 @@ function getScenarioDuration(scenario){
 	return maxTime ;
 }
 
+var scenarioDuration = 0 ;
 function createDiagram(scenario){
-	var duration = getScenarioDuration(scenario) ;
-	console.log("Duration = ",duration);
-	TIME_UNIT_SIZE = computeTimeUnitSize(duration);
+	scenarioDuration = getScenarioDuration(scenario) ;
+	console.log("Duration = ",scenarioDuration);
+	TIME_UNIT_SIZE = computeTimeUnitSize(scenarioDuration);
 	console.log("TIME_UNIT_SIZE = "+TIME_UNIT_SIZE+"px");
-	createGraduations(duration);
+	createGraduations(scenarioDuration);
 	loadActions(scenario);
 }
 
 /**
- * Resets the diagram
+ * Resets the diagram.
  */
 function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
+}
+
+var diagramNextTarget = 1,
+	doPause = false;
+
+function setPlayMode(mode){
+	if( mode == "play" ){
+		$("#playButton").hide();
+		$("#pauseButton").show();
+	}
+	if( mode == "pause" ){
+		$("#pauseButton").hide();
+    	$("#playButton").show();
+	}
+}
+
+$(document).ready(function(){
+	setPlayMode("pause");
+});
+
+function diagramPlay(){
+	diagramPlayStep();
+}
+function diagramPlayStep(callback){
+	doPause = false;
+	// Don't get further than the scenario ;)
+	if( diagramNextTarget > scenarioDuration ){
+		if( callback ){
+			callback();
+		}
+		return false;
+	}
+	// Play the animation & set the next step as a callback to the animation
+	timeLineAnimation(diagramNextTarget-1,diagramNextTarget, 1000, function(){
+		// Set next target
+        diagramNextTarget++;
+
+		if( doPause ){
+			doPause = false;
+			return false;
+		}
+
+		// play it
+		diagramPlayStep();
+	});
+}
+
+function diagramPause(){
+	doPause = true;
+}
+
+function diagramRewind(){
+	updateTimeLinePosition(0);
 }
