@@ -167,36 +167,53 @@ function createDiagram(scenario){
 function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
+	diagramRewind();
 }
 
 var diagramNextTarget = 1,
+	isPlaying = false;
 	doPause = false;
 
-function setPlayMode(mode){
+function setPlayerMode(mode){
 	if( mode == "play" ){
+		isPlaying = true ;
 		$("#playButton").hide();
 		$("#pauseButton").show();
 	}
 	if( mode == "pause" ){
+		isPlaying = false;
 		$("#pauseButton").hide();
     	$("#playButton").show();
 	}
 }
 
 $(document).ready(function(){
-	setPlayMode("pause");
+	setPlayerMode("pause");
 });
 
 function diagramPlay(){
-	diagramPlayStep();
+	if( isPlaying ){
+		return ;
+	}
+
+	// If the user clicks Play after the animation has finished,
+	// the animation goes back to the start
+	if( diagramNextTarget > scenarioDuration ){
+    		diagramRewind();
+    }
+    // Set the player mode
+	setPlayerMode("play");
+	// Start the scenario loop
+	diagramPlayLoop();
 }
-function diagramPlayStep(callback){
+function diagramPlayLoop(callback){
 	doPause = false;
 	// Don't get further than the scenario ;)
 	if( diagramNextTarget > scenarioDuration ){
 		if( callback ){
 			callback();
 		}
+		setPlayerMode("pause");
 		return false;
 	}
 	// Play the animation & set the next step as a callback to the animation
@@ -205,19 +222,56 @@ function diagramPlayStep(callback){
         diagramNextTarget++;
 
 		if( doPause ){
+			setPlayerMode("pause");
+			$("#pauseButton").removeClass("disabled");
 			doPause = false;
 			return false;
 		}
 
 		// play it
-		diagramPlayStep();
+		diagramPlayLoop();
 	});
 }
 
+function diagramStepMove(direction){
+	if( isPlaying ){
+		return ;
+	}
+	isPlaying = true ;
+
+	var start, end;
+	if( direction == 1 ){
+		start = diagramNextTarget-1;
+		end = diagramNextTarget;
+	}
+	else if( direction == -1 ){
+		start = diagramNextTarget-1;
+		end = diagramNextTarget-2;
+	}
+	timeLineAnimation(start,end, 1000, function(){
+		isPlaying = false;
+		diagramNextTarget += direction;
+	});
+
+}
+
 function diagramPause(){
+	$("#pauseButton").addClass("disabled");
 	doPause = true;
 }
 
 function diagramRewind(){
+	if( isPlaying ){
+		return ;
+	}
+	diagramNextTarget =  1;
 	updateTimeLinePosition(0);
+}
+
+function diagramNextStep(){
+	diagramStepMove(1);
+}
+
+function diagramPreviousStep(){
+	diagramStepMove(-1);
 }

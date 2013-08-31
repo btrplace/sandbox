@@ -344,6 +344,11 @@ code {
     font-size:0.5em;
 }
 
+.disabled {
+	background-color: lightgray;
+    color: #AAA;
+}
+
 #userInput {
 	float:left;
 	width:250px;
