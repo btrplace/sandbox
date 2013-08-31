@@ -81,10 +81,6 @@ function addAction(label, start, end){
 	addTimeLineMark(start);
 }
 
-function clearActions(){
-	$(".actionContainer").remove();
-}
-
 function addTimeLineMark(instant){
 	$(".timeLineGradLabel").eq(instant).addClass("withEvent");
 	/*var x = instant * TIME_UNIT_SIZE,
@@ -131,4 +127,12 @@ function createDiagram(scenario){
 	console.log("TIME_UNIT_SIZE = "+TIME_UNIT_SIZE+"px");
 	createGraduations(duration);
 	loadActions(scenario);
+}
+
+/**
+ * Resets the diagram
+ */
+function resetDiagram(){
+	$(".actionContainer").remove();
+	$("#graduations").children().remove();
 }
