@@ -81,6 +81,10 @@ function addAction(label, start, end){
 	addTimeLineMark(start);
 }
 
+function clearActions(){
+	$(".actionContainer").remove();
+}
+
 function addTimeLineMark(instant){
 	$(".timeLineGradLabel").eq(instant).addClass("withEvent");
 	/*var x = instant * TIME_UNIT_SIZE,

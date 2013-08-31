@@ -8,6 +8,7 @@ function changeView(viewName){
 	if( viewName == "input" ){
 		$("#solution > div").hide(300, function(){
         	$("#input_zone_wrapper").show(300);
+        	clearActions();
         });
 	}
 	else if( viewName == "solution"){
