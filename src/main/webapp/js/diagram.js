@@ -1,3 +1,8 @@
+/*
+Javascript to generate and navigate in a time-line diagram from a given scenario
+@author Tom Guillermin
+*/
+
 var TIME_UNIT_SIZE = 100 ;
 
 // List of the marks in the X graduation (to avoid duplicates)
@@ -54,6 +59,12 @@ function actionToString(action){
 	}
 }
 
+/*
+ * Adds an action in the diagram
+ * @param string Label of the action
+ * @param number Starting time of the action
+ * @param number Ending time of the action
+ */
 function addAction(label, start, end){
     var actionContainer = $("<div></div>").addClass("actionContainer"),
 		actionBar = $("<div></div>").addClass("actionBar"),
@@ -81,33 +92,58 @@ function addAction(label, start, end){
 	addTimeLineMark(start);
 }
 
+/*
+ * Marks a time graduation label with an event (text set to bold)
+ * @param instant number Time with event.
+ */
 function addTimeLineMark(instant){
 	$(".timeLineGradLabel").eq(instant).addClass("withEvent");
-	/*var x = instant * TIME_UNIT_SIZE,
-		grad = $("<div></div>").addClass("timeLineMark");
-    grad.css({left:x});
-   	$("#graduations").append(grad);*/
 }
 
+/*
+ * Updates the position of the time-line to a match given time
+ * @param newTime number Time to which the time-line has to be set.
+ */
 function updateTimeLinePosition(newTime){
 	var newPos = newTime * TIME_UNIT_SIZE;
 	$("#currentFrameLine").css({left:Math.round(newPos)});
 }
 
-function timeLineAnimation(duration){
-    $({value:0}).animate({value:duration},{
+/*
+ * Performs the time-line animation from a <i>start</i> to an </i>end</i> time
+ * for a given <i>duration</i>.
+ * @param duration number Duration of the animation in ms.
+ */
+function timeLineAnimation(start, end, duration, callback){
+    $({value:start}).animate({value:end},{
     	duration:duration,
     	easing:"linear",
     	step:function(){
-    		updateTimeLinePosition(this.value/1000);
+    		updateTimeLinePosition(this.value);
+    	},
+    	complete:function(){
+    		updateTimeLinePosition(end);
+    		console.log("Complete !");
+    		// Call the callback if any
+    		if(callback){
+    			callback();
+    		}
     	}
     })
 };
 
+/*
+ * Computes the pixel size of a time unit
+ */
 function computeTimeUnitSize(duration){
 	return $("#diagram").width()/duration ;
 }
 
+/*
+ * Calculates the duration of a given <i>scenario</i>
+ * @param scenario Object The scenario object.
+ * @return The duration of the scenario.
+ */
 function getScenarioDuration(scenario){
 	var maxTime = 0 ,
 		actions = scenario.actions ;
@@ -120,11 +156,194 @@ function getScenarioDuration(scenario){
 	return maxTime ;
 }
 
+var currentScenario,
+	scenarioDuration = 0 ;
 function createDiagram(scenario){
-	var duration = getScenarioDuration(scenario) ;
-	console.log("Duration = ",duration);
-	TIME_UNIT_SIZE = computeTimeUnitSize(duration);
+	currentScenario = scenario;
+	scenarioDuration = getScenarioDuration(scenario) ;
+	console.log("Duration = ",scenarioDuration);
+	TIME_UNIT_SIZE = computeTimeUnitSize(scenarioDuration);
 	console.log("TIME_UNIT_SIZE = "+TIME_UNIT_SIZE+"px");
-	createGraduations(duration);
+	createGraduations(scenarioDuration);
 	loadActions(scenario);
+}
+
+/**
+ * Resets the diagram.
+ */
+function resetDiagram(){
+	$(".actionContainer").remove();
+	$("#graduations").children().remove();
+	diagramRewind();
+	isPlaying = false;
+	doPause = false;
+	diagramNextTarget = 1;
+}
+
+var diagramNextTarget = 1,
+	isPlaying = false;
+	doPause = false;
+
+function setPlayerMode(mode){
+	if( mode == "play" ){
+		$("#playButton").hide();
+		$("#pauseButton").show();
+	}
+	if( mode == "pause" ){
+		isPlaying = false;
+		$("#pauseButton").hide();
+    	$("#playButton").show();
+	}
+}
+
+$(document).ready(function(){
+	setPlayerMode("pause");
+});
+
+function diagramPlay(){
+	if( isPlaying ){
+		return ;
+	}
+
+	// If the user clicks Play after the animation has finished,
+	// the animation goes back to the start
+	if( diagramNextTarget > scenarioDuration ){
+    		diagramRewind();
+    }
+    // Set the player mode
+	setPlayerMode("play");
+	// Start the scenario loop
+	diagramPlayLoop();
+}
+function diagramPlayLoop_old(callback){
+	doPause = false;
+	// Don't get further than the scenario ;)
+	if( diagramNextTarget > scenarioDuration ){
+		if( callback ){
+			callback();
+		}
+		setPlayerMode("pause");
+		return false;
+	}
+	// Play the animation & set the next step as a callback to the animation
+	timeLineAnimation(diagramNextTarget-1,diagramNextTarget, 1000, function(){
+		// Set next target
+        diagramNextTarget++;
+
+		if( doPause ){
+			setPlayerMode("pause");
+			$("#pauseButton").removeClass("disabled");
+			doPause = false;
+			return false;
+		}
+
+		// play it
+		diagramPlayLoop();
+	});
+}
+
+function diagramPlayLoop(callback){
+	doPause = false;
+	// Play the animation & set the next step as a callback to the animation
+	var canPlay = diagramStepMove(1, 1000, function(){
+		if( doPause ){
+			setPlayerMode("pause");
+			$("#pauseButton").removeClass("disabled");
+			doPause = false;
+			return false;
+		}
+
+		// play it
+		diagramPlayLoop();
+	});
+
+	if( !canPlay ){
+		console.log("Can't play now...");
+		if( callback ){
+    			callback();
+    	}
+    	setPlayerMode("pause");
+   		return false;
+	}
+	else {
+		console.log("Can play !");
+	}
+}
+
+
+function diagramStepMove(direction, duration, callback){
+	if( isPlaying ){
+		console.log("Is already playing !");
+		return false ;
+	}
+
+	var start, end, step;
+	if( direction == 1 ){
+		start = diagramNextTarget-1;
+		end = diagramNextTarget;
+		step = start;
+	}
+	else if( direction == -1 ){
+		start = diagramNextTarget-1;
+		end = diagramNextTarget-2;
+		step = end;
+	}
+
+	// Some validation
+	if( end < 0 || end > scenarioDuration){
+		console.log("Didn't pass validation");
+		return false;
+	}
+
+	isPlaying = true ;
+	//console.log("Playing step #"+step+" : ",getActionsStartingAt(step));
+
+	var actions = getActionsStartingAt(step);
+	for(var i in actions){
+		var action = actions[i];
+		actionHandler(action,function(){});
+	}
+
+	timeLineAnimation(start,end, 1000, function(){
+		isPlaying = false;
+		diagramNextTarget += direction;
+		if( callback ){
+			callback();
+		}
+	});
+	return true;
+
+}
+
+function diagramPause(){
+	$("#pauseButton").addClass("disabled");
+	doPause = true;
+}
+
+function diagramRewind(){
+	if( isPlaying ){
+		return ;
+	}
+	diagramNextTarget =  1;
+	updateTimeLinePosition(0);
+}
+
+function diagramNextStep(){
+	diagramStepMove(1);
+}
+
+function diagramPreviousStep(){
+	diagramStepMove(-1);
+}
+
+function getActionsStartingAt(time){
+	var result = [];
+	var actions = currentScenario.actions;
+	for(var i in actions){
+		var action = actions[i];
+		if( action.start == time ){
+			result.push(action);
+		}
+	}
+	return result;
 }
