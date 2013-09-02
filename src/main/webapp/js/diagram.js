@@ -209,6 +209,7 @@ function diagramPlay(){
 	// the animation goes back to the start
 	if( diagramNextTarget > scenarioDuration ){
     		diagramRewind();
+    		return ;
     }
     // Set the player mode
 	setPlayerMode("play");
@@ -301,10 +302,22 @@ function diagramStepMove(direction, duration, callback){
 	var actions = getActionsStartingAt(step);
 	for(var i in actions){
 		var action = actions[i];
-		actionHandler(action,function(){});
+		actionHandler(action, direction, duration, function(){});
 	}
 
-	timeLineAnimation(start,end, 1000, function(){
+	// Update the SVG with the new configuration
+	drawConfiguration('canvas');
+
+	// Play all the animations
+	for(var i in animationQueue){
+		var anim = animationQueue[i];
+		anim();
+	}
+
+	animationQueue = [];
+
+	// Play the time-line animation
+	timeLineAnimation(start,end, duration, function(){
 		isPlaying = false;
 		diagramNextTarget += direction;
 		if( callback ){
@@ -322,18 +335,41 @@ function diagramPause(){
 
 function diagramRewind(){
 	if( isPlaying ){
+		console.log("Is alreay playing !!");
 		return ;
 	}
+
+	var backLoop = function(){
+		console.log("BACK LOOP !");
+		var canPlay = diagramStepMove(-1, 100);
+		setTimeout(function(){
+			drawConfiguration('canvas');
+			if( canPlay ){
+				backLoop();
+			}
+		}, 105);
+	};
+
+	backLoop();
+	/*
+	// Undo all the actions
+	var canPlay = diagramStepMove(-1, 0);
+	while (canPlay) {
+		canPlay = diagramStepMove(-1, 0);
+	}
+	return ;
 	diagramNextTarget =  1;
 	updateTimeLinePosition(0);
+	reset();
+	drawConfiguration('canvas');*/
 }
 
 function diagramNextStep(){
-	diagramStepMove(1);
+	diagramStepMove(1, 1000);
 }
 
 function diagramPreviousStep(){
-	diagramStepMove(-1);
+	diagramStepMove(-1, 1000);
 }
 
 function getActionsStartingAt(time){

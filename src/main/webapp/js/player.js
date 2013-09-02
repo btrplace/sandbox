@@ -78,13 +78,66 @@ function doAction(f) {
     else if (arr[1] == "S") {boot(animationStep, config.getNode(arr[2]), f);}
 }
 
-function actionHandler(action, callback){
+
+var animationQueue = [];
+
+function actionHandler(action, direction, duration, callback){
 	var name = action.id;
-	if( name == "bootVM22" ){
-		boot(0, config.nodes[action.to], callback);
+	if( name == "bootNode" ){
+		if(direction == 1 ){
+			animationQueue.push(function(){ bootNode(config.nodes[action.node], duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1){
+			animationQueue.push(function(){ shutdownNode(config.nodes[action.node], duration, callback);  });
+		}
 	}
-	else if( name == "shutdownNode" ){ halt(0, config.nodes[action.node], callback);}
-	else if( name == "migrateVM" ){ migrate(0, config.vms[action.vm], config.nodes[action.from], config.nodes[action.to], callback)};
+	else if( name == "shutdownNode" ){
+		if (direction == 1){
+			animationQueue.push(function(){ shutdownNode(config.nodes[action.node], duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1){
+			animationQueue.push(function(){ bootNode(config.nodes[action.node], duration, callback); });
+		}
+	}
+	else if( name == "bootVM" ){
+		if (direction == 1) {
+			bootVM(config.vms[action.vm], config.nodes[action.to]);
+			animationQueue.push(function(){ bootVMAnim(config.vms[action.vm], duration, callback);  });
+		}
+		// Reverse mode
+		else if (direction == -1) {
+			//shutdownVM(config.vms[action.vm], config.nodes[action.to]);
+			animationQueue.push(function(){ shutdownVM(config.vms[action.vm], config.nodes[action.to], duration, callback); });
+		}
+	}
+	else if (name == "shutdownVM") {
+		if (direction == 1) {
+			//shutdownVM(config.vms[action.vm], config.nodes[action.on]);
+			animationQueue.push(function(){ shutdownVM(config.vms[action.vm], config.nodes[action.on], duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1) {
+			bootVM(config.vms[action.vm], config.nodes[action.on]);
+			animationQueue.push(function(){ bootVMAnim(config.vms[action.vm], duration, callback); });
+		}
+	}
+	else if( name == "migrateVM" ){
+		var from, to ;
+		if( direction == 1 ){
+			from = action.from;
+			to = action.to;
+		}
+		// Reverse mode
+		else if( direction == -1 ){
+			from = action.to;
+			to = action.from;
+		}
+		console.log("Action = ", action);
+		console.log("From : ", from, " to : ",to);
+		animationQueue.push(function(){ migrate(config.vms[action.vm], config.nodes[from], config.nodes[to], callback) });
+	};
 }
 
 //Undo the last committed action
@@ -153,8 +206,8 @@ function begin(a){
 }
 
 //Animation for a migrate action
-function migrate(a, vm, src, dst, f) {
-
+function migrate(vm, src, dst, f) {
+	var a = 0;
     //A light gray VM is posted on the destination
     var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
     ghostDst.bgColor = "#eee";
@@ -182,19 +235,54 @@ function migrate(a, vm, src, dst, f) {
             dst.host(vm);
             src.refresh();
             dst.refresh();
-            f(a);
+
+            drawConfiguration('canvas');
+            //f(a);
         }
         );
 }
 
 //Animation for booting a node
-function boot(a, node, f) {
-    node.boxStroke.animate({'stroke': 'black'}, fast ? 50 :500,"<>", function() {node.online = true;f(a);});
-    node.boxFill.animate({'fill': 'black'}, fast ? 50 : 500,"<>", function() {});
+function bootNode(node, duration) {
+	console.log("[ANIM] Booting node "+node.id);
+    node.boxStroke.animate({'stroke': 'black'}, duration,"<>", function() {node.online = true;});
+    node.boxFill.animate({'fill': 'black'}, duration,"<>", function() {});
 }
 
-//Animation for halting a node.
-function halt(a, node, f) {
-    node.boxStroke.animate({'stroke': '#bbb'}, fast ? 50 : 500,"<>", function(){node.online = false;f(a);});
-    node.boxFill.animate({'fill': '#bbb'}, fast ? 50 : 500,"<>", function() {});
+// Animation for shutting down a node
+function shutdownNode(node, duration){
+	console.log("[ANIM] Shutting down node "+node.id);
+    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){node.online = false;});
+    node.boxFill.animate({'fill': '#bbb'}, duration,"<>");
 }
+
+// Preparation for Animation for booting a VM
+function bootVM(vm, node, duration){
+	node.host(vm);
+	//vm.box.animate({'opacity': '1'}, duration,"<>", function() {});
+}
+
+// Animation for booting a VM
+function bootVMAnim(vm, duration){
+	console.log("[ANIM] Booting "+vm.id);
+   	vm.box.attr({"opacity":0});
+	vm.box.animate({'opacity': 1}, duration,"<>", function() {});
+
+}
+
+// Animation for shutting down a VM
+function shutdownVM(vm, node, duration){
+	console.log("[ANIM] Shutting down "+vm.id+" on node "+node.id);
+	//node.unhost(vm);
+	//drawConfiguration('canvas');
+	vm.box.attr({"opacity":1});
+	//return ;
+    vm.box.animate({'opacity': 0}, duration,"<>", function(){
+    	console.log("=== Unhosting "+vm.id+" from "+node.id);
+    	node.unhost(vm);
+    	//drawConfiguration('canvas');
+    });
+    //vm.box.animate({'fill-opacity': '0'}, duration,"<>");
+}
+
+//jQuery.Color.hook( "fill stroke" );
