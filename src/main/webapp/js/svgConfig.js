@@ -112,10 +112,6 @@ function Node(name, cpu, mem) {
 
 	    var bgColor = this.online ? "black" : "#bbb";
 
-	    //cleaning is now done before the draw-each-node loop
-        //canvas.rect(x,y,width, height).attr({'stroke':'white','fill' : 'transparent'});
-        //canvas.rect(x,y,width, height).attr({'stroke':'white','fill' : 'transparent'});
-
  	    //lightgray for the resources area
 	    this.boxStroke.push(canvas.rect(x + border, y + border, box_width, box_height).attr({'stroke':bgColor}));
 
@@ -416,7 +412,7 @@ function generateSampleScript(cfg) {
         if (cfg.vms[i].posX) {
             nb--;
             buf += cfg.vms[i].id;
-            if (nb > 0) {
+            if (nb > 1) {
                 buf += ",";
             }
         }
