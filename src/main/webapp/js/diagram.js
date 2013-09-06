@@ -175,16 +175,19 @@ function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
 
-	diagramNextTarget = 1 ;
-	updateTimeLinePosition(0);
+	//diagramNextTarget = 1 ;
+	//updateTimeLinePosition(0);
 	isPlaying = false;
 	doPause = false;
 
-	diagramRewind(0);
 
-	console.log("[LOG] Going to redraw after diagram reset");
-    drawConfiguration('canvas');
-	//diagramNextTarget = 1;
+	doPause = true ;
+	pauseCallback = function(){
+    	diagramRewind(0);
+    };
+
+	//console.log("[LOG] Going to redraw after diagram reset");
+    //drawConfiguration('canvas');
 }
 
 var diagramNextTarget = 1,
@@ -223,34 +226,8 @@ function diagramPlay(){
 	// Start the scenario loop
 	diagramPlayLoop();
 }
-function diagramPlayLoop_old(callback){
-	doPause = false;
-	// Don't get further than the scenario ;)
-	if( diagramNextTarget > scenarioDuration ){
-		if( callback ){
-			callback();
-		}
-		setPlayerMode("pause");
-		return false;
-	}
-	// Play the animation & set the next step as a callback to the animation
-	timeLineAnimation(diagramNextTarget-1,diagramNextTarget, 1000, function(){
-		// Set next target
-        diagramNextTarget++;
 
-		if( doPause ){
-			setPlayerMode("pause");
-			$("#pauseButton").removeClass("disabled");
-			doPause = false;
-			return false;
-		}
-
-		// play it
-		diagramPlayLoop();
-	});
-}
-
-var animationBaseDuration = 2000;
+var animationBaseDuration = 1000;
 
 function diagramPlayLoop(callback){
 	doPause = false;
@@ -260,6 +237,9 @@ function diagramPlayLoop(callback){
 			setPlayerMode("pause");
 			$("#pauseButton").removeClass("disabled");
 			doPause = false;
+            if( pauseCallback ){
+            	pauseCallback();
+            }
 			return false;
 		}
 
@@ -342,9 +322,11 @@ function diagramStepMove(direction, duration, callback){
 
 }
 
-function diagramPause(){
+var pauseCallback ;
+function diagramPause(callback){
 	$("#pauseButton").addClass("disabled");
 	doPause = true;
+	pauseCallback = callback;
 }
 
 function diagramRewind(){
