@@ -136,7 +136,7 @@ function actionHandler(action, direction, duration, callback){
 		}
 		console.log("Action = ", action);
 		console.log("From : ", from, " to : ",to);
-		animationQueue.push(function(){ migrate(config.vms[action.vm], config.nodes[from], config.nodes[to], callback) });
+		animationQueue.push(function(){ migrate(config.vms[action.vm], config.nodes[from], config.nodes[to], duration, callback) });
 	};
 }
 
@@ -206,7 +206,7 @@ function begin(a){
 }
 
 //Animation for a migrate action
-function migrate(vm, src, dst, f) {
+function migrate(vm, src, dst, duration, f) {
 	var a = 0;
     //A light gray VM is posted on the destination
     var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
@@ -222,7 +222,8 @@ function migrate(vm, src, dst, f) {
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
     movingVM.box.toFront();
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
+    //movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
+    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",
         function() {
             //The source VM goes away
             src.unhost(vm);

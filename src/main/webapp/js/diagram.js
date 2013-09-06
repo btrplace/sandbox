@@ -243,10 +243,12 @@ function diagramPlayLoop_old(callback){
 	});
 }
 
+var animationBaseDuration = 2000;
+
 function diagramPlayLoop(callback){
 	doPause = false;
 	// Play the animation & set the next step as a callback to the animation
-	var canPlay = diagramStepMove(1, 1000, function(){
+	var canPlay = diagramStepMove(1, animationBaseDuration, function(){
 		if( doPause ){
 			setPlayerMode("pause");
 			$("#pauseButton").removeClass("disabled");
@@ -365,11 +367,11 @@ function diagramRewind(){
 }
 
 function diagramNextStep(){
-	diagramStepMove(1, 1000);
+	diagramStepMove(1, animationBaseDuration);
 }
 
 function diagramPreviousStep(){
-	diagramStepMove(-1, 1000);
+	diagramStepMove(-1, animationBaseDuration);
 }
 
 function getActionsStartingAt(time){
