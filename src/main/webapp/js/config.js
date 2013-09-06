@@ -178,6 +178,7 @@ function updateConfiguration(buf) {
     //var configuration = parseConfigurationJSON(configurationJSON);
     if (ret[0].nodes.length) {
         config = ret[0];
+        console.log("[LOG] Going to redraw after update configuration");
         drawConfiguration('canvas');
     }
 

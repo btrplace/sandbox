@@ -228,9 +228,11 @@ function VirtualMachine(id, cpu, mem) {
 }
 
 
-var config = new Configuration();
+var config = new Configuration(),
+	initialConfig ;
 
 function drawConfiguration(id) {
+	console.log("[CONFIG] Drawing current configuration");
     //Compute the SVG size
     var width = 0;
     var height = 0;
@@ -279,6 +281,8 @@ function drawConfiguration(id) {
         var n = config.nodes[i];
         n.draw(paper,n.posX,n.posY);
     }
+
+    console.log("[LOG] FINISHED DRAWING");
 }
 
 

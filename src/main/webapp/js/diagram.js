@@ -174,10 +174,17 @@ function createDiagram(scenario){
 function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
-	diagramRewind();
+
+	diagramNextTarget = 1 ;
+	updateTimeLinePosition(0);
 	isPlaying = false;
 	doPause = false;
-	diagramNextTarget = 1;
+
+	diagramRewind(0);
+
+	console.log("[LOG] Going to redraw after diagram reset");
+    drawConfiguration('canvas');
+	//diagramNextTarget = 1;
 }
 
 var diagramNextTarget = 1,
@@ -304,10 +311,11 @@ function diagramStepMove(direction, duration, callback){
 	var actions = getActionsStartingAt(step);
 	for(var i in actions){
 		var action = actions[i];
-		actionHandler(action, direction, duration, function(){});
+		actionHandler(action, direction, duration*0.9, function(){});
 	}
 
 	// Update the SVG with the new configuration
+	console.log("[LOG] Going to redraw after animations preparation");
 	drawConfiguration('canvas');
 
 	// Play all the animations
@@ -322,6 +330,10 @@ function diagramStepMove(direction, duration, callback){
 	timeLineAnimation(start,end, duration, function(){
 		isPlaying = false;
 		diagramNextTarget += direction;
+
+		console.log("[LOG] Going to redraw after all animations completed");
+		drawConfiguration('canvas');
+
 		if( callback ){
 			callback();
 		}

@@ -207,6 +207,7 @@ function begin(a){
 
 //Animation for a migrate action
 function migrate(vm, src, dst, duration, f) {
+	console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
 	var a = 0;
     //A light gray VM is posted on the destination
     var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
@@ -237,7 +238,7 @@ function migrate(vm, src, dst, duration, f) {
             src.refresh();
             dst.refresh();
 
-            drawConfiguration('canvas');
+            //drawConfiguration('canvas');
             //f(a);
         }
         );
@@ -246,14 +247,22 @@ function migrate(vm, src, dst, duration, f) {
 //Animation for booting a node
 function bootNode(node, duration) {
 	console.log("[ANIM] Booting node "+node.id);
+
+	//node.boxStroke.attr({'stroke':'#bbb'});
+
     node.boxStroke.animate({'stroke': 'black'}, duration,"<>", function() {node.online = true;});
     node.boxFill.animate({'fill': 'black'}, duration,"<>", function() {});
 }
 
 // Animation for shutting down a node
 function shutdownNode(node, duration){
-	console.log("[ANIM] Shutting down node "+node.id);
-    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){node.online = false;});
+	console.log("[ANIM] Shutting down node "+node.id+" time : "+duration);
+	//node.boxStroke.attr({'stroke':'black'});
+	//node.boxFill.attr({'fill':'black'});
+
+    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){
+    	console.log("[ANIM] NODE SHUTTED DOWN :D");
+    	node.online = false;});
     node.boxFill.animate({'fill': '#bbb'}, duration,"<>");
 }
 
@@ -274,16 +283,11 @@ function bootVMAnim(vm, duration){
 // Animation for shutting down a VM
 function shutdownVM(vm, node, duration){
 	console.log("[ANIM] Shutting down "+vm.id+" on node "+node.id);
-	//node.unhost(vm);
-	//drawConfiguration('canvas');
 	vm.box.attr({"opacity":1});
 	//return ;
     vm.box.animate({'opacity': 0}, duration,"<>", function(){
-    	console.log("=== Unhosting "+vm.id+" from "+node.id);
+    	console.log("[ANIM DONE] Unhosted "+vm.id+" from "+node.id);
     	node.unhost(vm);
-    	//drawConfiguration('canvas');
     });
     //vm.box.animate({'fill-opacity': '0'}, duration,"<>");
 }
-
-//jQuery.Color.hook( "fill stroke" );

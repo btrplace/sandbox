@@ -81,6 +81,7 @@ function loadExperiment(id) {
     	            config = parseConfiguration(experiment.cfg)[0];
     	            cstrsEditor.setValue(experiment.script);
     	            configEditor.setValue(experiment.cfg);
+    	            console.log("[LOG] Going to redraw after Load Experiment");
     	            drawConfiguration('canvas');
     	            step(1);
     	        } else {
