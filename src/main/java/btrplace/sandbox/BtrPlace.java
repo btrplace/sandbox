@@ -117,6 +117,13 @@ public class BtrPlace {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String script) {
+		System.out.println("CLIENT INPUT : \n"+script);
+		String[] constraintsLines = script.split("\n");
+		for(int i = 0 ; i < constraintsLines.length ; i++){
+
+		}
+
+		// End of previous code
         System.out.println("======= Sending mock response to client.");
         GettingStarted gs = new GettingStarted();
         //gs.run();
