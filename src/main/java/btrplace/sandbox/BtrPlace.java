@@ -20,6 +20,10 @@
 package btrplace.sandbox;
 
 
+import btrplace.btrpsl.ErrorMessage;
+import btrplace.btrpsl.Script;
+import btrplace.btrpsl.ScriptBuilder;
+import btrplace.btrpsl.ScriptBuilderException;
 import btrplace.btrpsl.constraint.ConstraintsCatalog;
 import btrplace.btrpsl.constraint.DefaultConstraintsCatalog;
 import btrplace.json.JSONConverterException;
@@ -90,38 +94,46 @@ public class BtrPlace {
 
     }
 
-    /*
-    private String complete(Configuration cfg, String constraints, int padding) {
+
+    private String complete(Model model, String constraints, int padding) {
         StringBuilder n = new StringBuilder();
         n.append("namespace sandbox;\n");
-        /*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
+		for(VM vm : model.getVMs()){
+			n.append("VM"+vm.id()).append(" : mockVM;\n");
+		}
+
+		for(Node node : model.getNodes()){
+			n.append("N"+node.id()).append(" : mockNode;\n");
+		}
+		/*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
-        }
-        for (int i = 0; i <= padding; i++) {
-            n.append('\n');
-        }
-        n.append(constraints).append("\n");
+        }*/
+
+		for (int i = 0; i <= padding; i++) {
+			n.append('\n');
+		}
+		n.append(constraints).append("\n");
+
+
 
 
         String s = n.toString();
         //Add the '@' before each node name.
-        for (Node node : cfg.getAllNodes()) {
-            s = s.replaceAll(node.getName(), "@" + node.getName());
+        for (Node node : model.getNodes()) {
+            s = s.replaceAll("N"+node.id(), "@N" + node.id());
         }
+
         return s;
-        * /
-        return null;
     }
-    */
+
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response check(@FormParam("cfg") String cfg, @FormParam("script") String script) {
-		System.out.println("CLIENT INPUT : \n"+script);
-		String[] constraintsLines = script.split("\n");
-		for(int i = 0 ; i < constraintsLines.length ; i++){
-
-		}
+    public Response check(@FormParam("cfg") String cfg, @FormParam("script") String scriptInput) {
+		JSONObject response = new JSONObject();
+		response.put("errors",null);
+		response.put("solution",null);
+		System.out.println("CLIENT INPUT : \n"+scriptInput);
 
 		// End of previous code
         System.out.println("======= Sending mock response to client.");
@@ -129,7 +141,37 @@ public class BtrPlace {
         //gs.run();
 
         Model model = gs.makeModel();
-        List<SatConstraint> constraints = gs.makeConstraints();
+
+		int initialLength = scriptInput.split("\n").length;
+		scriptInput = complete(model, scriptInput,2);
+		// Number of lines added by the 'complete' method
+		int addedLinesNum = scriptInput.split("\n").length-initialLength;
+
+		System.out.println("=========== Resulting script : \n"+scriptInput+"\n===================");
+		ScriptBuilder scriptBuilder = new ScriptBuilder(model);
+		Script script = null ;
+		try {
+			script = scriptBuilder.build(scriptInput);
+		} catch (ScriptBuilderException sbe){
+			List<ErrorMessage> errorsList = sbe.getErrorReporter().getErrors();
+			List<JSONObject> errors = new ArrayList<JSONObject>();
+
+			for(ErrorMessage error : errorsList){
+				System.out.println("Error at line "+error.lineNo());
+				JSONObject e = new JSONObject();
+				e.put("line",error.lineNo() - addedLinesNum);
+				e.put("column",error.colNo());
+				e.put("message",error.message());
+				errors.add(e);
+			}
+
+			response.put("errors",errors);
+			System.out.println("==== Sending JSON of errors: \n"+response.toString());
+			return Response.ok(response).build();
+		}
+
+        //List<SatConstraint> constraints = gs.makeConstraints();
+        List<SatConstraint> constraints = new ArrayList(script.getConstraints());
 
 
         ArrayList<Integer> unsatisfiedConstrains = new ArrayList<Integer>();
@@ -142,12 +184,16 @@ public class BtrPlace {
         }
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
+
         try {
+			System.out.println("DEBUG 4.1");
             ReconfigurationPlan plan = ra.solve(model, constraints);
+			System.out.println("DEBUG 4.2");
             System.out.println("=========== PLAN JSON ==========");
             ReconfigurationPlanConverter planConverter = new ReconfigurationPlanConverter();
             try {
-                JSONObject response = planConverter.toJSON(plan);
+                JSONObject responseSolution = planConverter.toJSON(plan);
+				response.put("solution",responseSolution);
                 System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
@@ -161,9 +207,11 @@ public class BtrPlace {
             System.out.println(new DependencyBasedPlanApplier().toString(plan));
             //return (plan != null);
         } catch (SolverException ex) {
+			ex.printStackTrace();
             System.err.println(ex.getMessage());
             //return false;
         }
+
         /*
         System.out.println("CLIENT REQUEST ! Parsing : \n"+cfg);
 

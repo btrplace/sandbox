@@ -400,6 +400,7 @@ var spaceSplitter = /\s/g;
 
 
 function generateSampleScript(cfg) {
+	return "spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);";
     var buf = "";
     for (var i in cfg.nodes) {
         var n = cfg.nodes[i];
