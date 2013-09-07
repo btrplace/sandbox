@@ -116,8 +116,6 @@ public class BtrPlace {
 		n.append(constraints).append("\n");
 
 
-
-
         String s = n.toString();
         //Add the '@' before each node name.
         for (Node node : model.getNodes()) {
@@ -242,7 +240,7 @@ public class BtrPlace {
 			}
 
 			System.out.println("=== SNAPSHOT 4 : "+model.getVMs().size()+" VMs in the model.");
-			if(true)return null;
+			//if(true)return null;
 			System.out.println("=== SCRIPT : \n"+script.toString());
 
 		} catch (ScriptBuilderException sbe){
@@ -277,15 +275,18 @@ public class BtrPlace {
         }
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
+
 		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
 		for(VM vm : model.getVMs()){
 			System.out.println("VM : "+vm.id());
 		}
-		//ra.doRepair();
+
+		model.detach(namingService);
+
         try {
-			System.out.println("DEBUG 4.1");
+			System.out.println("SNAPSHOT 4.1");
             ReconfigurationPlan plan = ra.solve(model, constraints);
-			System.out.println("DEBUG 4.2");
+			System.out.println("SNAPSHOT 4.2");
             System.out.println("=========== PLAN JSON ==========");
             ReconfigurationPlanConverter planConverter = new ReconfigurationPlanConverter();
             try {
@@ -294,6 +295,7 @@ public class BtrPlace {
                 System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
+				System.err.println("[ERROR] Could not convert Plan to JSON.");
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
