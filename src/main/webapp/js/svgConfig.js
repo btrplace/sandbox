@@ -317,6 +317,7 @@ function check(id) {
 		});
 
 	}
+	console.log("=== Configuration Data sent to the server : ", cfg);
 	cfg = JSON.stringify(cfg);
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),

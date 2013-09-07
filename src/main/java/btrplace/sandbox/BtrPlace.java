@@ -97,30 +97,39 @@ public class BtrPlace {
 
 
     private String complete(Model model, String constraints, int padding) {
-        StringBuilder n = new StringBuilder();
+		StringBuilder n = new StringBuilder();
+
+		NamingService namingService = (NamingService) model.getView("btrpsl.ns");
+
         n.append("namespace sandbox;\n");
 		for(VM vm : model.getVMs()){
-			n.append("VM"+vm.id()).append(" : mockVM;\n");
+			String vmRealID = namingService.resolve(vm);
+			n.append(vmRealID).append(" : mockVM;\n");
 		}
 		n.append("\n");
 		for(Node node : model.getNodes()){
-			n.append("N"+node.id()).append(" : xen<boot=60>;\n");
+			String nodeRealID = namingService.resolve(node);
+			//System.out.println("===================== Node real ID : "+nodeRealID.substring(1));
+			constraints = constraints.replaceAll(nodeRealID.substring(1), nodeRealID);
+			//n.append(nodeRealID).append(" : xen<boot=60>;\n");
 		}
+
 		/*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
         }*/
 
+		padding = 1;
 		for (int i = 0; i <= padding; i++) {
 			n.append('\n');
 		}
-		n.append(constraints).append("\n");
 
+		n.append(constraints).append("\n");
 
         String s = n.toString();
         //Add the '@' before each node name.
         for (Node node : model.getNodes()) {
             //s = s.replaceAll("n"+node.id(), "@n" + node.id());
-			s = s.replaceAll("N"+node.id(), "@N" + node.id());
+			//s = s.replaceAll("N"+node.id(), "@N" + node.id());
         }
 		//s = s.replaceAll("VM","vm");
 
@@ -154,7 +163,16 @@ public class BtrPlace {
 			// Get the ID number (without 'N') of the Node
 			int nodeIDNum = Integer.parseInt(((String) node.get("id")).substring(1));
 			// Create the Node object
-			Node n = model.newNode(nodeIDNum); //mapping.ne
+			//Node n = model.newNode(); //mapping.ne
+			Node n = null ;
+
+			// Register the node
+			try {
+				n = (Node) namingService.register("@"+node.get("id")).getElement();
+				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
+			} catch (NamingServiceException e) {
+				e.printStackTrace();
+			}
 
 			// Setting capacities
 			// Node CPU
@@ -169,21 +187,22 @@ public class BtrPlace {
 			if( online ) mapping.addOnlineNode(n);
 			else mapping.addOfflineNode(n);
 
-			// Register the node
-			try {
-				namingService.register(""+node.get("id"));
-			} catch (NamingServiceException e) {
-				e.printStackTrace();
-			}
-
 			// Add the VMs of the node
 			JSONArray vmsIDs = (JSONArray) node.get("vms");
 			for(Object vmObject : vmsIDs){
 				JSONObject vm = (JSONObject) vmObject;
 				// Get the ID number (without 'VM') of the VM
 				int vmIDNum = Integer.parseInt(((String) vm.get("id")).substring(2));
+
 				// Create the VM object
-				VM v = model.newVM(vmIDNum);
+				VM v = null ;
+				// Register the VM
+				try {
+					v = (VM) namingService.register(""+vm.get("id")).getElement();
+					System.out.println("VM : "+vm.get("id")+" <=> "+v.id());
+				} catch (NamingServiceException e) {
+					e.printStackTrace();
+				}
 
 				// Consumptions
 				// CPU
@@ -207,7 +226,7 @@ public class BtrPlace {
 		JSONObject response = new JSONObject();
 		response.put("errors",null);
 		response.put("solution",null);
-		System.out.println("CLIENT Config : \n"+cfg);
+		//System.out.println("CLIENT Config : \n"+cfg);
 		System.out.println("CLIENT INPUT : \n"+scriptInput);
 
 		// End of previous code
@@ -232,12 +251,12 @@ public class BtrPlace {
 			script = scriptBuilder.build(scriptInput);
 			System.out.println("=== SNAPSHOT 3 : "+model.getVMs().size()+" VMs in the model.");
 
-			for(VM vm : model.getVMs()){
+			/*for(VM vm : model.getVMs()){
 				System.out.println("=== Test : VM:  "+vm.toString());
 			}
 			for(Node n : model.getNodes()){
 				System.out.println("=== Test : Node:  "+n.toString());
-			}
+			} */
 
 			System.out.println("=== SNAPSHOT 4 : "+model.getVMs().size()+" VMs in the model.");
 			//if(true)return null;
@@ -277,9 +296,9 @@ public class BtrPlace {
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
 
 		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
-		for(VM vm : model.getVMs()){
+		/*for(VM vm : model.getVMs()){
 			System.out.println("VM : "+vm.id());
-		}
+		} */
 
 		model.detach(namingService);
 
