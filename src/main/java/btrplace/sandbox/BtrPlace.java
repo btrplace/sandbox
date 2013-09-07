@@ -102,21 +102,10 @@ public class BtrPlace {
 		NamingService namingService = (NamingService) model.getView("btrpsl.ns");
 
         n.append("namespace sandbox;\n");
-		for(VM vm : model.getVMs()){
-			String vmRealID = namingService.resolve(vm);
-			n.append(vmRealID).append(" : mockVM;\n");
-		}
-		n.append("\n");
 		for(Node node : model.getNodes()){
 			String nodeRealID = namingService.resolve(node);
-			//System.out.println("===================== Node real ID : "+nodeRealID.substring(1));
 			constraints = constraints.replaceAll(nodeRealID.substring(1), nodeRealID);
-			//n.append(nodeRealID).append(" : xen<boot=60>;\n");
 		}
-
-		/*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
-            n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
-        }*/
 
 		padding = 1;
 		for (int i = 0; i <= padding; i++) {
@@ -126,12 +115,6 @@ public class BtrPlace {
 		n.append(constraints).append("\n");
 
         String s = n.toString();
-        //Add the '@' before each node name.
-        for (Node node : model.getNodes()) {
-            //s = s.replaceAll("n"+node.id(), "@n" + node.id());
-			//s = s.replaceAll("N"+node.id(), "@N" + node.id());
-        }
-		//s = s.replaceAll("VM","vm");
 
         return s;
     }
@@ -161,15 +144,13 @@ public class BtrPlace {
 		for(Object nodeObject : config){
 			JSONObject node = (JSONObject) nodeObject;
 			// Get the ID number (without 'N') of the Node
-			int nodeIDNum = Integer.parseInt(((String) node.get("id")).substring(1));
-			// Create the Node object
-			//Node n = model.newNode(); //mapping.ne
 			Node n = null ;
 
 			// Register the node
 			try {
 				n = (Node) namingService.register("@"+node.get("id")).getElement();
 				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
+                model.getAttributes().put(n, "btrpsl.id", node.get("id").toString());
 			} catch (NamingServiceException e) {
 				e.printStackTrace();
 			}
@@ -191,15 +172,13 @@ public class BtrPlace {
 			JSONArray vmsIDs = (JSONArray) node.get("vms");
 			for(Object vmObject : vmsIDs){
 				JSONObject vm = (JSONObject) vmObject;
-				// Get the ID number (without 'VM') of the VM
-				int vmIDNum = Integer.parseInt(((String) vm.get("id")).substring(2));
 
 				// Create the VM object
 				VM v = null ;
 				// Register the VM
 				try {
-					v = (VM) namingService.register(""+vm.get("id")).getElement();
-					System.out.println("VM : "+vm.get("id")+" <=> "+v.id());
+					v = (VM) namingService.register("sandbox."+vm.get("id")).getElement();
+                    model.getAttributes().put(v, "btrpsl.id", vm.get("id").toString());
 				} catch (NamingServiceException e) {
 					e.printStackTrace();
 				}
