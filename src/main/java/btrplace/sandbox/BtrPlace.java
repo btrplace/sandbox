@@ -104,7 +104,7 @@ public class BtrPlace {
         n.append("namespace sandbox;\n");
 		for(VM vm : model.getVMs()){
 			String vmRealID = namingService.resolve(vm);
-			n.append(vmRealID).append(" : mockVM;\n");
+			//n.append(vmRealID).append(" : mockVM;\n");
 		}
 		n.append("\n");
 		for(Node node : model.getNodes()){
@@ -149,6 +149,8 @@ public class BtrPlace {
 		NamingService namingService = new InMemoryNamingService(model);
 		model.attach(namingService);
 
+		Map<Integer,Integer> vmIDConversionTable = new HashMap<Integer, Integer>();
+
 		// Create the resources
 		ShareableResource rcCPU = new ShareableResource("cpu", 8, 0);
 		ShareableResource rcMem = new ShareableResource("mem", 7, 0);
@@ -169,7 +171,7 @@ public class BtrPlace {
 			// Register the node
 			try {
 				n = (Node) namingService.register("@"+node.get("id")).getElement();
-				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
+				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n);
 			} catch (NamingServiceException e) {
 				e.printStackTrace();
 			}
@@ -199,7 +201,8 @@ public class BtrPlace {
 				// Register the VM
 				try {
 					v = (VM) namingService.register(""+vm.get("id")).getElement();
-					System.out.println("VM : "+vm.get("id")+" <=> "+v.id());
+					System.out.println("VM : "+vm.get("id")+" <=> "+v);
+					vmIDConversionTable.put(v.id(), Integer.parseInt(((String) vm.get("id")).substring(2)));
 				} catch (NamingServiceException e) {
 					e.printStackTrace();
 				}
@@ -295,12 +298,14 @@ public class BtrPlace {
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
 
-		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
 		/*for(VM vm : model.getVMs()){
 			System.out.println("VM : "+vm.id());
 		} */
 
 		model.detach(namingService);
+
+		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes and "+constraints.size()+" constraints.");
+		System.out.println("Constrain 0 : " + constraints.get(0).toString());
 
         try {
 			System.out.println("SNAPSHOT 4.1");
@@ -311,6 +316,7 @@ public class BtrPlace {
             try {
                 JSONObject responseSolution = planConverter.toJSON(plan);
 				response.put("solution",responseSolution);
+				response.put("conversionTable",vmIDConversionTable);
                 System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {

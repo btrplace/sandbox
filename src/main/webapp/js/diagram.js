@@ -25,10 +25,34 @@ function createGraduations(duration){
 	}
 }
 
+
+// For VMs only
+function convertID(sourceID){
+	return conversionTable[sourceID];
+}
+
+var conversionTemplate = {
+	"bootVM":["vm"],
+	"shutdownVM":["vm"],
+	"migrateVM":["vm"]
+}
+
+function convertScenarioIDs(scenario){
+	for(var i in scenario.actions){
+    	var action = scenario.actions[i];
+    	if( ["bootVM","shutdownVM","migrateVM"].indexOf(action.id) != -1 ){
+    		console.log("Getting corresponding ID from "+action.vm);
+    		action.vm = convertID(action.vm);
+    	}
+	}
+}
+
 /*
  * Loads the action from the JSON response from server
  */
 function loadActions(scenario){
+	console.log("Converting VMs IDs to match client IDs.");
+	convertScenarioIDs(scenario);
 	console.log("Loading data : ",scenario);
 	var actions = scenario.actions;
 	for(var i in actions){
