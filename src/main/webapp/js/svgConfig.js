@@ -288,8 +288,36 @@ function drawConfiguration(id) {
 
 function check(id) {
     var script = cstrsEditor.getValue();
-    var cfg = config.btrpToJSON();
+    //var cfg = config.btrpToJSON();
+
     var http = createXhrObject();
+
+
+	var cfg = [];
+	for(var i in config.nodes){
+		var node = config.nodes[i];
+		// Create a list of the VMs' IDs
+		var vms = [];
+		for(var j in node.vms){
+			var vm = node.vms[j];
+			vms.push({
+				"id":vm.id,
+				"cpu":vm.cpu,
+				"mem":vm.mem
+			});
+
+		}
+		// Create a Node JSON object to be parsed by the server.
+		cfg.push({
+			"id":node.id,
+			"online":node.online,
+			"cpu":node.cpu,
+			"mem":node.mem,
+			"vms":vms
+		});
+
+	}
+	cfg = JSON.stringify(cfg);
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
     function() {

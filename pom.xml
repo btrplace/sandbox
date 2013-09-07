@@ -70,17 +70,17 @@
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-api</artifactId>
-            <version>0.30</version>
+            <version>0.31</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-choco</artifactId>
-            <version>0.30</version>
+            <version>0.31</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-json</artifactId>
-            <version>0.30</version>
+            <version>0.31</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>

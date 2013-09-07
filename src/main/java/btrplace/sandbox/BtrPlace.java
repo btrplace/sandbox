@@ -20,10 +20,7 @@
 package btrplace.sandbox;
 
 
-import btrplace.btrpsl.ErrorMessage;
-import btrplace.btrpsl.Script;
-import btrplace.btrpsl.ScriptBuilder;
-import btrplace.btrpsl.ScriptBuilderException;
+import btrplace.btrpsl.*;
 import btrplace.btrpsl.constraint.ConstraintsCatalog;
 import btrplace.btrpsl.constraint.DefaultConstraintsCatalog;
 import btrplace.json.JSONConverterException;
@@ -31,6 +28,7 @@ import btrplace.json.model.ModelConverter;
 import btrplace.json.plan.ReconfigurationPlanConverter;
 import btrplace.model.*;
 import btrplace.model.constraint.SatConstraint;
+import btrplace.model.view.ShareableResource;
 import btrplace.plan.DependencyBasedPlanApplier;
 import btrplace.plan.ReconfigurationPlan;
 import btrplace.plan.TimeBasedPlanApplier;
@@ -38,7 +36,10 @@ import btrplace.solver.SolverException;
 import btrplace.solver.choco.ChocoReconfigurationAlgorithm;
 import btrplace.solver.choco.DefaultChocoReconfigurationAlgorithm;
 import btrplace.solver.choco.durationEvaluator.DurationEvaluators;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
+import net.minidev.json.parser.JSONParser;
 
 //import org.codehaus.jettison.json.JSONObject;
 //import sun.org.mozilla.javascript.internal.ErrorReporter;
@@ -101,9 +102,9 @@ public class BtrPlace {
 		for(VM vm : model.getVMs()){
 			n.append("VM"+vm.id()).append(" : mockVM;\n");
 		}
-
+		n.append("\n");
 		for(Node node : model.getNodes()){
-			n.append("N"+node.id()).append(" : mockNode;\n");
+			n.append("N"+node.id()).append(" : xen<boot=60>;\n");
 		}
 		/*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
             n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
@@ -120,8 +121,10 @@ public class BtrPlace {
         String s = n.toString();
         //Add the '@' before each node name.
         for (Node node : model.getNodes()) {
-            s = s.replaceAll("N"+node.id(), "@N" + node.id());
+            //s = s.replaceAll("n"+node.id(), "@n" + node.id());
+			s = s.replaceAll("N"+node.id(), "@N" + node.id());
         }
+		//s = s.replaceAll("VM","vm");
 
         return s;
     }
@@ -130,18 +133,94 @@ public class BtrPlace {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String scriptInput) {
+		//Model model = gs.makeModel();
+
+		// Create an empty model
+		Model model = new DefaultModel();
+
+		// Add a NamingService to the model
+		NamingService namingService = new InMemoryNamingService(model);
+		model.attach(namingService);
+
+		// Create the resources
+		ShareableResource rcCPU = new ShareableResource("cpu", 8, 0);
+		ShareableResource rcMem = new ShareableResource("mem", 7, 0);
+
+		// Get the mapping
+		Mapping mapping = model.getMapping();
+
+		// Load the nodes
+		JSONArray config = (JSONArray) JSONValue.parse(cfg);
+		for(Object nodeObject : config){
+			JSONObject node = (JSONObject) nodeObject;
+			// Get the ID number (without 'N') of the Node
+			int nodeIDNum = Integer.parseInt(((String) node.get("id")).substring(1));
+			// Create the Node object
+			Node n = model.newNode(nodeIDNum); //mapping.ne
+
+			// Setting capacities
+			// Node CPU
+			int cpu = (Integer) node.get("cpu");
+			rcCPU.setCapacity(n, cpu);
+			// Node Mem
+			int mem = (Integer) node.get("mem");
+			rcMem.setCapacity(n, mem);
+
+			// Add the node to the map
+			boolean online = (Boolean) node.get("online");
+			if( online ) mapping.addOnlineNode(n);
+			else mapping.addOfflineNode(n);
+
+			// Register the node
+			try {
+				namingService.register(""+node.get("id"));
+			} catch (NamingServiceException e) {
+				e.printStackTrace();
+			}
+
+			// Add the VMs of the node
+			JSONArray vmsIDs = (JSONArray) node.get("vms");
+			for(Object vmObject : vmsIDs){
+				JSONObject vm = (JSONObject) vmObject;
+				// Get the ID number (without 'VM') of the VM
+				int vmIDNum = Integer.parseInt(((String) vm.get("id")).substring(2));
+				// Create the VM object
+				VM v = model.newVM(vmIDNum);
+
+				// Consumptions
+				// CPU
+				int VMCpu = (Integer) vm.get("cpu");
+				rcCPU.setConsumption(v, VMCpu);
+				// Mem
+				int VMMem = (Integer) vm.get("mem");
+				rcMem.setConsumption(v, VMMem);
+
+				// Add the VM to the map
+				mapping.addRunningVM(v, n);
+			}
+		}
+
+		// Attach the views
+  		model.attach(rcCPU);
+		model.attach(rcMem);
+
+		System.out.println("############### MODEL BUILT SUCCESSFULLY! ###################");
+
 		JSONObject response = new JSONObject();
 		response.put("errors",null);
 		response.put("solution",null);
+		System.out.println("CLIENT Config : \n"+cfg);
 		System.out.println("CLIENT INPUT : \n"+scriptInput);
 
 		// End of previous code
         System.out.println("======= Sending mock response to client.");
-        GettingStarted gs = new GettingStarted();
+
+		//GettingStarted gs = new GettingStarted();
         //gs.run();
 
-        Model model = gs.makeModel();
+		System.out.println("=== SNAPSHOT 1 : "+model.getVMs().size()+" VMs in the model.");
 
+		// Fixing the script to match BtrpSL requirements
 		int initialLength = scriptInput.split("\n").length;
 		scriptInput = complete(model, scriptInput,2);
 		// Number of lines added by the 'complete' method
@@ -151,7 +230,21 @@ public class BtrPlace {
 		ScriptBuilder scriptBuilder = new ScriptBuilder(model);
 		Script script = null ;
 		try {
+			System.out.println("=== SNAPSHOT 2 : "+model.getVMs().size()+" VMs in the model.");
 			script = scriptBuilder.build(scriptInput);
+			System.out.println("=== SNAPSHOT 3 : "+model.getVMs().size()+" VMs in the model.");
+
+			for(VM vm : model.getVMs()){
+				System.out.println("=== Test : VM:  "+vm.toString());
+			}
+			for(Node n : model.getNodes()){
+				System.out.println("=== Test : Node:  "+n.toString());
+			}
+
+			System.out.println("=== SNAPSHOT 4 : "+model.getVMs().size()+" VMs in the model.");
+			if(true)return null;
+			System.out.println("=== SCRIPT : \n"+script.toString());
+
 		} catch (ScriptBuilderException sbe){
 			List<ErrorMessage> errorsList = sbe.getErrorReporter().getErrors();
 			List<JSONObject> errors = new ArrayList<JSONObject>();
@@ -184,7 +277,11 @@ public class BtrPlace {
         }
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
-
+		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
+		for(VM vm : model.getVMs()){
+			System.out.println("VM : "+vm.id());
+		}
+		//ra.doRepair();
         try {
 			System.out.println("DEBUG 4.1");
             ReconfigurationPlan plan = ra.solve(model, constraints);
