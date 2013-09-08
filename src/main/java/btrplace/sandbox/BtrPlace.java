@@ -102,21 +102,13 @@ public class BtrPlace {
 		NamingService namingService = (NamingService) model.getView("btrpsl.ns");
 
         n.append("namespace sandbox;\n");
-		for(VM vm : model.getVMs()){
-			String vmRealID = namingService.resolve(vm);
-			//n.append(vmRealID).append(" : mockVM;\n");
-		}
-		n.append("\n");
+		
 		for(Node node : model.getNodes()){
 			String nodeRealID = namingService.resolve(node);
-			//System.out.println("===================== Node real ID : "+nodeRealID.substring(1));
 			constraints = constraints.replaceAll(nodeRealID.substring(1), nodeRealID);
 			//n.append(nodeRealID).append(" : xen<boot=60>;\n");
 		}
 
-		/*for (VirtualMachine vm : cfg.getAllVirtualMachines()) {
-            n.append(vm.getName().substring(vm.getName().indexOf('.') + 1)).append(" : mockVM;\n");
-        }*/
 
 		padding = 1;
 		for (int i = 0; i <= padding; i++) {
@@ -125,13 +117,7 @@ public class BtrPlace {
 
 		n.append(constraints).append("\n");
 
-        String s = n.toString();
-        //Add the '@' before each node name.
-        for (Node node : model.getNodes()) {
-            //s = s.replaceAll("n"+node.id(), "@n" + node.id());
-			//s = s.replaceAll("N"+node.id(), "@N" + node.id());
-        }
-		//s = s.replaceAll("VM","vm");
+        String s = n.toString(); 
 
         return s;
     }
@@ -149,8 +135,6 @@ public class BtrPlace {
 		NamingService namingService = new InMemoryNamingService(model);
 		model.attach(namingService);
 
-		Map<Integer,Integer> vmIDConversionTable = new HashMap<Integer, Integer>();
-
 		// Create the resources
 		ShareableResource rcCPU = new ShareableResource("cpu", 8, 0);
 		ShareableResource rcMem = new ShareableResource("mem", 7, 0);
@@ -163,15 +147,13 @@ public class BtrPlace {
 		for(Object nodeObject : config){
 			JSONObject node = (JSONObject) nodeObject;
 			// Get the ID number (without 'N') of the Node
-			int nodeIDNum = Integer.parseInt(((String) node.get("id")).substring(1));
-			// Create the Node object
-			//Node n = model.newNode(); //mapping.ne
 			Node n = null ;
 
 			// Register the node
 			try {
 				n = (Node) namingService.register("@"+node.get("id")).getElement();
-				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n);
+				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
+                model.getAttributes().put(n, "btrpsl.id", node.get("id").toString());
 			} catch (NamingServiceException e) {
 				e.printStackTrace();
 			}
@@ -193,16 +175,13 @@ public class BtrPlace {
 			JSONArray vmsIDs = (JSONArray) node.get("vms");
 			for(Object vmObject : vmsIDs){
 				JSONObject vm = (JSONObject) vmObject;
-				// Get the ID number (without 'VM') of the VM
-				int vmIDNum = Integer.parseInt(((String) vm.get("id")).substring(2));
 
 				// Create the VM object
 				VM v = null ;
 				// Register the VM
 				try {
-					v = (VM) namingService.register(""+vm.get("id")).getElement();
-					System.out.println("VM : "+vm.get("id")+" <=> "+v);
-					vmIDConversionTable.put(v.id(), Integer.parseInt(((String) vm.get("id")).substring(2)));
+					v = (VM) namingService.register("sandbox."+vm.get("id")).getElement();
+                    model.getAttributes().put(v, "btrpsl.id", vm.get("id").toString());
 				} catch (NamingServiceException e) {
 					e.printStackTrace();
 				}
@@ -298,14 +277,12 @@ public class BtrPlace {
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
 
+		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
 		/*for(VM vm : model.getVMs()){
 			System.out.println("VM : "+vm.id());
 		} */
 
 		model.detach(namingService);
-
-		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes and "+constraints.size()+" constraints.");
-		System.out.println("Constrain 0 : " + constraints.get(0).toString());
 
         try {
 			System.out.println("SNAPSHOT 4.1");
@@ -316,7 +293,6 @@ public class BtrPlace {
             try {
                 JSONObject responseSolution = planConverter.toJSON(plan);
 				response.put("solution",responseSolution);
-				response.put("conversionTable",vmIDConversionTable);
                 System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
