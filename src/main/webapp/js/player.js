@@ -82,6 +82,7 @@ function doAction(f) {
 var animationQueue = [];
 
 function actionHandler(action, direction, duration, callback){
+	duration *= 0.8 ;
 	var name = action.id;
 	if( name == "bootNode" ){
 		if(direction == 1 ){

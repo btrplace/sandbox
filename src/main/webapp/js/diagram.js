@@ -210,6 +210,8 @@ $(document).ready(function(){
 	setPlayerMode("pause");
 });
 
+
+var playSpeed = 1000 ;
 function diagramPlay(){
 	if( isPlaying ){
 		return ;
@@ -224,15 +226,15 @@ function diagramPlay(){
     // Set the player mode
 	setPlayerMode("play");
 	// Start the scenario loop
-	diagramPlayLoop();
+	diagramPlayLoop(1, playSpeed);
 }
 
 var animationBaseDuration = 1000;
 
-function diagramPlayLoop(callback){
+function diagramPlayLoop(direction, duration, callback){
 	doPause = false;
 	// Play the animation & set the next step as a callback to the animation
-	var canPlay = diagramStepMove(1, animationBaseDuration, function(){
+	var canPlay = diagramStepMove(direction, duration, function(){
 		if( doPause ){
 			setPlayerMode("pause");
 			$("#pauseButton").removeClass("disabled");
@@ -244,7 +246,7 @@ function diagramPlayLoop(callback){
 		}
 
 		// play it
-		diagramPlayLoop();
+		diagramPlayLoop(direction, duration);
 	});
 
 	if( !canPlay ){
@@ -291,7 +293,7 @@ function diagramStepMove(direction, duration, callback){
 	var actions = getActionsStartingAt(step);
 	for(var i in actions){
 		var action = actions[i];
-		actionHandler(action, direction, duration*0.9, function(){});
+		actionHandler(action, direction, duration, function(){});
 	}
 
 	// Update the SVG with the new configuration
@@ -329,11 +331,15 @@ function diagramPause(callback){
 	pauseCallback = callback;
 }
 
+var rewindSpeed = 100 ;
 function diagramRewind(){
 	if( isPlaying ){
 		console.log("Is alreay playing !!");
 		return ;
 	}
+
+	diagramPlayLoop(-1,rewindSpeed);
+    return ;
 
 	var backLoop = function(){
 		console.log("BACK LOOP !");
@@ -343,7 +349,7 @@ function diagramRewind(){
 			if( canPlay ){
 				backLoop();
 			}
-		}, 105);
+		}, 100);
 	};
 
 	backLoop();
