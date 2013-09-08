@@ -25,36 +25,13 @@ function createGraduations(duration){
 	}
 }
 
-
-// For VMs only
-function convertID(sourceID){
-	return conversionTable[sourceID];
-}
-
-var conversionTemplate = {
-	"bootVM":["vm"],
-	"shutdownVM":["vm"],
-	"migrateVM":["vm"]
-}
-
-function convertScenarioIDs(scenario){
-	for(var i in scenario.actions){
-    	var action = scenario.actions[i];
-    	if( ["bootVM","shutdownVM","migrateVM"].indexOf(action.id) != -1 ){
-    		console.log("Getting corresponding ID from "+action.vm);
-    		action.vm = convertID(action.vm);
-    	}
-	}
-}
-
 /*
  * Loads the action from the JSON response from server
  */
-function loadActions(scenario){
+function loadActions(actions){
 	console.log("Converting VMs IDs to match client IDs.");
-	convertScenarioIDs(scenario);
-	console.log("Loading data : ",scenario);
-	var actions = scenario.actions;
+	console.log("Loading actions : ", actions);
+
 	for(var i in actions){
 		var action = actions[i];
 		if( action.id == "allocate"){
@@ -64,7 +41,6 @@ function loadActions(scenario){
 			end = action.end,
 			actionName = actionToString(action);
 		addAction(actionName, start, end);
-
 	}
 }
 
@@ -168,9 +144,9 @@ function computeTimeUnitSize(duration){
  * @param scenario Object The scenario object.
  * @return The duration of the scenario.
  */
-function getScenarioDuration(scenario){
+function getScenarioDuration(actions){
 	var maxTime = 0 ,
-		actions = scenario.actions ;
+		actions = actions ;
 	for(var i in actions){
 		var action = actions[i];
 		if( action.end > maxTime ){
@@ -180,16 +156,16 @@ function getScenarioDuration(scenario){
 	return maxTime ;
 }
 
-var currentScenario,
+var currentAction,
 	scenarioDuration = 0 ;
-function createDiagram(scenario){
-	currentScenario = scenario;
-	scenarioDuration = getScenarioDuration(scenario) ;
+function createDiagram(actions){
+	currentActions = actions;
+	scenarioDuration = getScenarioDuration(actions) ;
 	console.log("Duration = ",scenarioDuration);
 	TIME_UNIT_SIZE = computeTimeUnitSize(scenarioDuration);
 	console.log("TIME_UNIT_SIZE = "+TIME_UNIT_SIZE+"px");
 	createGraduations(scenarioDuration);
-	loadActions(scenario);
+	loadActions(actions);
 }
 
 /**
@@ -394,7 +370,7 @@ function diagramPreviousStep(){
 
 function getActionsStartingAt(time){
 	var result = [];
-	var actions = currentScenario.actions;
+	var actions = currentActions;
 	for(var i in actions){
 		var action = actions[i];
 		if( action.start == time ){

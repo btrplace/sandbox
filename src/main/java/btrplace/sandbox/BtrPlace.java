@@ -278,9 +278,6 @@ public class BtrPlace {
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
 
 		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
-		/*for(VM vm : model.getVMs()){
-			System.out.println("VM : "+vm.id());
-		} */
 
 		model.detach(namingService);
 
@@ -292,7 +289,19 @@ public class BtrPlace {
             ReconfigurationPlanConverter planConverter = new ReconfigurationPlanConverter();
             try {
                 JSONObject responseSolution = planConverter.toJSON(plan);
-				response.put("solution",responseSolution);
+				JSONArray actionsJSON = (JSONArray) responseSolution.get("actions");
+				for(Object actionObject : actionsJSON){
+					JSONObject actionJSON = (JSONObject) actionObject;
+					if( actionJSON.keySet().contains("vm") ){
+						// Converting the BtrPlace ID of the VM to the BtrpSL ID.
+						int btrplaceID =Integer.parseInt(actionJSON.get("vm").toString());
+						Element vm = (Element) model.getVMs().toArray()[btrplaceID];
+						int btrpSLID = Integer.parseInt(model.getAttributes().get(vm, "btrpsl.id").toString().substring(2)) ;
+						actionJSON.put("vm", btrpSLID);
+						System.out.println("Converted ID "+btrplaceID+" to "+btrpSLID);
+					}
+				}
+				response.put("actions",actionsJSON);
                 System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
