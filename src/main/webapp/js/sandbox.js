@@ -39,3 +39,70 @@ function onServerResponse(json){
 $(document).ready(function(){
 	changeView("input");
 });
+
+var selectedElement = null ;
+
+function registerSelectedElement(element){
+	selectedElement = element;
+}
+
+
+function updateClickBindings(){
+	//$("body").click(function(){console.log("CLICK on body!")});
+	$(".nodeZone").unbind('click').on('click',function(){
+		var nodeID = this.attributes["sandboxNodeID"].value,
+		 	node = config.getNode(nodeID);
+			console.log("Click on node ",node);
+
+			if (selectedElement != null) {
+				selectedElement.setSelected(false);
+			}
+
+			selectedElement = node;
+
+			node.setSelected(true) ;
+			//console.log("Click on node ",$(this).attr("sandboxNodeID"));
+		}
+	);
+	$(".vmZone").unbind('click').on('click',function(){
+		console.log("Click on node "+$(this).attr("sandboxVMID"));
+	});
+}
+
+$(function() {
+    updateClickBindings();
+	$(document).keydown(function(event){
+		console.log("Key "+event.which);
+		if( ! editor.isFocused() ){
+			var keyCode = event.which;
+			if (selectedElement != null){
+				// Left
+				if (keyCode == 37) {
+                    selectedElement.cpu--;
+                    event.preventDefault();
+				}
+				// Right
+				else if (keyCode == 39) {
+                	selectedElement.cpu++;
+                	event.preventDefault();
+				}
+				// Up
+				else if (keyCode == 40){
+                	selectedElement.mem++;
+                	event.preventDefault();
+				}
+				// Down
+				else if (keyCode == 38){
+					selectedElement.mem--;
+					event.preventDefault();
+				}
+				// Escape
+				else if (keyCode == 27) {
+					selectedElement.setSelected(false) ;
+					selectedElement = null ;
+				}
+				drawConfiguration('canvas');
+			}
+		}
+	});
+});

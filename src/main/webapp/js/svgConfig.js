@@ -94,6 +94,7 @@ function Node(name, cpu, mem) {
     this.mem = mem;
     this.online = true;
     this.vms = [];
+    this.isSelected = false;
     this.boundingBox = function () {
 	    return [2 * border + unit_size * this.cpu, 2 * border + unit_size * this.mem];
     };
@@ -113,7 +114,14 @@ function Node(name, cpu, mem) {
 	    var bgColor = this.online ? "black" : "#bbb";
 
  	    //lightgray for the resources area
-	    this.boxStroke.push(canvas.rect(x + border, y + border, box_width, box_height).attr({'stroke':bgColor}));
+ 	    var rect = canvas.rect(x + border, y + border, box_width, box_height).attr({'stroke':bgColor});
+ 	    // Fill with transparent color to catch click
+ 	    rect.attr({'fill':'rgba(0,0,0,0)'});
+ 	    this.rect = rect;
+
+ 	    this.updateSelectionDraw();
+
+	    this.boxStroke.push(rect);
 
 	    //labels
         this.boxFill.push(canvas.text(x + width - border,y + height - 10,"cpu").attr({'font-size':'12pt','text-anchor':'end','baseline-shift':'0em','fill':bgColor}));
@@ -142,7 +150,38 @@ function Node(name, cpu, mem) {
 	        oX += this.vms[i].boundingBox()[0];
 	        oY -= this.vms[i].boundingBox()[1];
 	    }
+
+		var drawingElements = $.merge(this.boxStroke, this.boxFill);
+		//var drawingElements = this.boxStroke;
+		while (i < drawingElements.length) {
+	    	var stroke = drawingElements[i];
+	    	if ($.isArray(stroke)) {
+	    		drawingElements = drawingElements.concat(stroke);
+	    		continue;
+	    	}
+	    	stroke.node.setAttribute("class","nodeZone");
+            stroke.node.setAttribute("sandboxNodeID",this.id);
+
+            i++;
+        }
     }
+
+	this.setSelected = function(isSelected){
+		this.isSelected = isSelected ;
+		this.updateSelectionDraw();
+	}
+
+	this.updateSelectionDraw = function(){
+		if( this.isSelected ){
+			this.rect.attr({
+				'fill':'blue',
+				'fill-opacity':'1'
+			});
+		}
+		else {
+			this.rect.attr({'fill-opacity':'0'});
+		}
+	}
 
     this.refresh  = function() {
 	this.draw(this.canvas,this.posX,this.posY);
@@ -206,6 +245,8 @@ function VirtualMachine(id, cpu, mem) {
 
 	    //Bounding box
 	    this.rect = canvas.rect(x, y - this.mem * unit_size, this.cpu * unit_size,  this.mem * unit_size);
+	    this.rect.node.setAttribute("class","vmZone");
+	    this.rect.node.setAttribute("sandboxVMID", this.id);
 	    this.rect.attr({'fill' : this.bgColor, 'stroke' : this.strokeColor});
 	    this.box.push(this.rect);
 	    //Identifier
@@ -281,6 +322,8 @@ function drawConfiguration(id) {
         var n = config.nodes[i];
         n.draw(paper,n.posX,n.posY);
     }
+
+	updateClickBindings();
 
     console.log("[LOG] FINISHED DRAWING");
 }
