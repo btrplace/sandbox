@@ -172,19 +172,20 @@ function createDiagram(actions){
  * Resets the diagram.
  */
 function resetDiagram(){
+	console.log("Reseting diagram");
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
 
 	//diagramNextTarget = 1 ;
 	//updateTimeLinePosition(0);
-	isPlaying = false;
-	doPause = false;
+	doPause = isPlaying ;
 
-
-	doPause = true ;
 	pauseCallback = function(){
-    	diagramRewind(0);
+    	diagramRewind();
     };
+    if( !doPause ){
+    	diagramRewind();
+    }
 
 	//console.log("[LOG] Going to redraw after diagram reset");
     //drawConfiguration('canvas');

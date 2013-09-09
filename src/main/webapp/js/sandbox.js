@@ -76,9 +76,19 @@ $(function() {
 		if( ! editor.isFocused() ){
 			var keyCode = event.which;
 			if (selectedElement != null){
+				if (selectedElement instanceof Node && keyCode == 78){
+                    var node = selectedElement,
+                    	vm = new VirtualMachine(config.getNextVMID(), 1, 1);
+                    	config.vms.push(vm);
+                    if (node.fit(vm)) {
+                    	node.host(vm);
+                    }
+				}
 				// Left
 				if (keyCode == 37) {
-                    selectedElement.cpu--;
+					if( selectedElement instanceof Node && selectedElement.canBeReduced('cpu')){
+						selectedElement.cpu--;
+					}
                     event.preventDefault();
 				}
 				// Right
@@ -87,13 +97,15 @@ $(function() {
                 	event.preventDefault();
 				}
 				// Up
-				else if (keyCode == 40){
+				else if (keyCode == 38){
                 	selectedElement.mem++;
                 	event.preventDefault();
 				}
 				// Down
-				else if (keyCode == 38){
-					selectedElement.mem--;
+				else if (keyCode == 40){
+					if (selectedElement instanceof Node && selectedElement.canBeReduced('mem')) {
+						selectedElement.mem--;
+					}
 					event.preventDefault();
 				}
 				// Escape

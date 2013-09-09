@@ -86,6 +86,22 @@ function Configuration (ns,vs) {
         }
         return buffer;
     }
+
+    this.getNextVMID = function(){
+    	var candidate = 0;
+    	var valid = false;
+    	while (!valid) {
+    		valid = true;
+    		for (var i in this.vms) {
+				if ("VM"+candidate == this.vms[i].id) {
+					valid = false;
+					candidate++;
+					break;
+				}
+			}
+    	}
+    	return "VM"+candidate;
+    }
 }
 
 function Node(name, cpu, mem) {
@@ -157,6 +173,7 @@ function Node(name, cpu, mem) {
 	    	var stroke = drawingElements[i];
 	    	if ($.isArray(stroke)) {
 	    		drawingElements = drawingElements.concat(stroke);
+	    		i++;
 	    		continue;
 	    	}
 	    	stroke.node.setAttribute("class","nodeZone");
@@ -183,12 +200,24 @@ function Node(name, cpu, mem) {
 		}
 	}
 
+	/*
+	 * Returns true if the Node can be reduced by some attribute
+	 * @param attribute String 'cpu' or 'mem'
+	 */
+	this.canBeReduced = function(attribute){
+		var used = 0 ;
+		for(var i in this.vms){
+			used += this.vms[i][attribute];
+		}
+		return used < this[attribute] ;
+	}
+
     this.refresh  = function() {
-	this.draw(this.canvas,this.posX,this.posY);
+		this.draw(this.canvas,this.posX,this.posY);
     }
 
     this.host = function(vm) {
-	this.vms.push(vm); 
+		this.vms.push(vm);
     }
 
     this.unhost = function(vm) {
