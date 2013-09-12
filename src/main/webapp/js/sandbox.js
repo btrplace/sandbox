@@ -49,70 +49,243 @@ function registerSelectedElement(element){
 
 function updateClickBindings(){
 	//$("body").click(function(){console.log("CLICK on body!")});
-	$(".nodeZone").unbind('click').on('click',function(){
-		var nodeID = this.attributes["sandboxNodeID"].value,
-		 	node = config.getNode(nodeID);
-			console.log("Click on node ",node);
-
-			if (selectedElement != null) {
-				selectedElement.setSelected(false);
-			}
-
-			selectedElement = node;
-
-			node.setSelected(true) ;
-			//console.log("Click on node ",$(this).attr("sandboxNodeID"));
+	$(".nodeZone, .vmZone").unbind('click').on('click',function(){
+		var element ;
+		if (this.className.baseVal == "nodeZone") {
+			var nodeID = this.attributes["sandboxNodeID"].value;
+			element = config.getNode(nodeID);
 		}
-	);
-	$(".vmZone").unbind('click').on('click',function(){
-		console.log("Click on node "+$(this).attr("sandboxVMID"));
+		if (this.className.baseVal == "vmZone") {
+			var vmID = this.attributes["sandboxVMID"].value;
+			element = config.vms[vmID];
+		}
+       	// Safeguard
+		if( typeof(element) == "undefined" ){
+			console.error("Not a good click :(");
+			return ;
+		}
+		//console.log("Click on element ",element);
+        setSelectedElement(element);
 	});
 }
+
+function setSelectedElement(element){
+	if (selectedElement != null) {
+		selectedElement.setSelected(false);
+	}
+
+	selectedElement = element;
+
+	if (element != null) {
+		element.setSelected(true) ;
+	}
+}
+
+var CPU_UNIT = new VirtualMachine("CPU_UNIT", 1, 0),
+	MEM_UNIT = new VirtualMachine("MEM_UNIT", 0, 1);
 
 $(function() {
     updateClickBindings();
 	$(document).keydown(function(event){
 		console.log("Key "+event.which);
 		if( ! editor.isFocused() ){
-			var keyCode = event.which;
-			if (selectedElement != null){
-				if (selectedElement instanceof Node && keyCode == 78){
-                    var node = selectedElement,
-                    	vm = new VirtualMachine(config.getNextVMID(), 1, 1);
-                    	config.vms.push(vm);
-                    if (node.fit(vm)) {
-                    	node.host(vm);
-                    }
+			var keyCode = event.which,
+				redraw = false ;
+			if (selectedElement == null) {
+				if (keyCode == 78) {
+					if (config.nodes.length > 10){
+						return ;
+					}
+					var node = new Node(config.getNextNodeID(), 3,3);
+					config.nodes.push(node);
+					console.log("Created a node !");
+					redraw = true ;
+				}
+			}
+			else if (selectedElement != null){
+				redraw = true ;
+				// N : New element (node or VM)
+				if (keyCode == 78) {
+					var node = null ;
+					if (selectedElement instanceof Node) {
+						node = selectedElement;
+					}
+					else if (selectedElement instanceof VirtualMachine){
+						node = config.getHoster(selectedElement.id);
+					}
+					if (node != null) {
+						var vm = new VirtualMachine(config.getNextVMID(), 1, 1);
+							config.vms.push(vm);
+						if (node.fit(vm)) {
+							node.host(vm);
+							drawConfiguration('canvas');
+							redraw = false;
+							setSelectedElement(vm);
+						}
+					}
 				}
 				// Left
 				if (keyCode == 37) {
-					if( selectedElement instanceof Node && selectedElement.canBeReduced('cpu')){
+					var minSize = -1;
+					//if( (selectedElement instanceof Node && selectedElement.canBeReduced('cpu')) || selectedElement instanceof VirtualMachine){
+					if (selectedElement instanceof Node && selectedElement.fit(CPU_UNIT)){
+						minSize = 3;
+					}
+					if (selectedElement instanceof VirtualMachine) {
+						minSize = 1;
+					}
+					console.log("MinSize : "+minSize);
+					if (minSize != -1 && selectedElement.cpu > minSize) {
 						selectedElement.cpu--;
 					}
                     event.preventDefault();
 				}
 				// Right
 				else if (keyCode == 39) {
-                	selectedElement.cpu++;
+                	if (selectedElement instanceof Node && selectedElement.cpu < 12) {
+                		selectedElement.cpu++;
+                	}
+                	else if (selectedElement instanceof VirtualMachine) {
+						var hoster = config.getHoster(selectedElement.id);
+						if (hoster.fit(CPU_UNIT)) {
+							selectedElement.cpu++;
+						}
+					}
                 	event.preventDefault();
 				}
 				// Up
 				else if (keyCode == 38){
-                	selectedElement.mem++;
+                	if (selectedElement instanceof Node && selectedElement.mem < 12) {
+						selectedElement.mem++;
+					}
+					else if (selectedElement instanceof VirtualMachine) {
+						var hoster = config.getHoster(selectedElement.id);
+						if (hoster.fit(MEM_UNIT)) {
+							selectedElement.mem++;
+						}
+					}
                 	event.preventDefault();
 				}
 				// Down
 				else if (keyCode == 40){
-					if (selectedElement instanceof Node && selectedElement.canBeReduced('mem')) {
+					var minSize = -1;
+					//if ((selectedElement instanceof Node && selectedElement.canBeReduced('mem')) || selectedElement instanceof VirtualMachine) {
+					if (selectedElement instanceof Node && selectedElement.fit(new VirtualMachine("test", 0, 1))) {
+						minSize = 3;
+					}
+					if (selectedElement instanceof VirtualMachine) {
+						minSize = 1;
+					}
+					if (minSize != -1 && selectedElement.mem > minSize) {
 						selectedElement.mem--;
 					}
+
 					event.preventDefault();
 				}
 				// Escape
 				else if (keyCode == 27) {
-					selectedElement.setSelected(false) ;
-					selectedElement = null ;
+					if (selectedElement instanceof VirtualMachine) {
+						var node = config.getHoster(selectedElement.id);
+						setSelectedElement(node);
+					}
+					else {
+						setSelectedElement(null);
+					}
+					//selectedElement.setSelected(false) ;
+					//selectedElement = null ;
 				}
+				// Delete key : DEL, Backspace
+				else if (keyCode == 46 || keyCode == 8) {
+					console.log("Deleting ",selectedElement);
+					var newSelectedElement = null ;
+					// If it's a VM select the previous one in the node.
+					if (selectedElement instanceof VirtualMachine){
+						var vm = selectedElement ;
+						var node = config.getHoster(vm.id),
+							vmIndex = node.vms.indexOf(vm);
+						vmIndex++;
+						// Fix vm index
+						var noOver = false;
+						// If no VM over the selected one
+						if (vmIndex >= node.vms.length) {
+							// Target the VM before the selected one
+							vmIndex -= 2 ;
+							noOver = true ;
+						}
+						// If no VM under the selected one
+						if( vmIndex < 0 ){
+							// If there's also no over, select the node
+							if (noOver){
+								newSelectedElement = node ;
+							}
+							// Otherwise, select the one over :
+							vmIndex+=2;
+						}
+						// If this is the last VM of the node, select the node
+						if( node.vms.length == 1){
+						    newSelectedElement = node ;
+						}
+						// If there's still some element, get the previous
+						else {
+							newSelectedElement = node.vms[vmIndex];
+						}
+
+						//Math.abs(Math.floor(nodeIndex/length)*length)+nodeIndex
+
+					}
+					selectedElement.delete();
+					if (newSelectedElement != null) {
+						setSelectedElement(newSelectedElement);
+					}
+				}
+				// V key : previous
+				else if (keyCode == 86){
+					if (selectedElement instanceof Node) {
+						var nodeIndex = config.nodes.indexOf(selectedElement);
+						nodeIndex--;
+						if (nodeIndex <= -1) {
+							nodeIndex = config.nodes.length-1;
+						}
+						//Math.abs(Math.floor(nodeIndex/length)*length)+nodeIndex
+						setSelectedElement(config.nodes[nodeIndex]);
+					}
+					else if (selectedElement instanceof VirtualMachine) {
+						var vm = selectedElement ;
+						var node = config.getHoster(vm.id),
+							vmIndex = node.vms.indexOf(vm);
+						vmIndex--;
+						if (vmIndex <= -1) {
+							vmIndex = node.vms.length-1;
+						}
+						//Math.abs(Math.floor(nodeIndex/length)*length)+nodeIndex
+						setSelectedElement(node.vms[vmIndex]);
+					}
+
+				}
+				else if (keyCode == 16) {
+					console.log("Event : ", event.shiftKey);
+				}
+				// B key : next
+				else if (keyCode == 66) {
+					if (selectedElement instanceof Node) {
+						var nodeIndex = config.nodes.indexOf(selectedElement);
+						nodeIndex++;
+						nodeIndex %= config.nodes.length;
+						//Math.abs(Math.floor(nodeIndex/length)*length)+nodeIndex
+						setSelectedElement(config.nodes[nodeIndex]);
+					}
+					else if (selectedElement instanceof VirtualMachine) {
+						var vm = selectedElement ;
+						var node = config.getHoster(vm.id),
+							vmIndex = node.vms.indexOf(vm);
+						vmIndex++;
+						vmIndex %= node.vms.length;
+						//Math.abs(Math.floor(nodeIndex/length)*length)+nodeIndex
+						setSelectedElement(node.vms[vmIndex]);
+					}
+				}
+			}
+			if (redraw) {
 				drawConfiguration('canvas');
 			}
 		}

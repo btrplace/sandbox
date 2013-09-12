@@ -1,7 +1,6 @@
 /*
 Javascript to generate a SVG from a configuration.
 @author Fabien Hermenier
-
 */
 
 var paper;
@@ -87,21 +86,37 @@ function Configuration (ns,vs) {
         return buffer;
     }
 
-    this.getNextVMID = function(){
+    this.getNextNodeID = function(){
     	var candidate = 0;
     	var valid = false;
     	while (!valid) {
     		valid = true;
-    		for (var i in this.vms) {
-				if ("VM"+candidate == this.vms[i].id) {
+    		for (var i in this.nodes) {
+				if ("N"+candidate == this.nodes[i].id) {
 					valid = false;
 					candidate++;
 					break;
 				}
 			}
     	}
-    	return "VM"+candidate;
+    	return "N"+candidate;
     }
+
+    this.getNextVMID = function(){
+        	var candidate = 0;
+        	var valid = false;
+        	while (!valid) {
+        		valid = true;
+        		for (var i in this.vms) {
+    				if ("VM"+candidate == this.vms[i].id) {
+    					valid = false;
+    					candidate++;
+    					break;
+    				}
+    			}
+        	}
+        	return "VM"+candidate;
+        }
 }
 
 function Node(name, cpu, mem) {
@@ -139,8 +154,6 @@ function Node(name, cpu, mem) {
 
 	    this.boxStroke.push(rect);
 
-	    console.log("Drawed Node rect : ", this.rect.node);
-
 	    //labels
         this.boxFill.push(canvas.text(x + width - border,y + height - 10,"cpu").attr({'font-size':'12pt','text-anchor':'end','baseline-shift':'0em','fill':bgColor}));
         this.boxFill.push(canvas.text(x + 2,y + border - 7,"memory").attr({'font-size': '12pt','text-anchor':'start','baseline-shift':'0em','fill':bgColor}));
@@ -171,20 +184,13 @@ function Node(name, cpu, mem) {
 
 		var drawingElements = $.merge(this.boxStroke, this.boxFill);
 		//var drawingElements = this.boxStroke;
-		var i = 0;
-		while (i < drawingElements.length) {
-		    console.log("I = "+i);
-	    	var stroke = drawingElements[i];
-	    	if ($.isArray(stroke)) {
-	    		drawingElements = drawingElements.concat(stroke);
-	    		i++;
-	    		continue;
-	    	}
-	    	stroke.node.setAttribute("class","nodeZone");
-            stroke.node.setAttribute("sandboxNodeID",this.id);
-
-            i++;
-        }
+		var self = this ;
+		// Add class data foreach drawed element, to ensure to
+		// catch the click, even on the grid line.
+		foreachArray(drawingElements, function(element){
+			element.node.setAttribute("class","nodeZone");
+			element.node.setAttribute("sandboxNodeID",self.id);
+		});
     }
 
 	this.setSelected = function(isSelected){
@@ -246,9 +252,10 @@ function Node(name, cpu, mem) {
     this.fit = function(vm) {
 	    var freeCPU = this.cpu - vm.cpu;
 	    var freeMem = this.mem - vm.mem;
-	    for (var v  in this.vms) {
+	    for (var v in this.vms) {
 	        freeCPU -= this.vms[v].cpu;
 	        freeMem -= this.vms[v].mem;
+
 	        if (freeMem < 0 || freeCPU < 0) {
 	            break;
 	        }
@@ -262,6 +269,14 @@ function Node(name, cpu, mem) {
             ids.push(this.vms[v].id);
         }
         return ids;
+    }
+
+    this.delete = function(){
+    	for (var i in this.vms) {
+    		var vm = this.vms[i];
+    		vm.delete(false);
+    	}
+    	config.nodes.splice(config.nodes.indexOf(this), 1);
     }
 }
 
@@ -278,16 +293,25 @@ function VirtualMachine(id, cpu, mem) {
 
 	    //Bounding box
 	    this.rect = canvas.rect(x, y - this.mem * unit_size, this.cpu * unit_size,  this.mem * unit_size);
-	    this.rect.node.setAttribute("class","vmZone");
-	    this.rect.node.setAttribute("sandboxVMID", this.id);
+	    //this.rect.node.setAttribute("class","vmZone");
+	    //this.rect.node.setAttribute("sandboxVMID", this.id);
 	    this.rect.attr({'fill' : this.bgColor, 'stroke' : this.strokeColor});
 	    this.box.push(this.rect);
+
+	    this.updateSelectionDraw();
+
 	    //Identifier
 	    var t = canvas.text(x + (this.cpu * unit_size) / 2, y - ( this.mem * unit_size) / 2, this.id).attr({'font-size':'12pt'});
 	    if (this.cpu == 1) {
 	        t.rotate(-90);
 	    }
 	    this.box.push(t);
+
+		var self = this ;
+		foreachArray(this.box, function(element){
+			element.node.setAttribute("class","vmZone");
+			element.node.setAttribute("sandboxVMID", self.id.substr(2));
+		});
 
 	    //Upper left corner
 		this.posY = y - this.mem * unit_size;
@@ -298,6 +322,34 @@ function VirtualMachine(id, cpu, mem) {
     this.boundingBox = function() {
 	    return [this.cpu * unit_size, this.mem * unit_size];
     }
+
+    this.setSelected = function(isSelected){
+    		this.isSelected = isSelected ;
+    		this.updateSelectionDraw();
+    }
+
+	this.updateSelectionDraw = function(){
+		if( this.isSelected ){
+			this.previousColor = this.rect.attr("fill");
+			this.rect.attr({
+				'fill':'red'
+			});
+		}
+		else {
+			this.rect.attr({'fill':this.bgColor});
+		}
+	}
+
+	this.delete = function(doUnhost){
+		if (typeof(doUnhost) == "undefined") {
+			var doUnhost = true ;
+		}
+		if (doUnhost) {
+			config.getHoster(this.id).unhost(this);
+		}
+		console.log("Splicing VM ",this, "whose index is : "+config.vms.indexOf(this));
+		config.vms.splice(config.vms.indexOf(this), 1);
+	}
  
 }
 

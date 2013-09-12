@@ -11,8 +11,8 @@ Element.prototype.addClass = function(cls) {
 
 Element.prototype.removeClass = function(cls) {
   if (this.hasClass(cls)) {
-      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-      this.className=this.className.replace(reg,' ');
+	  var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+	  this.className=this.className.replace(reg,' ');
   }
 }
 
@@ -49,25 +49,43 @@ parseUri.options = {
 };
 
 function createXhrObject() {
-    if (window.XMLHttpRequest) {
-        return new XMLHttpRequest();
-    }
-    if (window.ActiveXObject) {
-        var names = ["Msxml2.XMLHTTP.6.0","Msxml2.XMLHTTP.3.0","Msxml2.XMLHTTP","Microsoft.XMLHTTP"];
-        for(var i in names) {
-            try{ return new ActiveXObject(names[i]); }
-            catch(e){}
-        }
-    }
-    window.alert("Your browser does not support XMLHttpRequest.");
-    return null;
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	}
+	if (window.ActiveXObject) {
+		var names = ["Msxml2.XMLHTTP.6.0","Msxml2.XMLHTTP.3.0","Msxml2.XMLHTTP","Microsoft.XMLHTTP"];
+		for(var i in names) {
+			try{ return new ActiveXObject(names[i]); }
+			catch(e){}
+		}
+	}
+	window.alert("Your browser does not support XMLHttpRequest.");
+	return null;
 }
 
 function postToAPI(id, params, callback) {
-    var http = createXhrObject();
-    var o = parseUri(document.location.href);
-    http.open("POST", "http://" + o.authority + o.directory + "api/" + id, true);
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.onreadystatechange = callback;
-    http.send(params);
+	var http = createXhrObject();
+	var o = parseUri(document.location.href);
+	http.open("POST", "http://" + o.authority + o.directory + "api/" + id, true);
+	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	http.onreadystatechange = callback;
+	http.send(params);
+}
+
+/*
+ * Applies the callback f to all the objects in the list l and its sublists.
+ */
+function foreachArray(l, f){
+	var i = 0 ;
+    while(i < l.length){
+    	var element = l[i];
+    	if ($.isArray(element)) {
+    		l = l.concat(element);
+    		i++;
+    		continue;
+    	}
+    	// Apply the callback
+    	f(element);
+    	i++;
+    }
 }
