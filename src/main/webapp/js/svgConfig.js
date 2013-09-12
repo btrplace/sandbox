@@ -139,6 +139,8 @@ function Node(name, cpu, mem) {
 
 	    this.boxStroke.push(rect);
 
+	    console.log("Drawed Node rect : ", this.rect.node);
+
 	    //labels
         this.boxFill.push(canvas.text(x + width - border,y + height - 10,"cpu").attr({'font-size':'12pt','text-anchor':'end','baseline-shift':'0em','fill':bgColor}));
         this.boxFill.push(canvas.text(x + 2,y + border - 7,"memory").attr({'font-size': '12pt','text-anchor':'start','baseline-shift':'0em','fill':bgColor}));
@@ -167,9 +169,11 @@ function Node(name, cpu, mem) {
 	        oY -= this.vms[i].boundingBox()[1];
 	    }
 
-		//var drawingElements = $.merge(this.boxStroke, this.boxFill);
-		var drawingElements = this.boxStroke;
+		var drawingElements = $.merge(this.boxStroke, this.boxFill);
+		//var drawingElements = this.boxStroke;
+		var i = 0;
 		while (i < drawingElements.length) {
+		    console.log("I = "+i);
 	    	var stroke = drawingElements[i];
 	    	if ($.isArray(stroke)) {
 	    		drawingElements = drawingElements.concat(stroke);

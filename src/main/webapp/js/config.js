@@ -64,9 +64,6 @@ function generateGettingStarted(){
     	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
     	    }
         }
-
-
-        console.log("MyBuff = \n"+buf);
         return buf ;
 
         // On prend un index au hasard dans tpls
