@@ -167,8 +167,8 @@ function Node(name, cpu, mem) {
 	        oY -= this.vms[i].boundingBox()[1];
 	    }
 
-		var drawingElements = $.merge(this.boxStroke, this.boxFill);
-		//var drawingElements = this.boxStroke;
+		//var drawingElements = $.merge(this.boxStroke, this.boxFill);
+		var drawingElements = this.boxStroke;
 		while (i < drawingElements.length) {
 	    	var stroke = drawingElements[i];
 	    	if ($.isArray(stroke)) {
