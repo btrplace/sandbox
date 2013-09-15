@@ -15,7 +15,7 @@ function init() {
     cstrsEditor = new EditSession("");*/
     if (get.cfg) {
     	var cfg = decodeURIComponent(get.cfg);
-        console.log("re-using sandbox " + cfg);
+        console.log("Re-using sandbox from configuration : " + cfg);
         loadExperiment(cfg);
         step(0);
         //document.getElementById('lock_button').style.display="none";
@@ -34,7 +34,7 @@ function init() {
         // Create configuration and fill the editor
 		randomConfiguration();
 		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
-
+		drawConfiguration("canvas");
         step(0);
     }
     editor.clearSelection();

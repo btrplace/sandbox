@@ -80,13 +80,15 @@ function drawConfiguration(id) {
     if (verbose) console.log("[LOG] FINISHED DRAWING");
 }
 
-
+/*
+ * Sends the current configuration to the server to get a solution.
+ * Receives the solution or the errors in the constraints script if any.
+ */
 function check(id) {
     var script = editor.getValue();
     //var cfg = config.btrpToJSON();
 
     var http = createXhrObject();
-
 
 	var cfg = [];
 	for(var i in config.nodes){
