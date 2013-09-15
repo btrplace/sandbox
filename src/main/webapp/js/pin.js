@@ -6,19 +6,22 @@ var cstrsEditor;
 var editor;
 
 function init() {
-    var o = parseUri(location.href);
+    //var o = parseUri(location.href);
+    var get = GETParameters();
 
     editor = ace.edit("editor");
     var EditSession = ace.require('ace/edit_session').EditSession;
-    configEditor = new EditSession("");
-    cstrsEditor = new EditSession("");
-    if (o.queryKey.lock) {
-        console.log("re-using sandbox " + o.queryKey.lock);
-        loadExperiment(o.queryKey.lock);
-        document.getElementById('lock_button').style.display="none";
-        document.getElementById('unlock_button').style.display="inline";
-        editor.setReadOnly(true);
-    } else if (o.queryKey.unlock) {
+    /*configEditor = new EditSession("");
+    cstrsEditor = new EditSession("");*/
+    if (get.cfg) {
+    	var cfg = decodeURIComponent(get.cfg);
+        console.log("re-using sandbox " + cfg);
+        loadExperiment(cfg);
+        step(0);
+        //document.getElementById('lock_button').style.display="none";
+        //document.getElementById('unlock_button').style.display="inline";
+        //editor.setReadOnly(true);
+    } else if (false) {
         console.log("Unlocked sandbox from " + o.queryKey.unlock);
         loadExperiment(o.queryKey.unlock);
         document.getElementById('lock_button').style.display="inline";
@@ -27,11 +30,16 @@ function init() {
     } else  {
         console.log("New sandbox");
         editor.setReadOnly(false);
+
+        // Create configuration and fill the editor
+		randomConfiguration();
+
+		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+		editor.clearSelection();
+
         step(0);
     }
-
-    configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
-
+    //configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
     insertCatalogContent();
 }
 
@@ -60,7 +68,10 @@ function unpinSandbox() {
 }
 
 
-function loadExperiment(id) {
+function loadExperiment(cfg) {
+		var parsedCfg = JSON.parse(cfg.replace("%22",'"'));
+		config.fromStorage(parsedCfg);
+		/*
         var http = createXhrObject();
         //Remove the possible index.html at the end
         if (!location.origin) {
@@ -87,4 +98,14 @@ function loadExperiment(id) {
     	    }
         }
         http.send(null);
+        */
+}
+
+function pinSandbox(){
+	var configStr = JSON.stringify(config.toStorage()),
+		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr),
+		pinUrlText = document.location.origin + document.location.pathname+ "?cfg="+configStr;
+	$("#goToPin").attr("href",pinUrl).text(pinUrlText);
+    $("#pinBox").jqm();
+    $("#pinBox").jqmShow();
 }

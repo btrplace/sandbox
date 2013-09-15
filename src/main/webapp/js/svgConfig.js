@@ -116,7 +116,31 @@ function Configuration (ns,vs) {
     			}
         	}
         	return "VM"+candidate;
-        }
+    }
+
+    this.toStorage = function(){
+    	var result = [],
+    		nodes = [];
+    	result.push(nodes);
+    	result.push(editor.getValue());
+    	for(var i in this.nodes){
+            nodes.push(this.nodes[i].toStorage());
+    	}
+    	return result ;
+    }
+
+    this.fromStorage = function(configData){
+    	this.nodes = [];
+    	this.vms = [];
+    	for(var i in configData[0]){
+ 			var nodeData = configData[0][i],
+    			node = new Node("temp",1,1);
+    		node.fromStorage(nodeData);
+    		this.nodes.push(node);
+    	}
+		editor.setValue(configData[1]);
+		drawConfiguration("canvas");
+    }
 }
 
 function Node(name, cpu, mem) {
@@ -278,6 +302,31 @@ function Node(name, cpu, mem) {
     	}
     	config.nodes.splice(config.nodes.indexOf(this), 1);
     }
+
+    this.toStorage = function(){
+    	var result = [this.id, this.cpu, this.mem],
+    		vms = [];
+    	result.push(vms);
+    	for(var i in this.vms){
+    		vms.push(this.vms[i].toStorage());
+    	}
+    	return result;
+    }
+
+    this.fromStorage = function(nodeData){
+    	// Load the base data
+    	this.id = nodeData[0];
+    	this.cpu = nodeData[1];
+    	this.mem = nodeData[2];
+    	// Add its VMs
+    	for(var i in nodeData[3]){
+    		var vmData = nodeData[3][i],
+    			vm = new VirtualMachine("",1,1);
+    		vm.fromStorage(vmData);
+    		this.host(vm);
+    		config.vms.push(vm);
+    	}
+    }
 }
 
 function VirtualMachine(id, cpu, mem) {
@@ -338,6 +387,16 @@ function VirtualMachine(id, cpu, mem) {
 		else {
 			this.rect.attr({'fill':this.bgColor});
 		}
+	}
+
+	this.toStorage = function(){
+		return [this.id, this.cpu, this.mem];
+	}
+
+	this.fromStorage = function(vmData){
+		this.id = vmData[0];
+		this.cpu = vmData[1];
+		this.mem = vmData[2];
 	}
 
 	this.delete = function(doUnhost){
@@ -497,6 +556,7 @@ function step(id) {
         scenario = undefined;
         pending = false;
 
+		/*
 		// Create configuration and fill the editor
         randomConfiguration();
 
@@ -504,7 +564,8 @@ function step(id) {
 		editor.clearSelection();
 
         // Draw the configuration
-        drawConfiguration("canvas");
+        drawConfiguration("canvas");*/
+
 	    //cstrsEditor.setValue(generateSampleScript(config));
 
     }
