@@ -480,14 +480,17 @@ function check(id) {
  * Change the step of the usage flow.
  */
 function step(id) {
+	console.log("[STEP System] Step "+id);
     // Change the message displayed in the box
-    for (var i = 0; i < 5; i++) {
+    $(".state").hide();
+    $("#state"+id).show();
+    /*for (var i = 0; i < 5; i++) {
         if (id != i) {document.getElementById("state" + i).style.display="none";}
         else {document.getElementById("state" + i).style.display="block";}
-    }
+    } */
 
     var o = parseUri(location.href);
-    // Step 0
+    // Step 0 : initialization
     if (id == 0) {
         checkable(true);
         animationStep = 0;
@@ -496,7 +499,9 @@ function step(id) {
 
 		// Create configuration and fill the editor
         randomConfiguration();
+
         editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+		editor.clearSelection();
 
         // Draw the configuration
         drawConfiguration("canvas");
@@ -514,7 +519,7 @@ function step(id) {
         showSyntaxErrors();
         checkable(true);
         colorLines(0);
-    } else if (id ==4) {
+    } else if (id == 4) {
         showSyntaxErrors();
         checkable(true);
     }
@@ -636,20 +641,28 @@ function rephrase(a) {
 }
 
 function showSyntaxErrors() {
-
+	console.log("[Log] Showing syntax errors in scenario : ", scenario);
     var annotations = [];
 
     var msgs = [];
 
     for (var j in scenario.errors) {
         var err = scenario.errors[j];
-        var lineNo = err.lineNo - 1;
+        annotations.push({
+                    row: err.row-1,
+                    column: 0,
+                    type: "error",
+                    text: err.message
+        });
+
+        /*var lineNo = err.lineNo - 1;
         if (!msgs[lineNo]) {
             msgs[lineNo] = err.msg;
         } else {
             msgs[lineNo] += "\n" + err.msg;
-        }
+        }*/
     }
+    /*
     for (var j in msgs) {
         var msg = msgs[j];
         annotations.push({
@@ -658,7 +671,7 @@ function showSyntaxErrors() {
             type: "error",
             text: msg
         });
-    }
+    }      */
     if (annotations.length > 0) {
             var node = $("#cstrs-mode > a").get()[0];
             node.style.fontWeight="bold";
@@ -667,7 +680,8 @@ function showSyntaxErrors() {
             $("#cstrs-mode > a").get()[0].style.fontWeight="";
             $("#cstrs-mode > a").get()[0].style.color="";
     }
-    cstrsEditor.setAnnotations(annotations);
+    console.log("[LOG] Anotations :", annotations);
+    editor.getSession().setAnnotations(annotations);
 }
 
 /**

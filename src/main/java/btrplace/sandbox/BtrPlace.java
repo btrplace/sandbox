@@ -251,7 +251,7 @@ public class BtrPlace {
 			for(ErrorMessage error : errorsList){
 				System.out.println("Error at line "+error.lineNo());
 				JSONObject e = new JSONObject();
-				e.put("line",error.lineNo() - addedLinesNum);
+				e.put("row",error.lineNo() - addedLinesNum);
 				e.put("column",error.colNo());
 				e.put("message",error.message());
 				errors.add(e);

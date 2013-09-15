@@ -1,22 +1,25 @@
 var currentView = "";
 
-function changeView(viewName){
+function changeView(viewName, instant){
+	if( typeof(instant) == "undefined" ){
+		var instant = false;
+	}
 	if( viewName == currentView ){
 		return ;
 	}
 	console.log("Switching to View: "+viewName);
+	var duration = instant ? 0 : 300 ;
 	if( viewName == "input" ){
-		var duration = 300 ;
 		$("#solution > div").hide(duration);
         setTimeout(function(){
-            $("#input_zone_wrapper").show(300);
+            $("#input_zone_wrapper").show(duration);
             resetDiagram();
         }, duration);
 	}
 	else if( viewName == "solution"){
 		console.log("Fading out inputWrapper");
-		$("#input_zone_wrapper").hide(300, function(){
-			$("#solution > div").show(300);
+		$("#input_zone_wrapper").hide(duration, function(){
+			$("#solution > div").show(duration);
 		});
 	}
 }
@@ -28,16 +31,17 @@ function onServerResponse(json){
 	console.log("Received JSON : ",json);
 	if( json.actions ){
 		changeView("solution");
-    	$("#userInput").html(cstrsEditor.getValue().replace("\n","<br />"));
+    	$("#userInput").html(editor.getValue().replace("\n","<br />"));
     	createDiagram(json.actions);
 	}
 	if( json.errors ){
-		alert("Errors !");
+		console.log("There are some errors in the user input.");
+		step(4);
 	}
 }
 
 $(document).ready(function(){
-	changeView("input");
+	changeView("input", true);
 });
 
 var selectedElement = null ;
@@ -196,7 +200,6 @@ $(function() {
 				}
 				// Delete key : DEL, Backspace
 				else if (keyCode == 46 || keyCode == 8) {
-					console.log("Deleting element "+selectedElement.id);
 					var newSelectedElement = null ;
 					// If it's a VM select the previous one in the node.
 					if (selectedElement instanceof VirtualMachine){
