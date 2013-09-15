@@ -87,7 +87,7 @@ var CPU_UNIT = new VirtualMachine("CPU_UNIT", 1, 0),
 $(function() {
     updateClickBindings();
 	$(document).keydown(function(event){
-		console.log("Key "+event.which);
+		//console.log("Key "+event.which);
 		if( ! editor.isFocused() ){
 			var keyCode = event.which,
 				redraw = false ;
@@ -196,7 +196,7 @@ $(function() {
 				}
 				// Delete key : DEL, Backspace
 				else if (keyCode == 46 || keyCode == 8) {
-					console.log("Deleting ",selectedElement);
+					console.log("Deleting element "+selectedElement.id);
 					var newSelectedElement = null ;
 					// If it's a VM select the previous one in the node.
 					if (selectedElement instanceof VirtualMachine){

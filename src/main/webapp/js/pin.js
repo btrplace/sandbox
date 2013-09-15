@@ -30,11 +30,6 @@ function init() {
         step(0);
     }
 
-    if (o.anchor == "cfg") {
-        setMode("cfg");
-    } else {
-        setMode("cstrs");
-    }
     configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
 
     insertCatalogContent();

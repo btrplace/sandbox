@@ -3,117 +3,51 @@
   @author Fabien Hermenier
 */
 
+// Generate the getting start, as it is in the Btrplace wiki on github.
 function generateGettingStarted(){
-    // Génération du getting started
+	config = new Configuration();
+	// Création de 4 noeuds
+	for (var i = 0; i < 4; i++) {
+		var n = new Node("N" + i, 8, 7);
+		config.nodes.push(n);
+	}
 
-    var buf = "# Nodes:\nN0,N1,N2,N3 = {cpu:8,mem:7}\n";
+	//Templates
+	var tpls = [[1,2],[2,1],[2,2],[2,1],[3,2],[2,3]];
+	var picked = [];
 
-        var config = new Configuration();
-        // Création de 4 noeuds
-        for (var i = 0; i < 4; i++) {
-    	    var n = new Node("N" + i, 8, 7);
-    	    config.nodes.push(n);
-        }
+	for (var i = 0; i < 6; i++) {
+		var v = new VirtualMachine("VM" + i);
+		config.vms.push(v);
+	}
 
-        //Templates
-        var tpls = [[1,2],[2,1],[2,2],[2,1],[3,2],[2,3]];
-        var picked = [];
+	config.vms[0].cpu = 2 ;
+	config.vms[0].mem = 2 ;
+	config.vms[1].cpu = 3 ;
+	config.vms[1].mem = 2 ;
+	config.vms[2].cpu = 4 ;
+	config.vms[2].mem = 4 ;
+	config.vms[3].cpu = 3 ;
+	config.vms[3].mem = 3 ;
+	config.vms[4].cpu = 1 ;
+	config.vms[4].mem = 1 ;
+	config.vms[5].cpu = 5 ;
+	config.vms[5].mem = 4 ;
 
-        for (var i = 0; i < 6; i++) {
-            var v = new VirtualMachine("VM" + i);
-            config.vms.push(v);
-        }
-
-
-
-        config.vms[0].cpu = 2 ;
-        config.vms[0].mem = 2 ;
-        config.vms[1].cpu = 3 ;
-        config.vms[1].mem = 2 ;
-        config.vms[2].cpu = 4 ;
-        config.vms[2].mem = 4 ;
-        config.vms[3].cpu = 3 ;
-        config.vms[3].mem = 3 ;
-        config.vms[4].cpu = 1 ;
-        config.vms[4].mem = 1 ;
-        config.vms[5].cpu = 5 ;
-        config.vms[5].mem = 4 ;
-
-        config.nodes[0].host(config.vms[2]);
-        config.nodes[1].host(config.vms[1]);
-        config.nodes[2].host(config.vms[0]);
-        config.nodes[2].host(config.vms[3]);
-        config.nodes[3].host(config.vms[5]);
-
-
-        //VMs declaration
-        buf += "\n# Virtual Machines:\n";
-        for(var i in config.vms){
-            var vm = config.vms[i];
-            buf += vm.id + " = {cpu:" + vm.cpu + ",mem:" + vm.mem + "}\n";
-        }
-
-
-        //Set idle node offline
-        buf += "\n# Assignment:";
-        for (var i in config.nodes) {
-    	    var n = config.nodes[i];
-    	    if (n.vms.length == 0) {
-    	        buf += "\n" + n.id + " = {online: 0}";
-    	    } else {
-    	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
-    	    }
-        }
-        return buf ;
-
-        // On prend un index au hasard dans tpls
-        var x = Math.floor(Math.random() * tpls.length);
-        var v = new VirtualMachine("VM" + i, tpls[x][0], tpls[x][1]);
-        config.vms.push(v);
-
-        //Placement
-        var nIdx = Math.floor(Math.random() * config.nodes.length);
-        if (config.nodes[nIdx].fit(v)) {
-            config.nodes[nIdx].host(v);
-            if (!picked[x]) {
-                picked[x] = [v.id];
-            }
-            else {
-                picked[x].push(v.id);
-            }
-
-        }
-
-        //VMs declaration
-        buf += "\n# Virtual Machines:\n";
-        for (var i in picked) {
-            if (picked.hasOwnProperty(i)) {
-                var vms = picked[i];
-                if (vms.length > 0) {
-                    buf += vms.join() + " = {cpu:" + tpls[i][0] + ",mem:" + tpls[i][1] + "}\n";
-                }
-            }
-        }
-        //Set idle node offline
-        buf += "\n# Assignment:";
-        for (var i in config.nodes) {
-    	    var n = config.nodes[i];
-    	    if (n.vms.length == 0) {
-    	        buf += "\n" + n.id + " = {online: 0}";
-    	    } else {
-    	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
-    	    }
-        }
-        return buf;
+	config.nodes[0].host(config.vms[2]);
+	config.nodes[1].host(config.vms[1]);
+	config.nodes[2].host(config.vms[0]);
+	config.nodes[2].host(config.vms[3]);
+	config.nodes[3].host(config.vms[5]);
 }
 
 function randomConfiguration() {
     return generateGettingStarted();
 
-    var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
-    buf += "N7,N8 = {cpu:6,mem:6}\n";
+//    var buf = "# Nodes:\nN1,N2,N3,N4,N5,N6 = {cpu:8,mem:6}\n";
+//    buf += "N7,N8 = {cpu:6,mem:6}\n";
 
-    var config = new Configuration();
+    config = new Configuration();
     //Generate the 8 nodes
     for (var i = 1; i <= 8; i++) {
 	    var n;
@@ -139,7 +73,6 @@ function randomConfiguration() {
 	        config.nodes[nIdx].host(v);
             if (!picked[x]) {picked[x] = [v.id];}
             else {picked[x].push(v.id);}
-
 	    }
     }
 
@@ -164,7 +97,6 @@ function randomConfiguration() {
 	        buf += "\n" + n.id + " = {vms: \"" + n.getVMsIds().join(",")+"\"}";
 	    }
     }
-    console.log("Buff = \n"+ buf);
     return buf;
 }
 
@@ -221,7 +153,6 @@ function highlightErrors(errors) {
         $("#config-mode > a").get()[0].style.fontWeight="";
         $("#config-mode > a").get()[0].style.color="";
     }
-    configEditor.setAnnotations(annotations);
 }
 
 function createElements(ids, config, errors, lineNumber, cnt) {
@@ -324,6 +255,7 @@ function createPlacement(nid, config, vms, errors, lineNumber) {
   N2 = {offline}
 */
 function parseConfiguration(b) {
+	console.error("Nothing to parse !");
     var lines = b.split("\n");
     var elements = new Object();
     var config = new Configuration();

@@ -347,7 +347,9 @@ function VirtualMachine(id, cpu, mem) {
 		if (doUnhost) {
 			config.getHoster(this.id).unhost(this);
 		}
-		console.log("Splicing VM ",this, "whose index is : "+config.vms.indexOf(this));
+
+		console.log("Splicing "+this.id+" whose config.vms index is : "+config.vms.indexOf(this));
+
 		config.vms.splice(config.vms.indexOf(this), 1);
 	}
  
@@ -358,7 +360,8 @@ var config = new Configuration(),
 	initialConfig ;
 
 function drawConfiguration(id) {
-	console.log("[CONFIG] Drawing current configuration");
+	var verbose = false;
+	if (verbose) console.log("[CONFIG] Drawing current configuration");
     //Compute the SVG size
     var width = 0;
     var height = 0;
@@ -410,12 +413,12 @@ function drawConfiguration(id) {
 
 	updateClickBindings();
 
-    console.log("[LOG] FINISHED DRAWING");
+    if (verbose) console.log("[LOG] FINISHED DRAWING");
 }
 
 
 function check(id) {
-    var script = cstrsEditor.getValue();
+    var script = editor.getValue();
     //var cfg = config.btrpToJSON();
 
     var http = createXhrObject();
@@ -473,24 +476,35 @@ function check(id) {
     checkable(false);
 }
 
-
+/*
+ * Change the step of the usage flow.
+ */
 function step(id) {
-
+    // Change the message displayed in the box
     for (var i = 0; i < 5; i++) {
         if (id != i) {document.getElementById("state" + i).style.display="none";}
         else {document.getElementById("state" + i).style.display="block";}
     }
+
     var o = parseUri(location.href);
+    // Step 0
     if (id == 0) {
         checkable(true);
         animationStep = 0;
         scenario = undefined;
         pending = false;
-        var cfg = randomConfiguration();
-        updateConfiguration(cfg);
-        configEditor.setValue(cfg);
-	    cstrsEditor.setValue(generateSampleScript(config));
-    } else if (id == 1) {
+
+		// Create configuration and fill the editor
+        randomConfiguration();
+        editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+
+        // Draw the configuration
+        drawConfiguration("canvas");
+	    //cstrsEditor.setValue(generateSampleScript(config));
+
+    }
+    // Step 1 : after user submitted input.
+    else if (id == 1) {
         showSyntaxErrors();
         //Don't show the pin button when the sandbox is already pinned
         showScenario();
@@ -506,7 +520,12 @@ function step(id) {
     }
 }
 
+/*
+ * Color the lines of the constrains input.
+ * If the constrains is matched, the line gets green. Red otherwise.
+ */
 function colorLines(nb) {
+	// TODO : Use colorLines() function.
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
     for (var j in stats) {
@@ -529,6 +548,7 @@ function colorLines(nb) {
     }
     cstrsEditor.setAnnotations(annotations);
 }
+
 
 function checkable(b) {
     var e = document.getElementsByClassName("check_button");
@@ -648,18 +668,6 @@ function showSyntaxErrors() {
             $("#cstrs-mode > a").get()[0].style.color="";
     }
     cstrsEditor.setAnnotations(annotations);
-}
-
-function setMode(id) {
-    if (id == "configuration") {
-        $("#config-mode")[0].addClass("active");
-        $("#cstrs-mode")[0].removeClass("active");
-        editor.setSession(configEditor);
-    } else {
-        $("#cstrs-mode")[0].addClass("active");
-        $("#config-mode")[0].removeClass("active");
-        editor.setSession(cstrsEditor);
-    }
 }
 
 /**
