@@ -135,8 +135,7 @@ function actionHandler(action, direction, duration, callback){
 			from = action.to;
 			to = action.from;
 		}
-		console.log("Action = ", action);
-		console.log("From : ", from, " to : ",to);
+		console.log("Action = ", action, "From : ", from, " to : ",to);
 		animationQueue.push(function(){ migrate(config.vms[action.vm], config.nodes[from], config.nodes[to], duration, callback) });
 	};
 }
