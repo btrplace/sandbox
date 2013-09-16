@@ -76,6 +76,15 @@
 </div>
 <div id="content" class="centered">
 	<div id="sandbox">
+		<div id="configurationHelpText">
+			<ul>
+					<li>Up/Down arrows : change the CPU of the selected element</li>
+					<li>Left/Right arrows : change the MEM of the selected element</li>
+					<li>N : new Node or a VM in the selected Node</li>
+					<li>V and B : select previous and next element</li>
+					<li>Escape : go to parent element or deselect if no parent</li>
+			</ul>
+		</div>
 		<div class="export_button" id="txt_export"></div>
 		<div class="export_button" id="svg_export"></div>
 		<div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
@@ -113,7 +122,7 @@
 					<p>Customize the constraints or the configuration
 						then let BtrPlace inspect the configuration to check for its viability.
 					</p>
-
+					<h3>Keyboards keys for configuration editing</h3>
 					<div class="check_button" onclick="check('constraints');"></div>
 					<div class="pin_button" onclick="pinSandbox()">Pin</div>
 					<br/>

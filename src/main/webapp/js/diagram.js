@@ -251,7 +251,7 @@ function diagramPlayLoop(direction, duration, callback){
 	});
 
 	if( !canPlay ){
-		console.log("Can't play now...");
+		console.log("[Player] Unreachable step. Stopping...");
 		if( callback ){
     			callback();
     	}
@@ -284,7 +284,7 @@ function diagramStepMove(direction, duration, callback){
 
 	// Some validation
 	if( end < 0 || end > scenarioDuration){
-		console.log("Didn't pass validation");
+		//console.log("[Player] Unreachable step. Stopping...");
 		return false;
 	}
 
