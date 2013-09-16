@@ -166,14 +166,16 @@ function step(id) {
         animationStep = 0;
         scenario = undefined;
         pending = false;
+        $("#configurationHelpText").show(1000);
     }
     // Step 1 : after user submitted input.
     else if (id == 1) {
         showSyntaxErrors();
-        //Don't show the pin button when the sandbox is already pinned
+        /*//Don't show the pin button when the sandbox is already pinned
         showScenario();
         animationStep = 0;
-        colorLines(0);
+        colorLines(0);*/
+        $("#configurationHelpText").hide(1000);
     } else if (id == 2 || id == 3) {
         showSyntaxErrors();
         checkable(true);
@@ -336,8 +338,12 @@ function showSyntaxErrors() {
             node.style.fontWeight="bold";
             node.style.color="red";
     } else {
-            $("#cstrs-mode > a").get()[0].style.fontWeight="";
-            $("#cstrs-mode > a").get()[0].style.color="";
+    		$("#cstrs-mode a").css({
+    			"font-weight":"",
+    			"color":""
+    		});
+            //$("#cstrs-mode > a").get()[0].style.fontWeight="";
+            //$("#cstrs-mode > a").get()[0].style.color="";
     }
     console.log("[LOG] Anotations :", annotations);
     editor.getSession().setAnnotations(annotations);

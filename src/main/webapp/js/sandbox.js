@@ -10,11 +10,13 @@ function changeView(viewName, instant){
 	console.log("Switching to View: "+viewName);
 	var duration = instant ? 0 : 300 ;
 	if( viewName == "input" ){
+		step(0);
 		$("#solution > div").hide(duration);
         setTimeout(function(){
             $("#input_zone_wrapper").show(duration);
             resetDiagram();
         }, duration);
+        $("#configurationHelpText").show(1000);
 	}
 	else if( viewName == "solution"){
 		console.log("Fading out inputWrapper");
@@ -31,6 +33,8 @@ function onServerResponse(json){
 	console.log("Received JSON : ",json);
 	if( json.actions ){
 		editor.getSession().clearAnnotations();
+		step(1);
+		//showSyntaxErrors();
 		changeView("solution");
     	$("#userInput").html(editor.getValue().replace("\n","<br />"));
     	createDiagram(json.actions);
