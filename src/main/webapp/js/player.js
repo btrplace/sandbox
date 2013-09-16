@@ -86,42 +86,42 @@ function actionHandler(action, direction, duration, callback){
 	var name = action.id;
 	if( name == "bootNode" ){
 		if(direction == 1 ){
-			animationQueue.push(function(){ bootNode(config.nodes[action.node], duration, callback); });
+			animationQueue.push(function(){ bootNode(config.getNode("N"+action.node), duration, callback); });
 		}
 		// Reverse mode
 		else if (direction == -1){
-			animationQueue.push(function(){ shutdownNode(config.nodes[action.node], duration, callback);  });
+			animationQueue.push(function(){ shutdownNode(config.getNode("N"+action.node), duration, callback);  });
 		}
 	}
 	else if( name == "shutdownNode" ){
 		if (direction == 1){
-			animationQueue.push(function(){ shutdownNode(config.nodes[action.node], duration, callback); });
+			animationQueue.push(function(){ shutdownNode(config.getNode("N"+action.node), duration, callback); });
 		}
 		// Reverse mode
 		else if (direction == -1){
-			animationQueue.push(function(){ bootNode(config.nodes[action.node], duration, callback); });
+			animationQueue.push(function(){ bootNode(config.getNode("N"+action.node), duration, callback); });
 		}
 	}
 	else if( name == "bootVM" ){
 		if (direction == 1) {
-			bootVM(config.vms[action.vm], config.nodes[action.to]);
-			animationQueue.push(function(){ bootVMAnim(config.vms[action.vm], duration, callback);  });
+			bootVM(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+action.node));
+			animationQueue.push(function(){ bootVMAnim(config.getVirtualMachine("VM"+action.vm), duration, callback);  });
 		}
 		// Reverse mode
 		else if (direction == -1) {
 			//shutdownVM(config.vms[action.vm], config.nodes[action.to]);
-			animationQueue.push(function(){ shutdownVM(config.vms[action.vm], config.nodes[action.to], duration, callback); });
+			animationQueue.push(function(){ shutdownVM(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+action.to), duration, callback); });
 		}
 	}
 	else if (name == "shutdownVM") {
 		if (direction == 1) {
 			//shutdownVM(config.vms[action.vm], config.nodes[action.on]);
-			animationQueue.push(function(){ shutdownVM(config.vms[action.vm], config.nodes[action.on], duration, callback); });
+			animationQueue.push(function(){ shutdownVM(config.getVirtualMachine("VM"+action.vm), config.nodes[action.on], duration, callback); });
 		}
 		// Reverse mode
 		else if (direction == -1) {
 			bootVM(config.vms[action.vm], config.nodes[action.on]);
-			animationQueue.push(function(){ bootVMAnim(config.vms[action.vm], duration, callback); });
+			animationQueue.push(function(){ bootVMAnim(config.getVirtualMachine("VM"+action.vm), duration, callback); });
 		}
 	}
 	else if( name == "migrateVM" ){
@@ -136,7 +136,7 @@ function actionHandler(action, direction, duration, callback){
 			to = action.from;
 		}
 		console.log("Action = ", action, "From : ", from, " to : ",to);
-		animationQueue.push(function(){ migrate(config.vms[action.vm], config.nodes[from], config.nodes[to], duration, callback) });
+		animationQueue.push(function(){ migrate(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+from), config.getNode("N"+to), duration, callback) });
 	};
 }
 
@@ -261,7 +261,6 @@ function shutdownNode(node, duration){
 	//node.boxFill.attr({'fill':'black'});
 
     node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){
-    	console.log("[ANIM] NODE SHUTTED DOWN :D");
     	node.online = false;});
     node.boxFill.animate({'fill': '#bbb'}, duration,"<>");
 }

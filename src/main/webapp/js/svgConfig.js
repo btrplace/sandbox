@@ -24,6 +24,9 @@ var config = new Configuration(),
 	initialConfig ;
 
 function drawConfiguration(id) {
+	if( paper != undefined ){
+		paper.clear();
+	}
 	var verbose = false;
 	if (verbose) console.log("[CONFIG] Drawing current configuration");
     //Compute the SVG size
@@ -67,9 +70,11 @@ function drawConfiguration(id) {
     if (paper != undefined) {
 	    paper.remove();
     }
+
     paper = Raphael(id, width, height);
     // emptying the paper
     paper.clear();
+
     for (var i in config.nodes) {
         var n = config.nodes[i];
         n.draw(paper,n.posX,n.posY);
