@@ -1,3 +1,9 @@
+function createNodeFromStorage(data){
+	var node = new Node(data[0], data[1], data[2]);
+	node.populateFromStorage(data);
+	return node ;
+}
+
 function Node(name, cpu, mem) {
     this.id = name;
     this.cpu = cpu;
@@ -5,6 +11,7 @@ function Node(name, cpu, mem) {
     this.online = true;
     this.vms = [];
     this.isSelected = false;
+
     this.boundingBox = function () {
 	    return [2 * border + unit_size * this.cpu, 2 * border + unit_size * this.mem];
     };
@@ -80,7 +87,7 @@ function Node(name, cpu, mem) {
 	this.updateSelectionDraw = function(){
 		if( this.isSelected ){
 			this.rect.attr({
-				'fill':'blue',
+				'fill':'#DBDEC5',
 				'fill-opacity':'1'
 			});
 		}
@@ -168,16 +175,12 @@ function Node(name, cpu, mem) {
     	return result;
     }
 
-    this.fromStorage = function(nodeData){
-    	// Load the base data
-    	this.id = nodeData[0];
-    	this.cpu = nodeData[1];
-    	this.mem = nodeData[2];
+    this.populateFromStorage = function(nodeData){
     	// Add its VMs
     	for(var i in nodeData[3]){
     		var vmData = nodeData[3][i],
-    			vm = new VirtualMachine("",1,1);
-    		vm.fromStorage(vmData);
+    			vm = createVMFromStorage(vmData);//new VirtualMachine("",1,1);
+    		//vm.fromStorage(vmData);
     		this.host(vm);
     		config.vms.push(vm);
     	}

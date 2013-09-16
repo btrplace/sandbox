@@ -1,3 +1,7 @@
+function createVMFromStorage(data){
+	return new VirtualMachine(data[0], data[1], data[2]);
+}
+
 function VirtualMachine(id, cpu, mem) {
     this.id = id;
     this.cpu = cpu;
@@ -50,7 +54,8 @@ function VirtualMachine(id, cpu, mem) {
 		if( this.isSelected ){
 			this.previousColor = this.rect.attr("fill");
 			this.rect.attr({
-				'fill':'red'
+				'fill':'#d2d8b1'
+
 			});
 		}
 		else {
@@ -60,12 +65,6 @@ function VirtualMachine(id, cpu, mem) {
 
 	this.toStorage = function(){
 		return [this.id, this.cpu, this.mem];
-	}
-
-	this.fromStorage = function(vmData){
-		this.id = vmData[0];
-		this.cpu = vmData[1];
-		this.mem = vmData[2];
 	}
 
 	this.delete = function(doUnhost){

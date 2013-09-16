@@ -42,6 +42,9 @@ function onServerResponse(json){
 
 $(document).ready(function(){
 	changeView("input", true);
+	$(document).click(function(){
+	   setSelectedElement(null);
+	});
 });
 
 var selectedElement = null ;
@@ -53,7 +56,7 @@ function registerSelectedElement(element){
 
 function updateClickBindings(){
 	//$("body").click(function(){console.log("CLICK on body!")});
-	$(".nodeZone, .vmZone").unbind('click').on('click',function(){
+	$(".nodeZone, .vmZone").unbind('click').on('click',function(event){
 		var element ;
 		if (this.className.baseVal == "nodeZone") {
 			var nodeID = this.attributes["sandboxNodeID"].value;
@@ -61,12 +64,16 @@ function updateClickBindings(){
 		}
 		if (this.className.baseVal == "vmZone") {
 			var vmID = this.attributes["sandboxVMID"].value;
-			element = config.vms[vmID];
+			//element = config.vms[vmID];
+			element = config.getVirtualMachine("VM"+vmID);
 		}
        	// Safeguard
 		if( typeof(element) == "undefined" ){
 			console.error("Not a good click :(");
 			return ;
+		}
+		else {
+			event.stopPropagation();
 		}
 		//console.log("Click on element ",element);
         setSelectedElement(element);

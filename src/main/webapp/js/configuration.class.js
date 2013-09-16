@@ -112,8 +112,7 @@ function Configuration (ns,vs) {
     	this.vms = [];
     	for(var i in configData[0]){
  			var nodeData = configData[0][i],
-    			node = new Node("temp",1,1);
-    		node.fromStorage(nodeData);
+    			node = createNodeFromStorage(nodeData);
     		this.nodes.push(node);
     	}
 		editor.setValue(configData[1]);
