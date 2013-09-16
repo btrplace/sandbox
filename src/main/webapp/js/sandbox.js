@@ -30,6 +30,7 @@ function onServerResponse(json){
 	//initialConfig = owl.deepCopy(config);
 	console.log("Received JSON : ",json);
 	if( json.actions ){
+		editor.getSession().clearAnnotations();
 		changeView("solution");
     	$("#userInput").html(editor.getValue().replace("\n","<br />"));
     	createDiagram(json.actions);

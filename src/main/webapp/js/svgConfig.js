@@ -166,19 +166,6 @@ function step(id) {
         animationStep = 0;
         scenario = undefined;
         pending = false;
-
-		/*
-		// Create configuration and fill the editor
-        randomConfiguration();
-
-        editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
-		editor.clearSelection();
-
-        // Draw the configuration
-        drawConfiguration("canvas");*/
-
-	    //cstrsEditor.setValue(generateSampleScript(config));
-
     }
     // Step 1 : after user submitted input.
     else if (id == 1) {

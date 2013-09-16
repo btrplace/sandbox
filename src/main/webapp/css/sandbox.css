@@ -7,6 +7,7 @@ body {
 	color: #222;
 	line-height: 180%;
 	background: #eee;
+	min-width:950px;
 }
 
 .blackButton {
