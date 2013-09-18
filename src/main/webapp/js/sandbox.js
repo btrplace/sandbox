@@ -317,6 +317,19 @@ $(function() {
 						setSelectedElement(node.vms[vmIndex]);
 					}
 				}
+				else if (keyCode == 79) {
+                	if (selectedElement instanceof Node) {
+                		if (selectedElement.vms.length != 0 ) {
+                			alert("Error : a node must be empty before being turned off");
+                			return false;
+                		}
+                		console.log("Switching Node online state");
+                		selectedElement.online = ! selectedElement.online;
+                		//paper.clear();
+                		drawConfiguration("canvas");
+                		setSelectedElement(null);
+                	}
+				}
 			}
 			if (redraw) {
 				drawConfiguration('canvas');
