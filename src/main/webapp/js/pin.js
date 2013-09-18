@@ -105,6 +105,7 @@ function loadExperiment(cfg) {
 
 function pinSandbox(){
 	var configStr = JSON.stringify(config.toStorage()),
+		//encodedCfg =
 		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr);
 		//pinUrlText = pinUrl;
 		pinUrlText = "Here";
