@@ -53,7 +53,6 @@ $(window).load(function(){
 		topPosition = $button.offset().top,
 		fixedTopOffset = 50 ;
     $(window).scroll(function(){
-    	console.log("Scrolltop = "+$(window).scrollTop()+" VS "+topPosition);
         if($(window).scrollTop() > topPosition - fixedTopOffset){
             $button.css('position', 'fixed');
             $button.css('top', fixedTopOffset);

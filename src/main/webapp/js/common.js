@@ -178,3 +178,14 @@ function decode64(input) {
 
    return unescape(output);
 }
+
+function moveCaretToStart(el) {
+    if (typeof el.selectionStart == "number") {
+        el.selectionStart = el.selectionEnd = 0;
+    } else if (typeof el.createTextRange != "undefined") {
+        el.focus();
+        var range = el.createTextRange();
+        range.collapse(true);
+        range.select();
+    }
+}

@@ -209,8 +209,11 @@
 </div>
 <div id="pinBox" class="jqmWindow">
 	<img src="img/info.png" class="logo"/>
-	  <p>The sandbox is now saved. It can be accessed at the following address:</p>
-	  <a id="goToPin" href="#"><code id="pinURL"></code></a>
+		<p>The sandbox is now saved. It can be accessed at the following address:</p>
+		<p style="text-align:center;">
+			<input type="text" value="URL" id="pinURLInput" readonly="readonly" onClick="this.select();"/><br><i>or by clicking</i><br />
+	  		<a id="goToPin" href="#"><code id="pinURL"></code></a>
+		</p>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
 	<img src="img/error.png" class="logo"/>

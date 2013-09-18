@@ -109,7 +109,9 @@ function pinSandbox(){
 		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr);
 		//pinUrlText = pinUrl;
 		pinUrlText = "Here";
+	$("#pinURLInput").val(pinUrl);
 	$("#goToPin").attr("href",pinUrl).text(pinUrlText);
     $("#pinBox").jqm();
     $("#pinBox").jqmShow();
+    moveCaretToStart($("#pinURLInput").get(0));
 }
