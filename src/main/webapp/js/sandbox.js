@@ -229,7 +229,7 @@ $(function() {
 					//selectedElement = null ;
 				}
 				// Delete key : DEL, Backspace
-				else if (keyCode == 46 || keyCode == 8) {
+				else if (keyCode == 46 || keyCode == 8 || keyCode == 68) {
 					var newSelectedElement = null ;
 					// If it's a VM select the previous one in the node.
 					if (selectedElement instanceof VirtualMachine){
