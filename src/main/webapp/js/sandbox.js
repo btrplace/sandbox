@@ -45,6 +45,24 @@ function onServerResponse(json){
 	}
 }
 
+$(window).load(function(){
+	var $button = $('#shareButton');
+
+	var initialTop = $button.css("top"),
+		topPosition = $button.offset().top,
+		fixedTopOffset = 50 ;
+    $(window).scroll(function(){
+    	console.log("Scrolltop = "+$(window).scrollTop()+" VS "+topPosition);
+        if($(window).scrollTop() > topPosition - fixedTopOffset){
+            $button.css('position', 'fixed');
+            $button.css('top', fixedTopOffset);
+        } else {
+            $button.css('position', 'absolute');
+            $button.css('top', initialTop);
+        }
+    });
+});
+
 $(document).ready(function(){
 	changeView("input", true);
 	$(document).click(function(){

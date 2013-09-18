@@ -63,7 +63,6 @@
 </head>
 <body onload="init()">
 <div id="top_line" class="green_line">
-	<a href="#" id="shareButton" onclick="pinSandbox()">Share this sandbox !</a>
 	<div id="intro_wrapper" class="centered">
 		<img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/>
 		<!--<h1>BtrPlace sandbox</h1>   -->
@@ -76,20 +75,23 @@
 		</div>
 	</div>
 </div>
-<div id="content" class="centered">
-	<div id="sandbox">
-		<div id="configurationHelpText">
-			<ul>
-					<li>Up/Down arrows : change the CPU of the selected element</li>
-					<li>Left/Right arrows : change the MEM of the selected element</li>
-					<li>N : new Node or a VM in the selected Node</li>
-					<li>V and B : select previous and next element</li>
-					<li>Escape : go to parent element or deselect if no parent</li>
-			</ul>
+<div id="content_wrapper">
+	<a href="#" id="shareButton" onclick="pinSandbox()">Share this sandbox !</a>
+	<div id="content" class="centered">
+		<div id="sandbox">
+			<div id="configurationHelpText">
+				<ul>
+						<li>Up/Down arrows : change the CPU of the selected element</li>
+						<li>Left/Right arrows : change the MEM of the selected element</li>
+						<li>N : new Node or a VM in the selected Node</li>
+						<li>V and B : select previous and next element</li>
+						<li>Escape : go to parent element or deselect if no parent</li>
+				</ul>
+			</div>
+			<div class="export_button" id="txt_export"></div>
+			<div class="export_button" id="svg_export"></div>
+			<div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
 		</div>
-		<div class="export_button" id="txt_export"></div>
-		<div class="export_button" id="svg_export"></div>
-		<div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
 	</div>
 </div>
 <div id="input_zone_wrapper">

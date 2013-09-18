@@ -37,13 +37,17 @@ body {
 	color: #444;
 }
 
+#content_wrapper {
+	position:relative;
+}
+
 #shareButton {
 	color:rgb(34, 34, 34);
 	text-decoration:none;
 	padding:5px;
-	position:fixed;
+	position:absolute;
 	display:block;
-	top:200px;
+	top:10px;
 	right:0;
 	background-color:#D4D6C5;
 	border-radius:4px;
