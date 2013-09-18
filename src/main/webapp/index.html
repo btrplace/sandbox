@@ -63,6 +63,7 @@
 </head>
 <body onload="init()">
 <div id="top_line" class="green_line">
+	<a href="#" id="shareButton" onclick="pinSandbox()">Share this sandbox !</a>
 	<div id="intro_wrapper" class="centered">
 		<img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/>
 		<!--<h1>BtrPlace sandbox</h1>   -->
@@ -71,7 +72,7 @@
             The figure depicts a sample infrastructure. Each grid is a server providing CPU and memory resources to VMs.
             Write a model and the constraints you care about then observe BtrPlace fixing the issues for you.
 			</p>
-			<a href="#" onclick="$('#aboutWindow').jqm().jqmShow(); return false;">Read more &#9654;</a>
+			<a href="#" onclick="$('#aboutWindow').jqm().jqmShow(); return false;">Read more &#9654;</a><br />
 		</div>
 	</div>
 </div>
@@ -124,7 +125,6 @@
 						then let BtrPlace inspect the configuration to check for its viability.
 					</p>
 					<div class="check_button" onclick="check('constraints');"></div>
-					<div class="pin_button" onclick="pinSandbox()">Pin</div>
 					<br/>
 				</div>
 				<div class="state" id="state1">
@@ -205,7 +205,7 @@
 </div>
 <div id="pinBox" class="jqmWindow">
 	<img src="img/info.png" class="logo"/>
-	  <p>The sandbox is now locked. It can be accessed at the following address:</p>
+	  <p>The sandbox is now saved. It can be accessed at the following address:</p>
 	  <a id="goToPin" href="#"><code id="pinURL"></code></a>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
