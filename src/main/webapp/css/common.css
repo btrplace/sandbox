@@ -16,6 +16,12 @@ h1 {
     text-align: center;
 }
 
+h2 {
+	font-size: 24pt;
+	color:#222;
+	font-family:'Times New Roman',serif;
+}
+
 .centered {
     width: 900px;
     margin: auto;
