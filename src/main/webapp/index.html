@@ -92,20 +92,18 @@
 			<div class="export_button" id="svg_export"></div>
 			<div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
 		</div>
-	</div>
-</div>
-<div id="input_zone_wrapper">
-	<div id="input_zone" class="centered">
-		<div id="tab-container" class="tab-container">
-			<ul class="etabs">
-				<li class="tab" id="cstrs-mode"><a>Constrains script</a></li>
-			</ul>
-			<div class="panel-container">
-				<div id="editor"></div>
-				<div class="note"><a href="howto.html" target="_blank">How to</a></div>
-			</div>
-			<script type="text/javascript">
-				$(document).ready(function(){
+		<div id="input_zone_wrapper">
+			<!--<div id="input_zone" class="centered">-->
+			<div id="tab-container" class="tab-container">
+				<ul class="etabs">
+					<li class="tab" id="cstrs-mode"><a>Constrains script</a></li>
+				</ul>
+				<div class="panel-container">
+					<div id="editor"></div>
+					<div class="note"><a href="howto.html" target="_blank">How to</a></div>
+				</div>
+				<script type="text/javascript">
+					$(document).ready(function(){
 					$(".panel-container").resizable({
 					grid:50,
 					handles: "se, e, s",
@@ -113,91 +111,95 @@
 					maxWidth:480,
 					minHeight:90,
 					resize:function(event, ui){
-						$("#editor").height(ui.size.height-45);
-						editor.resize(true);
+					$("#editor").height(ui.size.height-45);
+					editor.resize(true);
 					}
-				   });
-				});
-			</script>
-		</div>
-		<div id="script">
-			<div id="output">
-				<div class="state" id="state0">
-					<p>Customize the constraints or the configuration
-						then let BtrPlace inspect the configuration to check for its viability.
-					</p>
-					<div class="check_button" onclick="check('constraints');"></div>
-					<br/>
-				</div>
-				<div class="state" id="state1">
-					<p>
-						Some constraints are not satisfied but
-						Btrplace found doing the following actions makes the placement viable. Use
-						the player to navigate through the reconfiguration.
-					</p>
+					});
+					});
+				</script>
+			</div>
+			<div id="script">
+				<div id="output">
+					<div class="state" id="state0">
+						<p>Customize the constraints or the configuration
+							then let BtrPlace inspect the configuration to check for its viability.
+						</p>
+						<div class="check_button" onclick="check('constraints');"></div>
+						<br/>
+					</div>
+					<div class="state" id="state1">
+						<!--
+						<p>
+							Some constraints are not satisfied but
+							Btrplace found doing the following actions makes the placement viable. Use
+							the player to navigate through the reconfiguration.
+						</p>
 
-					<div id="scenario">
-						<div id="plan"></div>
-						<div id="player">
-							<div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span></div>
-							<div class="player_button" id="prev_button" onclick="prev()"><span class="tt">Previous</span></div>
-							<div class="player_button" id="play_button" onclick="playOrPause();"><span class="tt">Play</span></div>
-							<div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span></div>
-							<div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span></div>
-							<div class="player_button" id="lock_button" onclick="pinSandbox()"><span class="tt">Lock</span></div>
-							<div class="player_button" id="unlock_button" onclick="unpinSandbox()"><span class="tt">Unlock</span></div>
-							<br>
+						<div id="scenario">
+							<div id="plan"></div>
+							<div id="player">
+								<div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span></div>
+								<div class="player_button" id="prev_button" onclick="prev()"><span class="tt">Previous</span></div>
+								<div class="player_button" id="play_button" onclick="playOrPause();"><span class="tt">Play</span></div>
+								<div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span></div>
+								<div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span></div>
+								<div class="player_button" id="lock_button" onclick="pinSandbox()"><span class="tt">Lock</span></div>
+								<div class="player_button" id="unlock_button" onclick="unpinSandbox()"><span class="tt">Unlock</span></div>
+								<br>
+							</div>
+
 						</div>
+						-->
+					</div>
+					<div class="state" id="state2">
+						<p>
+							Every constraints are already satisfied.
+							Declare other constraints in the script.
+						</p>
 
+						<div class="check_button" onclick="check('constraints');"></div>
+					</div>
+					<div class="state" id="state3">
+						<p>
+							Some constraints are not satisfied and BtrPlace found there
+							is no possible placement that can satisfy then. Use other
+							constraints or refresh the page for a new configuration.
+						</p>
+
+						<div class="check_button" onclick="check('constraints');"></div>
+					</div>
+					<div class="state" id="state4">
+						<p>Errors in the script prevent its interpretation. Fix them then retry to inspect the configuration.</p>
+						<div class="check_button" onclick="check('constraints');"></div>
 					</div>
 				</div>
-				<div class="state" id="state2">
-					<p>
-						Every constraints are already satisfied.
-						Declare other constraints in the script.
-					</p>
-
-					<div class="check_button" onclick="check('constraints');"></div>
+			</div>
+			<!--</div>-->
+		</div>
+		<div id="solution">
+			<div id="userInput"></div>
+			<div id="diagramWrapper">
+				<div id="diagram">
+					<div id="actionLines"></div>
+					<div id="currentFrameLine"></div>
+					<div id="timeLine">
+						<div id="graduations"></div>
+						<div id="timeLineBar"></div>
+					</div>
 				</div>
-				<div class="state" id="state3">
-					<p>
-						Some constraints are not satisfied and BtrPlace found there
-						is no possible placement that can satisfy then. Use other
-						constraints or refresh the page for a new configuration.
-					</p>
-
-					<div class="check_button" onclick="check('constraints');"></div>
-				</div>
-				<div class="state" id="state4">
-					<p>Errors in the script prevent its interpretation. Fix them then retry to inspect the configuration.</p>
-					<div class="check_button" onclick="check('constraints');"></div>
+				<div id="playerControls">
+					<div id="rewindButton" class="greenButton" onclick="diagramRewind();"><<</div>
+					<div id="previousStepButton" class="greenButton" onclick="diagramPreviousStep();"><</div>
+					<div id="playButton" class="greenButton" onclick="diagramPlay();">Play</div>
+					<div id="pauseButton" class="greenButton" onclick="diagramPause();">Pause</div>
+					<div id="nextStepButton" class="greenButton" onclick="diagramNextStep();">></div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
-<div id="solution" class="centered">
-	<div id="userInput">LOREM IPSUM LQSDFM MF QF MQKJFDSKJ JKLKMJJKMF D</div>
-	<div id="diagramWrapper">
-		<div id="diagram">
-			<div id="actionLines"></div>
-			<div id="currentFrameLine"></div>
-			<div id="timeLine">
-				<div id="graduations"></div>
-				<div id="timeLineBar"></div>
+			<div id="solutionBottomControls">
+				<a href="#" class="blackButton" onclick="changeView('input')">Back to Edit Mode</a>
+				<!--<a href="#" class="greenButton">Save</a>-->
 			</div>
 		</div>
-		<div id="playerControls">
-			<div id="rewindButton" class="greenButton" onclick="diagramRewind();"><<</div>
-			<div id="previousStepButton" class="greenButton" onclick="diagramPreviousStep();"><</div>
-			<div id="playButton" class="greenButton" onclick="diagramPlay();">Play</div>
-			<div id="pauseButton" class="greenButton" onclick="diagramPause();">Pause</div>
-			<div id="nextStepButton" class="greenButton" onclick="diagramNextStep();">></div>
-		</div>
-	</div>
-	<div id="solutionBottomControls">
-		<a href="#" class="blackButton" onclick="changeView('input')">Back to Edit Mode</a>
-		<a href="#" class="greenButton">Save</a>
 	</div>
 </div>
 

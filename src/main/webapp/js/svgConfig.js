@@ -166,7 +166,7 @@ function step(id) {
         animationStep = 0;
         scenario = undefined;
         pending = false;
-        $("#configurationHelpText").show(1000);
+        $("#configurationHelpText").show(changeViewDuration);
     }
     // Step 1 : after user submitted input.
     else if (id == 1) {
@@ -175,7 +175,7 @@ function step(id) {
         showScenario();
         animationStep = 0;
         colorLines(0);*/
-        $("#configurationHelpText").hide(1000);
+        $("#configurationHelpText").hide(changeViewDuration);
     } else if (id == 2 || id == 3) {
         showSyntaxErrors();
         checkable(true);

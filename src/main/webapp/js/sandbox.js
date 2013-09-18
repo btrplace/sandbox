@@ -1,5 +1,6 @@
 var currentView = "";
 
+var changeViewDuration = 500;
 function changeView(viewName, instant){
 	if( typeof(instant) == "undefined" ){
 		var instant = false;
@@ -8,7 +9,7 @@ function changeView(viewName, instant){
 		return ;
 	}
 	console.log("Switching to View: "+viewName);
-	var duration = instant ? 0 : 300 ;
+	var duration = instant ? 0 : changeViewDuration ;
 	if( viewName == "input" ){
 		step(0);
 		$("#solution > div").hide(duration);
@@ -16,7 +17,7 @@ function changeView(viewName, instant){
             $("#input_zone_wrapper").show(duration);
             resetDiagram();
         }, duration);
-        $("#configurationHelpText").show(1000);
+        $("#configurationHelpText").show(changeViewDuration);
 	}
 	else if( viewName == "solution"){
 		console.log("Fading out inputWrapper");
