@@ -34,7 +34,9 @@ function init() {
         // Create configuration and fill the editor
 		randomConfiguration();
 		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
-		paper.clear();
+		if( paper )
+			paper.clear();
+
 		drawConfiguration("canvas");
         step(0);
     }
@@ -103,8 +105,9 @@ function loadExperiment(cfg) {
 
 function pinSandbox(){
 	var configStr = JSON.stringify(config.toStorage()),
-		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr),
-		pinUrlText = document.location.origin + document.location.pathname+ "?cfg="+configStr;
+		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr);
+		//pinUrlText = pinUrl;
+		pinUrlText = "Here";
 	$("#goToPin").attr("href",pinUrl).text(pinUrlText);
     $("#pinBox").jqm();
     $("#pinBox").jqmShow();
