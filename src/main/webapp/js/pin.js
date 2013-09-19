@@ -15,20 +15,20 @@ function init() {
     cstrsEditor = new EditSession("");*/
     if (get.cfg) {
     	var cfg = decodeURIComponent(get.cfg);
-        console.log("Re-using sandbox from configuration : " + cfg);
+        if (LOG) console.log("Re-using sandbox from configuration : " + cfg);
         loadExperiment(cfg);
         step(0);
         //document.getElementById('lock_button').style.display="none";
         //document.getElementById('unlock_button').style.display="inline";
         //editor.setReadOnly(true);
     } else if (false) {
-        console.log("Unlocked sandbox from " + o.queryKey.unlock);
+        if (LOG) console.log("Unlocked sandbox from " + o.queryKey.unlock);
         loadExperiment(o.queryKey.unlock);
         document.getElementById('lock_button').style.display="inline";
         document.getElementById('unlock_button').style.display="none";
         editor.setReadOnly(false);
     } else  {
-        console.log("New sandbox");
+        if (LOG) console.log("New sandbox");
         editor.setReadOnly(false);
 
         // Create configuration and fill the editor
@@ -58,7 +58,7 @@ function pinSandbox() {
                 $('#pinBox').jqm();
                 $('#pinBox').jqmShow();
 	        } else {
-	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
+	            console.error("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }
 	    }
     });

@@ -29,8 +29,8 @@ function createGraduations(duration){
  * Loads the action from the JSON response from server
  */
 function loadActions(actions){
-	console.log("Converting VMs IDs to match client IDs.");
-	console.log("Loading actions : ", actions);
+	//if (LOG) console.log("Converting VMs IDs to match client IDs.");
+	if (LOG) console.log("Loading actions : ", actions);
 
 	for(var i in actions){
 		var action = actions[i];
@@ -123,7 +123,7 @@ function timeLineAnimation(start, end, duration, callback){
     	},
     	complete:function(){
     		updateTimeLinePosition(end);
-    		console.log("Complete !");
+    		if (LOG) console.log("Complete !");
     		// Call the callback if any
     		if(callback){
     			callback();
@@ -158,12 +158,15 @@ function getScenarioDuration(actions){
 
 var currentAction,
 	scenarioDuration = 0 ;
+
+/**
+ * Creates the diagram from a given actions list.
+ * (Automatically compute the TIME_UNIT_SIZE)
+ */
 function createDiagram(actions){
 	currentActions = actions;
 	scenarioDuration = getScenarioDuration(actions) ;
-	console.log("Duration = ",scenarioDuration);
 	TIME_UNIT_SIZE = computeTimeUnitSize(scenarioDuration);
-	console.log("TIME_UNIT_SIZE = "+TIME_UNIT_SIZE+"px");
 	createGraduations(scenarioDuration);
 	loadActions(actions);
 }
@@ -172,7 +175,7 @@ function createDiagram(actions){
  * Resets the diagram.
  */
 function resetDiagram(){
-	console.log("Reseting diagram");
+	if (LOG) console.log("Reseting diagram");
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
 
@@ -251,7 +254,7 @@ function diagramPlayLoop(direction, duration, callback){
 	});
 
 	if( !canPlay ){
-		console.log("[Player] Unreachable step. Stopping...");
+		if (LOG) console.log("[Player] Unreachable step. Stopping...");
 		if( callback ){
     			callback();
     	}
@@ -259,14 +262,14 @@ function diagramPlayLoop(direction, duration, callback){
    		return false;
 	}
 	else {
-		console.log("Can play !");
+		if (LOG) console.log("Can play !");
 	}
 }
 
 
 function diagramStepMove(direction, duration, callback){
 	if( isPlaying ){
-		console.log("Is already playing !");
+		if (LOG) console.log("Is already playing !");
 		return false ;
 	}
 
@@ -298,7 +301,7 @@ function diagramStepMove(direction, duration, callback){
 	}
 
 	// Update the SVG with the new configuration
-	console.log("[LOG] Going to redraw after animations preparation");
+	if (LOG) console.log("[LOG] Going to redraw after animations preparation");
 	drawConfiguration('canvas');
 
 	// Play all the animations
@@ -314,7 +317,7 @@ function diagramStepMove(direction, duration, callback){
 		isPlaying = false;
 		diagramNextTarget += direction;
 
-		console.log("[LOG] Going to redraw after all animations completed");
+		if (LOG) console.log("[LOG] Going to redraw after all animations completed");
 		drawConfiguration('canvas');
 
 		if( callback ){
@@ -335,7 +338,7 @@ function diagramPause(callback){
 var rewindSpeed = 100 ;
 function diagramRewind(){
 	if( isPlaying ){
-		console.log("Is alreay playing !!");
+		if (LOG) console.log("Is alreay playing !!");
 		return ;
 	}
 
@@ -343,7 +346,7 @@ function diagramRewind(){
     return ;
 
 	var backLoop = function(){
-		console.log("BACK LOOP !");
+		if (LOG) console.log("BACK LOOP !");
 		var canPlay = diagramStepMove(-1, 100);
 		setTimeout(function(){
 			drawConfiguration('canvas');

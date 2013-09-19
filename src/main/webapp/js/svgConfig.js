@@ -119,7 +119,7 @@ function check(id) {
 		});
 
 	}
-	console.log("=== Configuration Data sent to the server : ", cfg);
+	if (LOG) console.log("=== Configuration Data sent to the server : ", cfg);
 	cfg = JSON.stringify(cfg);
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
@@ -129,7 +129,7 @@ function check(id) {
 	        onServerResponse(scenario);
 	        // Return here for testing purposes
 	        return ;
-	        console.log("Scenario : ", scenario);
+	        if (LOG) console.log("Scenario : ", scenario);
 	        if (scenario.errors.length == 0) {
 	            if (scenario.actions.length == 0) { //Every constraints are satisfied
 	                step(2);
@@ -150,7 +150,7 @@ function check(id) {
  * Change the step of the usage flow.
  */
 function step(id) {
-	console.log("[STEP System] Step "+id);
+	if (LOG) console.log("[STEP System] Step "+id);
     // Change the message displayed in the box
     $(".state").hide();
     $("#state"+id).show();
@@ -302,7 +302,7 @@ function rephrase(a) {
 }
 
 function showSyntaxErrors() {
-	console.log("[Log] Showing syntax errors in scenario : ", scenario);
+	if (LOG) console.log("[Log] Showing syntax errors in scenario : ", scenario);
     var annotations = [];
 
     var msgs = [];
@@ -345,7 +345,7 @@ function showSyntaxErrors() {
             //$("#cstrs-mode > a").get()[0].style.fontWeight="";
             //$("#cstrs-mode > a").get()[0].style.color="";
     }
-    console.log("[LOG] Anotations :", annotations);
+    if (LOG) console.log("[LOG] Anotations :", annotations);
     editor.getSession().setAnnotations(annotations);
 }
 

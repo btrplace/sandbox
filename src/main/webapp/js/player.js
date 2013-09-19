@@ -135,7 +135,7 @@ function actionHandler(action, direction, duration, callback){
 			from = action.to;
 			to = action.from;
 		}
-		console.log("Action = ", action, "From : ", from, " to : ",to);
+		if (LOG) console.log("Action = ", action, "From : ", from, " to : ",to);
 		animationQueue.push(function(){ migrate(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+from), config.getNode("N"+to), duration, callback) });
 	};
 }
@@ -207,7 +207,7 @@ function begin(a){
 
 //Animation for a migrate action
 function migrate(vm, src, dst, duration, f) {
-	console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
+	if (LOG) console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
 	var a = 0;
     //A light gray VM is posted on the destination
     var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
@@ -246,7 +246,7 @@ function migrate(vm, src, dst, duration, f) {
 
 //Animation for booting a node
 function bootNode(node, duration) {
-	console.log("[ANIM] Booting node "+node.id);
+	if (LOG) console.log("[ANIM] Booting node "+node.id);
 
 	//node.boxStroke.attr({'stroke':'#bbb'});
 
@@ -256,7 +256,7 @@ function bootNode(node, duration) {
 
 // Animation for shutting down a node
 function shutdownNode(node, duration){
-	console.log("[ANIM] Shutting down node "+node.id+" time : "+duration);
+	if (LOG) console.log("[ANIM] Shutting down node "+node.id+" time : "+duration);
 	//node.boxStroke.attr({'stroke':'black'});
 	//node.boxFill.attr({'fill':'black'});
 
@@ -273,7 +273,7 @@ function bootVM(vm, node, duration){
 
 // Animation for booting a VM
 function bootVMAnim(vm, duration){
-	console.log("[ANIM] Booting "+vm.id);
+	if (LOG) console.log("[ANIM] Booting "+vm.id);
    	vm.box.attr({"opacity":0});
 	vm.box.animate({'opacity': 1}, duration,"<>", function() {});
 
@@ -281,11 +281,11 @@ function bootVMAnim(vm, duration){
 
 // Animation for shutting down a VM
 function shutdownVM(vm, node, duration){
-	console.log("[ANIM] Shutting down "+vm.id+" on node "+node.id);
+	if (LOG) console.log("[ANIM] Shutting down "+vm.id+" on node "+node.id);
 	vm.box.attr({"opacity":1});
 	//return ;
     vm.box.animate({'opacity': 0}, duration,"<>", function(){
-    	console.log("[ANIM DONE] Unhosted "+vm.id+" from "+node.id);
+    	if (LOG) console.log("[ANIM DONE] Unhosted "+vm.id+" from "+node.id);
     	node.unhost(vm);
     });
     //vm.box.animate({'fill-opacity': '0'}, duration,"<>");

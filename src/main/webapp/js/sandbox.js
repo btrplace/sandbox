@@ -1,4 +1,4 @@
-var LOG = false ;
+var LOG = true ;
 var currentView = "";
 
 var changeViewDuration = 500;
@@ -35,7 +35,7 @@ function changeView(viewName, instant){
 
 var conversionTable ;
 function onServerResponse(json){
-	console.log("Received JSON : ",json);
+	if (LOG) console.log("Received JSON : ",json);
 	if( json.actions ){
 		editor.getSession().clearAnnotations();
 		step(1);
@@ -45,7 +45,7 @@ function onServerResponse(json){
     	createDiagram(json.actions);
 	}
 	if( json.errors ){
-		console.log("There are some errors in the user input.");
+		if (LOG) console.log("There are some errors in the user input.");
 		step(4);
 	}
 }
@@ -125,7 +125,7 @@ function onKeyEvent(keyCode){
 			}
 			var node = new Node(config.getNextNodeID(), 3,3);
 			config.nodes.push(node);
-			console.log("Created a node !");
+			if (LOG) console.log("Created a node !");
 			redraw = true ;
 		}
 	}
@@ -154,17 +154,18 @@ function onKeyEvent(keyCode){
 		// Left
 		if (keyCode == 37) {
 			var minSize = -1;
-			//if( (selectedElement instanceof Node && selectedElement.canBeReduced('cpu')) || selectedElement instanceof VirtualMachine){
 			if (selectedElement instanceof Node && selectedElement.fit(CPU_UNIT)){
 				minSize = 3;
 			}
 			if (selectedElement instanceof VirtualMachine) {
 				minSize = 1;
 			}
-			console.log("MinSize : "+minSize);
+
+			// Modify the selected element only if the new value is valid.
 			if (minSize != -1 && selectedElement.cpu > minSize) {
 				selectedElement.cpu--;
 			}
+			// Prevent the page from scrolling
 			event.preventDefault();
 		}
 		// Right
@@ -178,6 +179,7 @@ function onKeyEvent(keyCode){
 					selectedElement.cpu++;
 				}
 			}
+			// Prevent the page from scrolling
 			event.preventDefault();
 		}
 		// Up
@@ -191,6 +193,7 @@ function onKeyEvent(keyCode){
 					selectedElement.mem++;
 				}
 			}
+			// Prevent the page from scrolling
 			event.preventDefault();
 		}
 		// Down
@@ -206,7 +209,7 @@ function onKeyEvent(keyCode){
 			if (minSize != -1 && selectedElement.mem > minSize) {
 				selectedElement.mem--;
 			}
-
+            // Prevent the page from scrolling
 			event.preventDefault();
 		}
 		// Escape
@@ -292,6 +295,11 @@ function onKeyEvent(keyCode){
 	}
 }
 
+/**
+ * Shifts the currently selected element in the Configuration in the specified direction.
+ * The direction parameter might be negative.
+ * @param direction The direction in which the selection has to be shifted.
+ */
 function shiftSelectedElement(direction){
 	var newSelectedElement = null;
 	if (selectedElement instanceof Node) {
@@ -304,6 +312,7 @@ function shiftSelectedElement(direction){
 	setSelectedElement(newSelectedElement);
 }
 
+// Setup keyboard actions
 $(function() {
     updateClickBindings();
 	$(document).keydown(function(event){

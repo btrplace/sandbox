@@ -75,9 +75,11 @@ function VirtualMachine(id, cpu, mem) {
 			config.getHoster(this.id).unhost(this);
 		}
 
-		console.log("Splicing "+this.id+" whose config.vms index is : "+config.vms.indexOf(this));
+		//if (LOG) console.log("Splicing "+this.id+" whose config.vms index is : "+config.vms.indexOf(this));
 
 		config.vms.splice(config.vms.indexOf(this), 1);
 	}
+
+	// TODO : add changeResourcesRelatively(name, relative)
 
 }
