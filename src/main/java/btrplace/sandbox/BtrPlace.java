@@ -248,12 +248,17 @@ public class BtrPlace {
             } catch (JSONConverterException e) {
 				System.err.println("[ERROR] Could not convert Plan to JSON.");
                 e.printStackTrace();
+				return Response.ok(response).build();
             }
         } catch (SolverException ex) {
 			System.err.println("[ERROR] Could not find a solution.");
 			ex.printStackTrace();
 			return Response.ok(response).build();
-        }
-		return Response.serverError().build();
+        } catch (Exception ex){
+			System.err.println("[ERROR] Unknown error.");
+			ex.printStackTrace();
+			return Response.ok(response).build();
+		}
+		//return Response.serverError().build();
     }
 }
