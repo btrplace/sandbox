@@ -1,6 +1,6 @@
 /*
-Javascript to generate and navigate in a time-line diagram from a given scenario
-@author Tom Guillermin
+ * Javascript to generate and navigate in a time-line diagram from a given scenario
+ * @author Tom Guillermin
 */
 
 var TIME_UNIT_SIZE = 100 ;
@@ -254,7 +254,7 @@ function diagramPlayLoop(direction, duration, callback){
 	});
 
 	if( !canPlay ){
-		if (LOG) console.error("[Player] Unreachable step. Stopping...");
+		if (LOG) console.log("[Player] Unreachable step. Stopping...");
 		if( callback ){
     			callback();
     	}
