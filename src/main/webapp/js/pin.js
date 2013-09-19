@@ -34,6 +34,7 @@ function init() {
         // Create configuration and fill the editor
 		randomConfiguration();
 		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+
 		if( paper )
 			paper.clear();
 

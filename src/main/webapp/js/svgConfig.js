@@ -24,11 +24,14 @@ var config = new Configuration(),
 	initialConfig ;
 
 function drawConfiguration(id) {
+	var verbose = true;
+	if (verbose) console.log("[DIAGRAM] Drawing current configuration ===================");
+
 	if( paper != undefined ){
 		paper.clear();
+		if (verbose) console.log("[DIAGRAM] Cleared paper.");
 	}
-	var verbose = false;
-	if (verbose) console.log("[CONFIG] Drawing current configuration");
+
     //Compute the SVG size
     var width = 0;
     var height = 0;
@@ -82,7 +85,7 @@ function drawConfiguration(id) {
 
 	updateClickBindings();
 
-    if (verbose) console.log("[LOG] FINISHED DRAWING");
+    if (verbose) console.log("[DIAGRAM] Finished drawing =====================");
 }
 
 /*

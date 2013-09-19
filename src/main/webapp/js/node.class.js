@@ -19,6 +19,10 @@ function Node(name, cpu, mem) {
     this.draw = function (canvas, x, y) {
 	    this.posX = x;
 	    this.posY = y;
+
+	    if( this.boxStroke != undefined ) this.boxStroke.remove();
+	    if( this.boxFill != undefined ) this.boxFill.remove();
+
         this.boxStroke = canvas.set();
         this.boxFill = canvas.set();
 	    this.canvas = canvas;

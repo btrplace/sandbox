@@ -135,7 +135,7 @@ function actionHandler(action, direction, duration, callback){
 			from = action.to;
 			to = action.from;
 		}
-		if (LOG) console.log("Action = ", action, "From : ", from, " to : ",to);
+
 		animationQueue.push(function(){ migrate(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+from), config.getNode("N"+to), duration, callback) });
 	};
 }
@@ -210,7 +210,7 @@ function migrate(vm, src, dst, duration, f) {
 	if (LOG) console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
 	var a = 0;
     //A light gray VM is posted on the destination
-    var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
+    var ghostDst = new VirtualMachine(vm.id+"_G", vm.cpu, vm.mem);
     ghostDst.bgColor = "#eee";
     ghostDst.strokeColor = "#ddd";
     // remove the moving light gray and the source dark gray
@@ -218,7 +218,7 @@ function migrate(vm, src, dst, duration, f) {
     dst.refresh();
 
     //a light gray VM will move from the source to the destination
-    var movingVM = new VirtualMachine(vm.id, vm.cpu, vm.mem);
+    var movingVM = new VirtualMachine(vm.id+"_M", vm.cpu, vm.mem);
     movingVM.bgColor = "#eee";
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
@@ -231,6 +231,8 @@ function migrate(vm, src, dst, duration, f) {
 
             // the dst light gray VM into dark gray
             ghostDst.box.remove();
+            movingVM.box.remove();
+
             dst.vms.length--;    //remove ghostDst
             vm.posX = ghostDst.posX;
             vm.posY = ghostDst.posY;

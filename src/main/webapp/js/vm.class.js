@@ -10,7 +10,9 @@ function VirtualMachine(id, cpu, mem) {
     this.bgColor = "#bbb";
     this.strokeColor = "black";
     this.draw = function(canvas, x, y) {
-
+		if( this.box != undefined ) {
+			this.box.remove();
+		}
         this.box = canvas.set();
 
 	    //Bounding box

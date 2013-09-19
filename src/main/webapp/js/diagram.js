@@ -123,7 +123,7 @@ function timeLineAnimation(start, end, duration, callback){
     	},
     	complete:function(){
     		updateTimeLinePosition(end);
-    		if (LOG) console.log("Complete !");
+    		if (LOG) console.log("[Time-line] Animation complete !");
     		// Call the callback if any
     		if(callback){
     			callback();
@@ -254,7 +254,7 @@ function diagramPlayLoop(direction, duration, callback){
 	});
 
 	if( !canPlay ){
-		if (LOG) console.log("[Player] Unreachable step. Stopping...");
+		if (LOG) console.error("[Player] Unreachable step. Stopping...");
 		if( callback ){
     			callback();
     	}
@@ -262,7 +262,7 @@ function diagramPlayLoop(direction, duration, callback){
    		return false;
 	}
 	else {
-		if (LOG) console.log("Can play !");
+		if (LOG) console.log("[Player] Can play !");
 	}
 }
 
@@ -301,8 +301,10 @@ function diagramStepMove(direction, duration, callback){
 	}
 
 	// Update the SVG with the new configuration
-	if (LOG) console.log("[LOG] Going to redraw after animations preparation");
-	drawConfiguration('canvas');
+
+	// DEBUG1
+	//if (LOG) console.log("[LOG] Going to redraw after animations preparation");
+	//drawConfiguration('canvas');
 
 	// Play all the animations
 	for(var i in animationQueue){
@@ -317,8 +319,9 @@ function diagramStepMove(direction, duration, callback){
 		isPlaying = false;
 		diagramNextTarget += direction;
 
-		if (LOG) console.log("[LOG] Going to redraw after all animations completed");
-		drawConfiguration('canvas');
+		// DEBUG1
+		//if (LOG) console.log("[LOG] Going to redraw after all animations completed");
+		//drawConfiguration('canvas');
 
 		if( callback ){
 			callback();
@@ -349,7 +352,8 @@ function diagramRewind(){
 		if (LOG) console.log("BACK LOOP !");
 		var canPlay = diagramStepMove(-1, 100);
 		setTimeout(function(){
-			drawConfiguration('canvas');
+			// DEBUG1
+			//drawConfiguration('canvas');
 			if( canPlay ){
 				backLoop();
 			}
