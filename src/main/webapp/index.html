@@ -131,28 +131,6 @@
 						<br/>
 					</div>
 					<div class="state" id="state1">
-						<!--
-						<p>
-							Some constraints are not satisfied but
-							Btrplace found doing the following actions makes the placement viable. Use
-							the player to navigate through the reconfiguration.
-						</p>
-
-						<div id="scenario">
-							<div id="plan"></div>
-							<div id="player">
-								<div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span></div>
-								<div class="player_button" id="prev_button" onclick="prev()"><span class="tt">Previous</span></div>
-								<div class="player_button" id="play_button" onclick="playOrPause();"><span class="tt">Play</span></div>
-								<div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span></div>
-								<div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span></div>
-								<div class="player_button" id="lock_button" onclick="pinSandbox()"><span class="tt">Lock</span></div>
-								<div class="player_button" id="unlock_button" onclick="unpinSandbox()"><span class="tt">Unlock</span></div>
-								<br>
-							</div>
-
-						</div>
-						-->
 					</div>
 					<div class="state" id="state2">
 						<p>
@@ -160,7 +138,7 @@
 							Declare other constraints in the script.
 						</p>
 
-						<div class="check_button" onclick="check('constraints');"></div>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
 					</div>
 					<div class="state" id="state3">
 						<p>
@@ -169,11 +147,11 @@
 							constraints or refresh the page for a new configuration.
 						</p>
 
-						<div class="check_button" onclick="check('constraints');"></div>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
 					</div>
 					<div class="state" id="state4">
 						<p>Errors in the script prevent its interpretation. Fix them then retry to inspect the configuration.</p>
-						<div class="check_button" onclick="check('constraints');"></div>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
 					</div>
 				</div>
 			</div>

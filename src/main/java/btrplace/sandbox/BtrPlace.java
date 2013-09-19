@@ -252,6 +252,7 @@ public class BtrPlace {
         } catch (SolverException ex) {
 			System.err.println("[ERROR] Could not find a solution.");
 			ex.printStackTrace();
+			return Response.ok(response).build();
         }
 		return Response.serverError().build();
     }

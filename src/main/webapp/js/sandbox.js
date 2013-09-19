@@ -136,6 +136,7 @@ function check(id) {
 
 	}
 	if (LOG) console.log("=== Configuration Data sent to the server : ", cfg);
+	if (LOG) console.log("=== Script sent to the server : ", script);
 	cfg = JSON.stringify(cfg);
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
@@ -180,10 +181,15 @@ function onServerResponse(json){
     	createDiagram(json.actions);
 	}
 	// There are errors in the user constraints script.
-	if( json.errors ){
+	if (json.errors) {
 		if (LOG) console.log("There are some errors in the user input.");
 		// Move to the error-in-script UI state.
 		state(4);
+	}
+
+	if (json.errors == null && json.solution == null) {
+		if (LOG) console.log("[SOLVER] There is no solution to the problem.");
+		state(3);
 	}
 }
 
@@ -341,7 +347,7 @@ function onKeyEvent(keyCode){
 				minSize = 3;
 			}
 			if (selectedElement instanceof VirtualMachine) {
-				minSize = 1;
+				minSize = 2;
 			}
 			if (minSize != -1 && selectedElement.mem > minSize) {
 				selectedElement.mem--;
