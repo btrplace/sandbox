@@ -27,9 +27,11 @@ import btrplace.model.*;
 import btrplace.model.constraint.SatConstraint;
 import btrplace.model.view.ShareableResource;
 import btrplace.plan.ReconfigurationPlan;
+import btrplace.plan.event.MigrateVM;
 import btrplace.solver.SolverException;
 import btrplace.solver.choco.ChocoReconfigurationAlgorithm;
 import btrplace.solver.choco.DefaultChocoReconfigurationAlgorithm;
+import btrplace.solver.choco.durationEvaluator.LinearToAResourceActionDuration;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
@@ -222,6 +224,8 @@ public class BtrPlace {
 		//System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
 
 		model.detach(namingService);
+
+		ra.getDurationEvaluators().register(MigrateVM.class, new LinearToAResourceActionDuration("mem", 0.5));
 
         try {
             ReconfigurationPlan plan = ra.solve(model, constraints);

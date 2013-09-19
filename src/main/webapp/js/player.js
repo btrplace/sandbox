@@ -6,7 +6,7 @@ var animationQueue = [];
 var playerNextTarget  = 1, //
 	isPlaying = false; // Indicates if the player is playing or not.
 	doPause = false,  // If set to true, the player will pause before next step
-	playSpeed = 700, // Duration of one step in regular Play mode or step by step mode
+	playSpeed = 1000, // Duration of one step in regular Play mode or step by step mode
 	rewindSpeed = 100 ; // Duration of the rewind
 
 /**
@@ -72,8 +72,8 @@ $(document).ready(function(){
 	setPlayerMode("pause");
 });
 
-function actionHandler(action, direction, duration, callback){
-	duration *= 0.8 ;
+function actionHandler(action, direction, timeUnit, callback){
+	var duration = (action.end - action.start) * timeUnit * 0.9;
 	var name = action.id;
 	if( name == "bootNode" ){
 		if(direction == 1 ){
