@@ -57,7 +57,13 @@ public class BtrPlace {
 
     }
 
-
+	/**
+	 * Prepends an initial script with more data to get it valid as a BtrpSL script.
+	 * This allows the client-side script to be more lightweight and easier to read.
+	 * @param model The model concerned about the script.
+	 * @param constraints The client constraints script.
+	 * @return The completed and valid script.
+	 */
     private String complete(Model model, String constraints) {
 		StringBuilder n = new StringBuilder();
 
@@ -78,6 +84,13 @@ public class BtrPlace {
     }
 
 
+	/**
+	 * Look for a solution for a given configuration and a given constraints script.
+	 * Issue a Response to client.
+	 * @param cfg The client's configuration (Nodes,VMs)
+	 * @param scriptInput Constraints script input from client.
+	 * @return The server computed solution.
+	 */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@FormParam("cfg") String cfg, @FormParam("script") String scriptInput) {
@@ -174,7 +187,6 @@ public class BtrPlace {
 		// Number of lines added by the 'complete' method
 		int addedLinesNum = scriptInput.split("\n").length-initialLength;
 
-		//System.out.println("=========== Resulting script : \n"+scriptInput+"\n===================");
 		ScriptBuilder scriptBuilder = new ScriptBuilder(model);
 		Script script ;
 		try {
@@ -237,18 +249,9 @@ public class BtrPlace {
 				System.err.println("[ERROR] Could not convert Plan to JSON.");
                 e.printStackTrace();
             }
-
-			/*
-            System.out.println("=== Time-based plan: ====");
-            new TimeBasedPlanApplier().apply(plan);
-            System.out.println(new TimeBasedPlanApplier().toString(plan));
-            System.out.println("\n ====== Dependency based plan: ===== ");
-            System.out.println(new DependencyBasedPlanApplier().toString(plan));
-            */
-
         } catch (SolverException ex) {
+			System.err.println("[ERROR] Could not find a solution.");
 			ex.printStackTrace();
-            System.err.println(ex.getMessage());
         }
 		return Response.serverError().build();
     }
