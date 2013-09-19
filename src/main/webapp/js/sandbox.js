@@ -36,6 +36,7 @@ function changeView(viewName, instant){
 		// Back to initial state
 		state(0);
 		canEdit = true ;
+
 		$("#solution > div").hide(duration,function(){
             $("#input_zone_wrapper").show(duration);
             resetDiagram();
@@ -198,7 +199,9 @@ function registerSelectedElement(element){
  */
 function updateClickBindings(){
 	$(".nodeZone, .vmZone").unbind('click').on('click',function(event){
+		console.log("Click !");
 		if (!canEdit) return false;
+
 		var element ;
 		if (this.className.baseVal == "nodeZone") {
 			var nodeID = this.attributes["sandboxNodeID"].value;
@@ -217,6 +220,7 @@ function updateClickBindings(){
 		else {
 			event.stopPropagation();
 		}
+		console.log("Click on : ",element);
         setSelectedElement(element);
 	});
 }

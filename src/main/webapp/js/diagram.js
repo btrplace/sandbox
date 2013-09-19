@@ -29,7 +29,6 @@ function createGraduations(duration){
  * Loads the action from the JSON response from server
  */
 function loadActions(actions){
-	//if (LOG) console.log("Converting VMs IDs to match client IDs.");
 	if (LOG) console.log("Loading actions : ", actions);
 
 	for(var i in actions){
@@ -56,6 +55,8 @@ function actionToString(action){
 			return "shutdown(N"+action.node+")";
 		case "allocate":
 			return "allocate(VM"+action.vm+","+action.rc+"="+action.amount+") on N"+action.on;
+		case "root":
+			return "root(VM"+action.vm+")";
 	}
 }
 
@@ -179,66 +180,47 @@ function resetDiagram(){
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
 
-	//diagramNextTarget = 1 ;
+	//playerNextTarget = 1 ;
 	//updateTimeLinePosition(0);
-	doPause = isPlaying ;
 
+	// The player is playing, program a pause.
+	doPause = isPlaying ;
+	// Rewind when stopped
 	pauseCallback = function(){
-    	diagramRewind();
+    	playerRewind();
     };
+    // The player is not playing. Start the rewind immediately.
     if( !doPause ){
-    	diagramRewind();
+    	playerRewind();
     }
 
 	//console.log("[LOG] Going to redraw after diagram reset");
     //drawConfiguration('canvas');
 }
 
-var diagramNextTarget = 1,
-	isPlaying = false;
-	doPause = false;
-
-function setPlayerMode(mode){
-	if( mode == "play" ){
-		$("#playButton").hide();
-		$("#pauseButton").show();
-	}
-	if( mode == "pause" ){
-		isPlaying = false;
-		$("#pauseButton").hide();
-    	$("#playButton").show();
-	}
-}
-
-$(document).ready(function(){
-	setPlayerMode("pause");
-});
-
-
-var playSpeed = 1000 ;
-function diagramPlay(){
+function playerPlay(){
 	if( isPlaying ){
 		return ;
 	}
 
 	// If the user clicks Play after the animation has finished,
 	// the animation goes back to the start
-	if( diagramNextTarget > scenarioDuration ){
-    		diagramRewind();
+	if( playerNextTarget > scenarioDuration ){
+    		playerRewind();
     		return ;
     }
     // Set the player mode
 	setPlayerMode("play");
 	// Start the scenario loop
-	diagramPlayLoop(1, playSpeed);
+	playLoop(1, playSpeed);
 }
 
 var animationBaseDuration = 1000;
 
-function diagramPlayLoop(direction, duration, callback){
+function playLoop(direction, duration, callback){
 	doPause = false;
 	// Play the animation & set the next step as a callback to the animation
-	var canPlay = diagramStepMove(direction, duration, function(){
+	var canPlay = playerStepMove(direction, duration, function(){
 		if( doPause ){
 			setPlayerMode("pause");
 			$("#pauseButton").removeClass("disabled");
@@ -250,7 +232,7 @@ function diagramPlayLoop(direction, duration, callback){
 		}
 
 		// play it
-		diagramPlayLoop(direction, duration);
+		playLoop(direction, duration, callback);
 	});
 
 	if( !canPlay ){
@@ -267,7 +249,7 @@ function diagramPlayLoop(direction, duration, callback){
 }
 
 
-function diagramStepMove(direction, duration, callback){
+function playerStepMove(direction, duration, callback){
 	if( isPlaying ){
 		if (LOG) console.log("Is already playing !");
 		return false ;
@@ -275,13 +257,13 @@ function diagramStepMove(direction, duration, callback){
 
 	var start, end, step;
 	if( direction == 1 ){
-		start = diagramNextTarget-1;
-		end = diagramNextTarget;
+		start = playerNextTarget -1;
+		end = playerNextTarget ;
 		step = start;
 	}
 	else if( direction == -1 ){
-		start = diagramNextTarget-1;
-		end = diagramNextTarget-2;
+		start = playerNextTarget -1;
+		end = playerNextTarget -2;
 		step = end;
 	}
 
@@ -317,7 +299,7 @@ function diagramStepMove(direction, duration, callback){
 	// Play the time-line animation
 	timeLineAnimation(start,end, duration, function(){
 		isPlaying = false;
-		diagramNextTarget += direction;
+		playerNextTarget += direction;
 
 		// DEBUG1
 		//if (LOG) console.log("[LOG] Going to redraw after all animations completed");
@@ -331,57 +313,12 @@ function diagramStepMove(direction, duration, callback){
 
 }
 
-var pauseCallback ;
-function diagramPause(callback){
-	$("#pauseButton").addClass("disabled");
-	doPause = true;
-	pauseCallback = callback;
-}
 
-var rewindSpeed = 100 ;
-function diagramRewind(){
-	if( isPlaying ){
-		if (LOG) console.log("Is alreay playing !!");
-		return ;
-	}
-
-	diagramPlayLoop(-1,rewindSpeed);
-    return ;
-
-	var backLoop = function(){
-		if (LOG) console.log("BACK LOOP !");
-		var canPlay = diagramStepMove(-1, 100);
-		setTimeout(function(){
-			// DEBUG1
-			//drawConfiguration('canvas');
-			if( canPlay ){
-				backLoop();
-			}
-		}, 100);
-	};
-
-	backLoop();
-	/*
-	// Undo all the actions
-	var canPlay = diagramStepMove(-1, 0);
-	while (canPlay) {
-		canPlay = diagramStepMove(-1, 0);
-	}
-	return ;
-	diagramNextTarget =  1;
-	updateTimeLinePosition(0);
-	reset();
-	drawConfiguration('canvas');*/
-}
-
-function diagramNextStep(){
-	diagramStepMove(1, animationBaseDuration);
-}
-
-function diagramPreviousStep(){
-	diagramStepMove(-1, animationBaseDuration);
-}
-
+/**
+ * Returns a list of the actions starting at the provided time parameter.
+ * @param time The time at which the returned actions starts.
+ * @return The list of the action starting at this time.
+ */
 function getActionsStartingAt(time){
 	var result = [];
 	var actions = currentActions;

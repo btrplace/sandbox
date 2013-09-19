@@ -1,90 +1,76 @@
 /*
- * Everything related to the animations.
+ * Everything related to the player and the animations.
  */
 
-/*
-var playing = false;
-
-//Go very fast
-var fast = false;
-
-//Play the reconfiguration or pause it
-
-function playMode() {
-    playing = true;
-    document.getElementById("play_button").style.backgroundPositionX="-40px";
-}
-
-function pauseMode() {
-    playing = false;
-    document.getElementById("play_button").style.backgroundPositionX="-60px";
-    fast = false;
-}
-function playOrPause() {
-    if (!playing && !pending && animationStep < scenario.actions.length) { //run & reveals the pause button if not at the end
-        playMode();
-        doAction(autoCommit);
-    }
-    else { //pause & reveals the play button
-        pauseMode();
-    }
-}
-
-//Move back to the source configuration
-function reset() {
-    if (pending || animationStep == 0) {return false;}
-    playMode();
-    if (animationStep != 0) {
-        fast = true;
-        undoAction(autoRollback);
-    }
-
-}
-
-
-//Go directly to the destination configuration
-function directEnd() {
-    if (pending) {return false;}
-    if (animationStep < scenario.actions.length) {
-        playMode();
-        fast = true;
-        doAction(autoCommit);
-    }
-}
-
-
-//Go to the previous move in a reconfiguration
-function prev() {
-    if (pending) {return false;}
-    if (animationStep != 0) {
-        pauseMode();
-        undoAction(rollback);
-    }
-    return true;
-}
-
-//Go to the next move of the reconfiguration
-function next() {
-    if (pending) {return false;}
-    if (animationStep < scenario.actions.length) {
-        pauseMode();
-        doAction(commit);
-    }
-    return true;
-}
-
-//Execute the current action
-function doAction(f) {
-    //console.log("do '" + scenario.actions[animationStep] + "'");
-    begin(animationStep);
-    var arr = scenario.actions[animationStep].split(spaceSplitter);
-    if (arr[1] == "M") {migrate(animationStep, config.getVirtualMachine(arr[2]),config.getNode(arr[3]),config.getNode(arr[4]), f);}
-    else if (arr[1] == "H") {halt(animationStep, config.getNode(arr[2]), f);}
-    else if (arr[1] == "S") {boot(animationStep, config.getNode(arr[2]), f);}
-}
-*/
-
 var animationQueue = [];
+var playerNextTarget  = 1, //
+	isPlaying = false; // Indicates if the player is playing or not.
+	doPause = false,  // If set to true, the player will pause before next step
+	playSpeed = 700, // Duration of one step in regular Play mode or step by step mode
+	rewindSpeed = 100 ; // Duration of the rewind
+
+/**
+ * Changes the Player mode to the specified mode.
+ * Modes are 'play','pause'
+ * @param mode
+ */
+function setPlayerMode(mode){
+	if( mode == "play" ){
+		$("#playButton").hide();
+		$("#pauseButton").show();
+	}
+	if( mode == "pause" ){
+		isPlaying = false;
+		$("#pauseButton").hide();
+    	$("#playButton").show();
+	}
+}
+
+function playerNextStep(){
+	playerStepMove(1, animationBaseDuration);
+}
+
+function playerPreviousStep(){
+	playerStepMove(-1, animationBaseDuration);
+}
+
+var pauseCallback ;
+function playerPause(callback){
+	$("#pauseButton").addClass("disabled");
+	doPause = true;
+	pauseCallback = callback;
+}
+
+function playerRewind(){
+	if( isPlaying ){
+		if (LOG) console.error("Can't rewind ! It's alreay playing !!");
+		return ;
+	}
+
+	playLoop(-1,rewindSpeed, function(){
+		console.error("Updating click bindings !");
+		// In the case some of the Node have been .refresh()'d.
+    	updateClickBindings();
+    });
+    return ;
+    /*
+	var backLoop = function(){
+		if (LOG) console.log("BACK LOOP !");
+		var canPlay = playerStepMove(-1, 100);
+		setTimeout(function(){
+			if( canPlay ){
+				backLoop();
+			}
+		}, 100);
+	};
+
+	backLoop();
+	*/
+}
+
+$(document).ready(function(){
+	setPlayerMode("pause");
+});
 
 function actionHandler(action, direction, duration, callback){
 	duration *= 0.8 ;
