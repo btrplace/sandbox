@@ -149,12 +149,6 @@
     </distributionManagement>
 
     <repositories>
-        <!-- local repository for dependencies not available on central repositories -->
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/repository</url>
-        </repository>
         <repository>
             <id>btrp-releases</id>
             <url>http://btrp.inria.fr/repos/releases</url>
