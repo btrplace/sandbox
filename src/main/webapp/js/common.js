@@ -189,3 +189,16 @@ function moveCaretToStart(el) {
         range.select();
     }
 }
+
+function getConsecutiveObject(arr, obj, direction){
+	var objIndex = arr.indexOf(obj);
+	objIndex += direction;
+	// Backward safeguard
+	if (objIndex < 0) {
+		objIndex = arr.length + objIndex;
+	}
+	// Forward safeguard
+	objIndex %= arr.length;
+
+	return arr[objIndex];
+}
