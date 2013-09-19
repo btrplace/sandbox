@@ -47,6 +47,7 @@ function onServerResponse(json){
 }
 
 $(window).load(function(){
+	return ;
 	var $button = $('#shareButton');
 
 	var initialTop = $button.css("top"),
