@@ -50,13 +50,6 @@ function onServerResponse(json){
 	}
 }
 
-$(document).ready(function(){
-	changeView("input", true);
-	$(document).click(function(){
-		setSelectedElement(null);
-	});
-});
-
 var selectedElement = null ;
 
 function registerSelectedElement(element){
@@ -312,6 +305,22 @@ function shiftSelectedElement(direction){
 	setSelectedElement(newSelectedElement);
 }
 
+/**
+ * Generates a list of the supported constraints with links to the official documentation
+ */
+function getCatalogContent() {
+    var buf = "Supported constraints: ";
+    var cstrs = ["spread", "gather", "root", "lonely", "split", "root", "among", "quarantine", "ban", "fence","online","offline"];
+    for (var i in cstrs) {
+    	var cstr = ucFirst(cstrs[i]);
+        buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + cstr + "</a>";
+        if ( i < cstrs.length - 1) {
+            buf += ", ";
+        }
+    }
+    return buf ;
+}
+
 // Setup keyboard actions
 $(function() {
     updateClickBindings();
@@ -320,5 +329,13 @@ $(function() {
 		if( ! editor.isFocused() ){
 			onKeyEvent(event.which);
 		}
+	});
+});
+
+$(document).ready(function(){
+	changeView("input", true);
+	$("#catalog").html(getCatalogContent());
+	$(document).click(function(){
+		setSelectedElement(null);
 	});
 });

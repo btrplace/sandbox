@@ -43,7 +43,7 @@ function init() {
     }
     editor.clearSelection();
     //configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
-    insertCatalogContent();
+    //insertCatalogContent();
 }
 
 function pinSandbox() {
