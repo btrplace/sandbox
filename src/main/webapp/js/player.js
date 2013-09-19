@@ -1,4 +1,8 @@
-//
+/*
+ * Everything related to the animations.
+ */
+
+
 var playing = false;
 
 //Go very fast

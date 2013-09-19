@@ -6,52 +6,179 @@
 var LOG = true ;
 var currentView = "";
 
+// changeView transition duration
 var changeViewDuration = 500;
+
+/*
+ * Changes the view of the app with a smooth transition.
+ * Available views are 'input','solution'
+ * @param viewName String The name of the view to change to.
+ * @param instant Optional (Default:false). If set to true, the change will be done instantly without transition.
+ */
 function changeView(viewName, instant){
+	// Default value for instant =
 	if( typeof(instant) == "undefined" ){
 		var instant = false;
 	}
+
 	if( viewName == currentView ){
-		return ;
+		return ; // Nothing to do !
 	}
+
 	if( LOG ) console.log("Switching to View: "+viewName);
+
 	var duration = instant ? 0 : changeViewDuration ;
+
 	if( viewName == "input" ){
-		step(0);
-		$("#solution > div").hide(duration);
-        setTimeout(function(){
+		// Back to initial state
+		state(0);
+		$("#solution > div").hide(duration,function(){
             $("#input_zone_wrapper").show(duration);
             resetDiagram();
-        }, duration);
+        });
         $("#configurationHelpText").show(changeViewDuration);
 	}
 	else if( viewName == "solution"){
+		state(1);
 		if( LOG ) console.log("Fading out inputWrapper");
+		$("#solution > div").show(duration, function(){
+        				// Scroll to content
+        				$('html, body').animate({
+        						scrollTop: $("#content").offset().top
+        					}, 1000);
+        			});
 		$("#input_zone_wrapper").hide(duration, function(){
-			$("#solution > div").show(duration, function(){
-				// Scroll to content
-				$('html, body').animate({
-						scrollTop: $("#content").offset().top
-					}, 1000);
-			});
+
 		});
 	}
 }
 
-var conversionTable ;
+/*
+ * Change the active state of the usage flow.
+ * Here are the available steps :
+ * 0 : initial step, the user is asked to customize the configuration and the script
+ * 1 : the user submitted his configuration and the server found a reconfiguration plan to satisfy all the constraints.
+ * 2 : all the constraints are already satisfied.
+ * 3 : there is no viable solution for this problem
+ * 4 : User submitted but there are errors in the user script
+ */
+function state(id) {
+	if (LOG) console.log("[STEP System] Step "+id);
+    // Change the message displayed in the box
+    $(".state").hide();
+    $("#state"+id).show();
+
+    var o = parseUri(location.href);
+    // Step 0 : initialization
+    if (id == 0) {
+        canSubmit = true ;
+        $("#configurationHelpText").show(changeViewDuration);
+    }
+    // Step 1 : after user submitted input and solution found.
+    else if (id == 1) {
+        showSyntaxErrors(); // Update syntax errors (to remove them)
+        /*//Don't show the pin button when the sandbox is already pinned
+        showScenario();
+        animationStep = 0;
+        colorLines(0);*/
+        $("#configurationHelpText").hide(changeViewDuration);
+    // Step 2 and 3 : nothing to do : all constraints are already satisfied or there's no viable solution.
+    } else if (id == 2 || id == 3) {
+        showSyntaxErrors(); // Update syntax errors (to remove them)
+        canSubmit = true ;
+	// Step 4 : there are errors in the script
+    } else if (id == 4) {
+        showSyntaxErrors();
+        canSubmit = true ;
+    }
+}
+
+/*
+ * Sends the current configuration to the server to get a solution.
+ * Receives the solution or the errors in the constraints script if any.
+ */
+function check(id) {
+	if (!canSubmit) {
+		return false;
+	}
+    var script = editor.getValue();
+    //var cfg = config.btrpToJSON();
+
+    var http = createXhrObject();
+
+	var cfg = [];
+	for(var i in config.nodes){
+		var node = config.nodes[i];
+		// Create a list of the VMs' IDs
+		var vms = [];
+		for(var j in node.vms){
+			var vm = node.vms[j];
+			vms.push({
+				"id":vm.id,
+				"cpu":vm.cpu,
+				"mem":vm.mem
+			});
+
+		}
+		// Create a Node JSON object to be parsed by the server.
+		cfg.push({
+			"id":node.id,
+			"online":node.online,
+			"cpu":node.cpu,
+			"mem":node.mem,
+			"vms":vms
+		});
+
+	}
+	if (LOG) console.log("=== Configuration Data sent to the server : ", cfg);
+	cfg = JSON.stringify(cfg);
+
+    postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
+    function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	        scenario = JSON.parse(this.responseText);
+	        onServerResponse(scenario);
+	        // Return here for testing purposes
+	        return ;
+	        if (LOG) console.log("Scenario : ", scenario);
+	        if (scenario.errors.length == 0) {
+	            if (scenario.actions.length == 0) { //Every constraints are satisfied
+	                state(2);
+	            } else { //Some constraints are not satisfied
+	                state(1);
+	            }
+	        } else if (scenario.errors[0].msg == "no solution") {
+	            state(3);
+	        } else if (scenario.errors.length > 0) {
+	            state(4);
+	        }
+        }
+    });
+    canSubmit = false;
+}
+
+/**
+ * This function is called after the server answer the request.
+ * It loads the JSON data in the app.
+ * @param json JSON data from the server to be loaded.
+ */
 function onServerResponse(json){
 	if (LOG) console.log("Received JSON : ",json);
+	// If there is a solution : the data contains action
 	if( json.actions ){
 		editor.getSession().clearAnnotations();
-		step(1);
+		// Move to solution state
+		state(1);
 		//showSyntaxErrors();
 		changeView("solution");
     	$("#userInput").html(editor.getValue().replace("\n","<br />"));
     	createDiagram(json.actions);
 	}
+	// There are errors in the user constraints script.
 	if( json.errors ){
 		if (LOG) console.log("There are some errors in the user input.");
-		step(4);
+		// Move to the error-in-script UI state.
+		state(4);
 	}
 }
 

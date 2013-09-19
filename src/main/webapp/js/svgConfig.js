@@ -89,107 +89,6 @@ function drawConfiguration(id) {
 }
 
 /*
- * Sends the current configuration to the server to get a solution.
- * Receives the solution or the errors in the constraints script if any.
- */
-function check(id) {
-    var script = editor.getValue();
-    //var cfg = config.btrpToJSON();
-
-    var http = createXhrObject();
-
-	var cfg = [];
-	for(var i in config.nodes){
-		var node = config.nodes[i];
-		// Create a list of the VMs' IDs
-		var vms = [];
-		for(var j in node.vms){
-			var vm = node.vms[j];
-			vms.push({
-				"id":vm.id,
-				"cpu":vm.cpu,
-				"mem":vm.mem
-			});
-
-		}
-		// Create a Node JSON object to be parsed by the server.
-		cfg.push({
-			"id":node.id,
-			"online":node.online,
-			"cpu":node.cpu,
-			"mem":node.mem,
-			"vms":vms
-		});
-
-	}
-	if (LOG) console.log("=== Configuration Data sent to the server : ", cfg);
-	cfg = JSON.stringify(cfg);
-
-    postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
-    function() {
-	    if (this.readyState == 4 && this.status == 200) {
-	        scenario = JSON.parse(this.responseText);
-	        onServerResponse(scenario);
-	        // Return here for testing purposes
-	        return ;
-	        if (LOG) console.log("Scenario : ", scenario);
-	        if (scenario.errors.length == 0) {
-	            if (scenario.actions.length == 0) { //Every constraints are satisfied
-	                step(2);
-	            } else { //Some constraints are not satisfied
-	                step(1);
-	            }
-	        } else if (scenario.errors[0].msg == "no solution") {
-	            step(3);
-	        } else if (scenario.errors.length > 0) {
-	            step(4);
-	        }
-        }
-    });
-    checkable(false);
-}
-
-/*
- * Change the step of the usage flow.
- */
-function step(id) {
-	if (LOG) console.log("[STEP System] Step "+id);
-    // Change the message displayed in the box
-    $(".state").hide();
-    $("#state"+id).show();
-    /*for (var i = 0; i < 5; i++) {
-        if (id != i) {document.getElementById("state" + i).style.display="none";}
-        else {document.getElementById("state" + i).style.display="block";}
-    } */
-
-    var o = parseUri(location.href);
-    // Step 0 : initialization
-    if (id == 0) {
-        checkable(true);
-        animationStep = 0;
-        scenario = undefined;
-        pending = false;
-        $("#configurationHelpText").show(changeViewDuration);
-    }
-    // Step 1 : after user submitted input.
-    else if (id == 1) {
-        showSyntaxErrors();
-        /*//Don't show the pin button when the sandbox is already pinned
-        showScenario();
-        animationStep = 0;
-        colorLines(0);*/
-        $("#configurationHelpText").hide(changeViewDuration);
-    } else if (id == 2 || id == 3) {
-        showSyntaxErrors();
-        checkable(true);
-        colorLines(0);
-    } else if (id == 4) {
-        showSyntaxErrors();
-        checkable(true);
-    }
-}
-
-/*
  * Color the lines of the constrains input.
  * If the constrains is matched, the line gets green. Red otherwise.
  */
@@ -218,16 +117,7 @@ function colorLines(nb) {
     cstrsEditor.setAnnotations(annotations);
 }
 
-
-function checkable(b) {
-    var e = document.getElementsByClassName("check_button");
-    for (var i in e) {
-        e[i].disabled = b;
-    }
-}
-
-
-
+var canSubmit = true ;
 
 function output(id) {
     var out = document.getElementById("output");
@@ -311,23 +201,7 @@ function showSyntaxErrors() {
                     text: err.message
         });
 
-        /*var lineNo = err.lineNo - 1;
-        if (!msgs[lineNo]) {
-            msgs[lineNo] = err.msg;
-        } else {
-            msgs[lineNo] += "\n" + err.msg;
-        }*/
     }
-    /*
-    for (var j in msgs) {
-        var msg = msgs[j];
-        annotations.push({
-            row: j,
-            column: 0,
-            type: "error",
-            text: msg
-        });
-    }      */
     if (annotations.length > 0) {
             var node = $("#cstrs-mode > a").get()[0];
             node.style.fontWeight="bold";
@@ -358,4 +232,3 @@ function saveSVG() {
         a.href = (window.URL || webkitURL).createObjectURL(blob);
         a.click();
     }
-

@@ -17,7 +17,7 @@ function init() {
     	var cfg = decodeURIComponent(get.cfg);
         if (LOG) console.log("Re-using sandbox from configuration : " + cfg);
         loadExperiment(cfg);
-        step(0);
+        state(0);
         //document.getElementById('lock_button').style.display="none";
         //document.getElementById('unlock_button').style.display="inline";
         //editor.setReadOnly(true);
@@ -39,7 +39,7 @@ function init() {
 			paper.clear();
 
 		drawConfiguration("canvas");
-        step(0);
+        state(0);
     }
     editor.clearSelection();
     //configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});

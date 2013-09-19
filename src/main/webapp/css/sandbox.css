@@ -443,6 +443,7 @@ code {
 	border-radius:2px;
 	font-family:Monaco, Menlo, 'Ubuntu Mono', 'Droid Sans Mono', Consolas, monospace;
 	text-align:left;
+	font-size:14px
 }
 
 #diagram * {
