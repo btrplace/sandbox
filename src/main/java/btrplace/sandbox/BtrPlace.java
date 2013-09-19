@@ -171,12 +171,10 @@ public class BtrPlace {
 
 		System.out.println("Model built successfully");
 
+		// Preparing the response
 		JSONObject response = new JSONObject();
 		response.put("errors",null);
 		response.put("solution",null);
-
-		// End of previous code
-        System.out.println("======= Sending mock response to client.");
 
 
 		// Fixing the script to match BtrpSL requirements
