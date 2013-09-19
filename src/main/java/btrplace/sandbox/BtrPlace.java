@@ -249,7 +249,7 @@ public class BtrPlace {
 			List<JSONObject> errors = new ArrayList<JSONObject>();
 
 			for(ErrorMessage error : errorsList){
-				System.out.println("Error at line "+error.lineNo());
+				//System.out.println("Error at line "+error.lineNo());
 				JSONObject e = new JSONObject();
 				e.put("row",error.lineNo() - addedLinesNum);
 				e.put("column",error.colNo());
@@ -262,7 +262,6 @@ public class BtrPlace {
 			return Response.ok(response).build();
 		}
 
-        //List<SatConstraint> constraints = gs.makeConstraints();
         List<SatConstraint> constraints = new ArrayList(script.getConstraints());
 
 
@@ -277,15 +276,12 @@ public class BtrPlace {
 
         ChocoReconfigurationAlgorithm ra = new DefaultChocoReconfigurationAlgorithm();
 
-		System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
+		//System.out.println("Going to solve problem with: " + model.getVMs().size() + " VMS, " + model.getNodes().size() + " nodes");
 
 		model.detach(namingService);
 
         try {
-			System.out.println("SNAPSHOT 4.1");
             ReconfigurationPlan plan = ra.solve(model, constraints);
-			System.out.println("SNAPSHOT 4.2");
-            System.out.println("=========== PLAN JSON ==========");
             ReconfigurationPlanConverter planConverter = new ReconfigurationPlanConverter();
             try {
                 JSONObject responseSolution = planConverter.toJSON(plan);
@@ -298,15 +294,13 @@ public class BtrPlace {
 						Element vm = (Element) model.getVMs().toArray()[btrplaceID];
 						int btrpSLID = Integer.parseInt(model.getAttributes().get(vm, "btrpsl.id").toString().substring(2)) ;
 						actionJSON.put("vm", btrpSLID);
-						System.out.println("Converted ID "+btrplaceID+" to "+btrpSLID);
 					}
 				}
 				response.put("actions",actionsJSON);
-                System.out.println(response.toString());
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
 				System.err.println("[ERROR] Could not convert Plan to JSON.");
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
 
             System.out.println("=== Time-based plan: ====");
@@ -318,189 +312,7 @@ public class BtrPlace {
         } catch (SolverException ex) {
 			ex.printStackTrace();
             System.err.println(ex.getMessage());
-            //return false;
         }
-
-        /*
-        System.out.println("CLIENT REQUEST ! Parsing : \n"+cfg);
-
-        ModelConverter modelConverter = new ModelConverter();
-        JSONObject json = new JSONObject();
-
-        try {
-            Model model = modelConverter.fromJSON(cfg);
-            System.out.println("Parsing done.");
-            System.out.println(model.toString());
-        } catch (IOException e) {
-            System.err.println("IO Exception");
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (JSONConverterException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        if( ! script.isEmpty() ){
-            String[] constraints = script.split("\n");
-        }
-        */
-
-       /* List<Integer> nonViables = new ArrayList<Integer>();
-        List<PlacementConstraint> cstrs = new ArrayList<PlacementConstraint>();
-        TimedReconfigurationPlan plan = null;
-        ErrorReporter errReporter = new JSonErrorReporter();
-        Configuration src;
-        try {
-            src = confReader.unSerialize(new BufferedReader(new StringReader(cfg)));
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return Response.status(400).build();
-        }
-
-        Map<PlacementConstraint, Integer> cstrToLine = new HashMap<PlacementConstraint, Integer>();
-
-        if (!script.isEmpty()) {
-
-            String[] constraints = script.split("\n");
-            VJobElementBuilder eb = new DefaultVJobElementBuilder(vtpls, ptpls);
-            BtrPlaceVJobBuilder vjobBuilder = new BtrPlaceVJobBuilder(eb, catalog);
-
-            VJob vjob = new DefaultVJob("sandbox");
-            vjobBuilder.getElementBuilder().useConfiguration(src);
-
-            for (int nb = 0; nb < constraints.length; nb++) {
-                String cstr = constraints[nb];
-                if (cstr != null && !cstr.trim().isEmpty()) {
-                String buffer = complete(src, cstr, nb);
-                try {
-                    VJob v = vjobBuilder.build(buffer);
-                    PlacementConstraint c = v.getConstraints().iterator().next();
-                    cstrToLine.put(c, nb + 1);
-                    if (!c.isSatisfied(src)) {
-                        nonViables.add(nb);
-                    }
-
-                    vjob.addConstraint(c);
-                    cstrs.add(c);
-                } catch (BtrpPlaceVJobBuilderException e) {
-                    ErrorReporter rep = e.getErrorReporter();
-                    if (rep != null) {
-                        errReporter.getErrors().addAll(rep.getErrors());
-                    }
-                }
-                }
-            }
-            if (errReporter.getErrors().isEmpty() && !nonViables.isEmpty()) {
-                ChocoCustomRP rp = new ChocoCustomRP(durEv);
-                rp.doOptimize(false);
-                rp.setRepairMode(false);
-                rp.setTimeLimit(10);
-                List<VJob> vjobs = new ArrayList<VJob>(1);
-                vjobs.add(vjob);
-                try {
-                    plan = rp.compute(src, src.getRunnings(),
-                            src.getWaitings(),
-                            src.getSleepings(),
-                            new SimpleManagedElementSet<VirtualMachine>(),
-                            new SimpleManagedElementSet<Node>(),
-                            new SimpleManagedElementSet<Node>(),
-                            vjobs);
-                } catch (Exception e) {
-                        errReporter.append(0, 0, "no solution");
-                }
-            } else {
-                plan = new DefaultTimedReconfigurationPlan(src);
-            }
-        } else {
-            plan = new DefaultTimedReconfigurationPlan(src);
-        }
-        try {
-            return Response.ok(buildResponse(src, errReporter, cstrs, nonViables, plan, cstrToLine).toString()).build();
-        } catch (Exception x) {
-            x.printStackTrace();
-            return Response.status(400).build();
-        }
-        */
         return null;
     }
-
-    /*private JSONObject buildResponse(Configuration src, ErrorReporter errors, List<PlacementConstraint> cstrs, List<Integer> nonViables, TimedReconfigurationPlan plan, Map<PlacementConstraint, Integer> cstrToLine) throws JSONException {
-    //private JSONObject buildResponse() throws JSONException {
->>>>>>> tomtom/feature-editConfig
-        JSONObject o = new JSONObject();
-      /*List<List<Integer>> status = new ArrayList<List<Integer>>();
-        int shift = src.getAllVirtualMachines().size() + 2; //number of VMs + namespace declaration + blank line - 1 (lines start at 1)
-        for (ErrorMessage err : errors.getErrors()) {
-            err.message = err.message.replaceAll("sandbox\\.", "");
-            err.lineNo -= shift;
-        }
-        o.put("errors", errors);
-        if (plan == null) {
-
-            List<Integer> stat = new ArrayList<Integer>();
-            for (PlacementConstraint c : cstrs) {
-                if (!c.isSatisfied(src)) {
-                    stat.add(-1 * cstrToLine.get(c));
-                } else {
-                    stat.add(cstrToLine.get(c));
-                }
-            }
-            status.add(stat);
-        } else {
-            List<Action> longActions = new ArrayList<Action>();
-            for (Action a : plan.getActions()) {
-                longActions.add(a);
-            }
-            Collections.sort(longActions, cmp);
-
-            List<String> actions = new ArrayList<String>();
-            for (Action a : longActions) {
-                if (a instanceof Migration) {
-                    Migration m = (Migration) a;
-                    actions.add(m.getStartMoment() + " M " + name(m.getVirtualMachine()) + " " + name(m.getHost()) + " " + name(m.getDestination()));
-                } else if (a instanceof Shutdown) {
-                    Shutdown s = (Shutdown) a;
-                    actions.add(s.getStartMoment() + " H " + name(s.getNode()));
-                } else if (a instanceof Startup) {
-                    Startup s = (Startup) a;
-                    actions.add(s.getStartMoment() + " S " + name(s.getNode()));
-                }
-            }
-            o.put("actions", actions);
-
-            //Apply each action sequentially
-            //After each move, check all the actions,
-            int i = 0;
-            Configuration cur = src.clone();
-            while (true) {
-                List<Integer> stat = new ArrayList<Integer>();
-                for (PlacementConstraint c : cstrs) {
-                    if (!c.isSatisfied(cur)) {
-                        stat.add(-1 * cstrToLine.get(c));
-                    } else {
-                        stat.add(cstrToLine.get(c));
-                    }
-                }
-                status.add(stat);
-                if (i == longActions.size()) {
-                    break;
-                }
-                Action a = longActions.get(i++);
-                a.apply(cur);
-
-            }
-        }
-        o.put("status", status);
-        System.out.println(o);
-
-        return o;
-    }
-    */
-
-    /*
-    private String name(VirtualMachine vm) {
-        return vm.getName().substring(vm.getName().indexOf('.') + 1);
-    }
-
-    private String name(Node n) {
-        return n.getName();
-    }                */
 }
