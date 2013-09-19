@@ -76,7 +76,6 @@
 	</div>
 </div>
 <div id="content_wrapper">
-	<a href="#" id="shareButton" onclick="pinSandbox()">Share !</a>
 	<div id="content" class="centered">
 		<div id="sandbox">
 			<div id="configurationHelpText">
@@ -125,7 +124,9 @@
 						<p>Customize the constraints or the configuration
 							then let BtrPlace inspect the configuration to check for its viability.
 						</p>
-						<div class="check_button" onclick="check('constraints');"></div>
+						<!--<div class="check_button" onclick="check('constraints');"></div>-->
+						<a href="#" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
+						<a href="#" id="shareButton" class="buttonBase buttonGreen" onclick="pinSandbox()">Share !</a>
 						<br/>
 					</div>
 					<div class="state" id="state1">
@@ -198,6 +199,7 @@
 			</div>
 			<div id="solutionBottomControls">
 				<a href="#" id="editModeButton" class="blackButton" onclick="changeView('input')">Edit Mode</a>
+				<a href="#" id="shareButton" class="buttonBase buttonGreen" onclick="pinSandbox()">Share !</a>
 				<!--<a href="#" class="greenButton">Save</a>-->
 			</div>
 		</div>
@@ -213,7 +215,7 @@
 		<p>The sandbox is now saved. It can be accessed at the following address:</p>
 		<p style="text-align:center;">
 			<input type="text" value="URL" id="pinURLInput" readonly="readonly" onClick="this.select();"/><br><i>or by clicking</i><br />
-	  		<a id="goToPin" href="#"><code id="pinURL"></code></a>
+	  		<a id="goToPin" class="buttonBase" href="#"><code id="pinURL"></code></a>
 		</p>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
