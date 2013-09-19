@@ -41,7 +41,7 @@ body {
 	position:relative;
 }
 
-#shareButton {
+.shareButton {
 	padding:0 5px;
 	padding-right:15px;
 	background-color:#D4D6C5;
@@ -54,7 +54,7 @@ body {
 	z-index:1;
 }
 
-#shareButton:hover {
+.shareButton:hover {
 	color:rgb(54, 54, 54);
 	background-color:#E4E6D5;
 }

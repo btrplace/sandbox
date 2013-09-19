@@ -48,6 +48,7 @@ function onServerResponse(json){
 
 $(window).load(function(){
 	return ;
+	// TODO : remove the following
 	var $button = $('#shareButton');
 
 	var initialTop = $button.css("top"),
