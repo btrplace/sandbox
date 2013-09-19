@@ -171,7 +171,7 @@ public class BtrPlace {
   		model.attach(rcCPU);
 		model.attach(rcMem);
 
-		System.out.println("Model built successfully");
+		//System.out.println("Model built successfully");
 
 		// Preparing the response
 		JSONObject response = new JSONObject();
