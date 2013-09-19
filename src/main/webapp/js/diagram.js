@@ -175,7 +175,7 @@ function createDiagram(actions){
 /**
  * Resets the diagram.
  */
-function resetDiagram(){
+function resetDiagram(callback){
 	if (LOG) console.log("Reseting diagram");
 	$(".actionContainer").remove();
 	$("#graduations").children().remove();
@@ -187,11 +187,11 @@ function resetDiagram(){
 	doPause = isPlaying ;
 	// Rewind when stopped
 	pauseCallback = function(){
-    	playerRewind();
+    	playerRewind(callback);
     };
     // The player is not playing. Start the rewind immediately.
     if( !doPause ){
-    	playerRewind();
+    	playerRewind(callback);
     }
 
 	//console.log("[LOG] Going to redraw after diagram reset");
@@ -238,7 +238,11 @@ function playLoop(direction, duration, callback){
 	if( !canPlay ){
 		if (LOG) console.log("[Player] Unreachable step. Stopping...");
 		if( callback ){
+			console.log("Calling PlayLoop callback!");
+			// TODO : improve this quickFix (of updateClickBindings bug)
+    		setTimeout(function(){
     			callback();
+    		},1000);
     	}
     	setPlayerMode("pause");
    		return false;

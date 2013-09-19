@@ -41,7 +41,7 @@ function playerPause(callback){
 	pauseCallback = callback;
 }
 
-function playerRewind(){
+function playerRewind(callback){
 	if( isPlaying ){
 		if (LOG) console.error("Can't rewind ! It's alreay playing !!");
 		return ;
@@ -149,27 +149,37 @@ function migrate(vm, src, dst, duration, f) {
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
     movingVM.box.toFront();
+    var callbackAlreadyCalled = false;
+    var animationEnd = function() {
+		//The source VM goes away
+		src.unhost(vm);
+
+		// the dst light gray VM into dark gray
+		ghostDst.box.remove();
+		movingVM.box.remove();
+
+		dst.vms.length--;    //remove ghostDst
+		vm.posX = ghostDst.posX;
+		vm.posY = ghostDst.posY;
+		dst.host(vm);
+		src.refresh();
+		dst.refresh();
+
+		//drawConfiguration('canvas');
+		//f(a);
+   }
     //movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",
-        function() {
-            //The source VM goes away
-            src.unhost(vm);
-
-            // the dst light gray VM into dark gray
-            ghostDst.box.remove();
-            movingVM.box.remove();
-
-            dst.vms.length--;    //remove ghostDst
-            vm.posX = ghostDst.posX;
-            vm.posY = ghostDst.posY;
-            dst.host(vm);
-            src.refresh();
-            dst.refresh();
-
-            //drawConfiguration('canvas');
-            //f(a);
+    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",function(){
+        	animationEnd();
+        	callbackAlreadyCalled = true ;
         }
-        );
+    );
+    // This is a safety, in the eventuality of some drawing error ;
+    setTimeout(function(){
+    	if( ! callbackAlreadyCalled ){
+    		animationEnd();
+    	}
+    }, duration+100);
 }
 
 //Animation for booting a node

@@ -37,9 +37,11 @@ function changeView(viewName, instant){
 		state(0);
 		canEdit = true ;
 
+		resetDiagram(function(){
+			setTimeout('updateClickBindings',100);
+		});
 		$("#solution > div").hide(duration,function(){
             $("#input_zone_wrapper").show(duration);
-            resetDiagram();
         });
         $("#configurationHelpText").show(changeViewDuration);
 	}
