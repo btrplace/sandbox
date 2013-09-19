@@ -118,9 +118,6 @@ function colorLines(nb) {
     cstrsEditor.setAnnotations(annotations);
 }
 
-// If this variable is set to false, the check() function will not be able to be executed.
-var canSubmit = true ;
-
 var spaceSplitter = /\s/g;
 
 

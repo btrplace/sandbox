@@ -5,6 +5,9 @@
  */
 var LOG = true ;
 var currentView = "";
+// If this variable is set to false, the check() function will not be able to be executed.
+var canSubmit = true ;
+var canEdit = true ;
 
 // changeView transition duration
 var changeViewDuration = 500;
@@ -32,6 +35,8 @@ function changeView(viewName, instant){
 	if( viewName == "input" ){
 		// Back to initial state
 		state(0);
+		canEdit = true ;
+
 		$("#solution > div").hide(duration,function(){
             $("#input_zone_wrapper").show(duration);
             resetDiagram();
@@ -40,6 +45,7 @@ function changeView(viewName, instant){
 	}
 	else if( viewName == "solution"){
 		state(1);
+		canEdit = false ;
 		if( LOG ) console.log("Fading out inputWrapper");
 		$("#solution > div").show(duration, function(){
         				// Scroll to content
@@ -47,9 +53,7 @@ function changeView(viewName, instant){
         						scrollTop: $("#content").offset().top
         					}, 1000);
         			});
-		$("#input_zone_wrapper").hide(duration, function(){
-
-		});
+		$("#input_zone_wrapper").hide(duration);
 	}
 }
 
@@ -132,6 +136,7 @@ function check(id) {
 
 	}
 	if (LOG) console.log("=== Configuration Data sent to the server : ", cfg);
+	if (LOG) console.log("=== Script sent to the server : ", script);
 	cfg = JSON.stringify(cfg);
 
     postToAPI("inspect","cfg="+encodeURI(cfg)+"&script="+encodeURI(script),
@@ -172,14 +177,19 @@ function onServerResponse(json){
 		state(1);
 		//showSyntaxErrors();
 		changeView("solution");
-    	$("#userInput").html(editor.getValue().replace("\n","<br />"));
+    	$("#userInput").html(editor.getValue().replace(/\n/g,"<br />"));
     	createDiagram(json.actions);
 	}
 	// There are errors in the user constraints script.
-	if( json.errors ){
+	if (json.errors) {
 		if (LOG) console.log("There are some errors in the user input.");
 		// Move to the error-in-script UI state.
 		state(4);
+	}
+
+	if (json.errors == null && json.solution == null) {
+		if (LOG) console.log("[SOLVER] There is no solution to the problem.");
+		state(3);
 	}
 }
 
@@ -195,6 +205,9 @@ function registerSelectedElement(element){
  */
 function updateClickBindings(){
 	$(".nodeZone, .vmZone").unbind('click').on('click',function(event){
+		console.log("Click !");
+		if (!canEdit) return false;
+
 		var element ;
 		if (this.className.baseVal == "nodeZone") {
 			var nodeID = this.attributes["sandboxNodeID"].value;
@@ -213,6 +226,7 @@ function updateClickBindings(){
 		else {
 			event.stopPropagation();
 		}
+		console.log("Click on : ",element);
         setSelectedElement(element);
 	});
 }
@@ -243,6 +257,9 @@ var CPU_UNIT = new VirtualMachine("CPU_UNIT", 1, 0),
 	MEM_UNIT = new VirtualMachine("MEM_UNIT", 0, 1);
 
 function onKeyEvent(keyCode){
+	if (!canEdit) {
+		return false ;
+	}
 	var redraw = false ;
 	if (selectedElement == null) {
 		if (keyCode == 78) {
@@ -330,7 +347,7 @@ function onKeyEvent(keyCode){
 				minSize = 3;
 			}
 			if (selectedElement instanceof VirtualMachine) {
-				minSize = 1;
+				minSize = 2;
 			}
 			if (minSize != -1 && selectedElement.mem > minSize) {
 				selectedElement.mem--;
