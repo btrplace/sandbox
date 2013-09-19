@@ -64,12 +64,13 @@
 <body onload="init()">
 <div id="top_line" class="green_line">
 	<div id="intro_wrapper" class="centered">
-		<img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/>
+		<a href="http://btrp.inria.fr"><img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/></a>
 		<!--<h1>BtrPlace sandbox</h1>   -->
 		<div id="intro">
 			<p>
             The figure depicts a sample infrastructure. Each grid is a server providing CPU and memory resources to VMs.
-            Write a model and the constraints you care about then observe BtrPlace fixing the issues for you.
+            Customize the infrastructure, express the constraints you care about and watch BtrPlace fixing the
+            issues for you.
 			</p>
 			<a href="javascript:void(0)" onclick="$('#aboutWindow').jqm().jqmShow(); return false;">Read more &#9654;</a><br />
 		</div>
@@ -82,7 +83,7 @@
 				<ul>
 						<li>Up/Down arrows : change the CPU of the selected element</li>
 						<li>Left/Right arrows : change the MEM of the selected element</li>
-						<li>N : new Node or a VM in the selected Node</li>
+						<li>N : new Node or VM in the selected Node</li>
 						<li>V and B : select previous and next element</li>
 						<li>O : switching online state of a Node</li>
 						<li>D, Del or Backspace : deletes the selected element</li>
@@ -212,7 +213,6 @@
 	<a href="http://www.ow2.org/view/Events2013ProgrammingContest/">OW2 Programming Contest 2013</a>.		
 	The source code is licensed under the terms of the LGPLv3. It is available on
 	<a href="https://github.com/fhermeni/btrplace-sandbox">Github</a>.
-    Use that entry point to report bugs and feature requests.
     </p>
 </div>
 </body>
