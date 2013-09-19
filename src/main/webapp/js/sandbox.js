@@ -445,8 +445,9 @@ function getCatalogContent() {
     var buf = "Supported constraints: ";
     var cstrs = ["Among", "Ban", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", "Gather", "Killed", "Lonely", "MinMTTR", "Offline", "Online", "Overbook", "Preserve", "Quarantine", "Ready", "Root", "Running", "SequentialVMTransitions", "SingleResourceCapacity", "SingleRunningCapacity", "Sleeping", "Split", "SplitAmong", "Spread"];
     for (var i in cstrs) {
-    	var cstr = cstrs[i];
-        buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + cstr.toLowerCase() + "</a>";
+    	var cstr = cstrs[i],
+    		caseCstr = cstr.charAt(0).toLowerCase() + cstr.slice(1);
+        buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + caseCstr + "</a>";
         if ( i < cstrs.length - 1) {
             buf += ", ";
         }
