@@ -1,3 +1,8 @@
+/*
+ * Main functions used by the Sandbox.
+ * This does not include function for diagram generation and animation.
+ * @author Tom Guillermin
+ */
 var LOG = true ;
 var currentView = "";
 
@@ -310,10 +315,10 @@ function shiftSelectedElement(direction){
  */
 function getCatalogContent() {
     var buf = "Supported constraints: ";
-    var cstrs = ["spread", "gather", "root", "lonely", "split", "root", "among", "quarantine", "ban", "fence","online","offline"];
+    var cstrs = ["Among", "Ban", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", "Gather", "Killed", "Lonely", "MinMTTR", "Offline", "Online", "OptConstraint", "Overbook", "Preserve", "Quarantine", "Ready", "Root", "Running", "SatConstraint", "SequentialVMTransitions", "SingleResourceCapacity", "SingleRunningCapacity", "Sleeping", "Split", "SplitAmong", "Spread"];
     for (var i in cstrs) {
-    	var cstr = ucFirst(cstrs[i]);
-        buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + cstr + "</a>";
+    	var cstr = cstrs[i];
+        buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + cstr.toLowerCase() + "</a>";
         if ( i < cstrs.length - 1) {
             buf += ", ";
         }
