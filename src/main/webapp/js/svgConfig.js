@@ -88,12 +88,13 @@ function drawConfiguration(id) {
     if (verbose) console.log("[DIAGRAM] Finished drawing =====================");
 }
 
+// TODO : Use colorLines() function to indicate constraints satisfaction evolution.
 /*
  * Color the lines of the constrains input.
  * If the constrains is matched, the line gets green. Red otherwise.
  */
 function colorLines(nb) {
-	// TODO : Use colorLines() function.
+
     var stats = JSON.parse(scenario.status[nb]);
     var annotations = [];
     for (var j in stats) {
@@ -117,18 +118,16 @@ function colorLines(nb) {
     cstrsEditor.setAnnotations(annotations);
 }
 
+// If this variable is set to false, the check() function will not be able to be executed.
 var canSubmit = true ;
-
-function output(id) {
-    var out = document.getElementById("output");
-    out.innerHTML = id;
-}
 
 var spaceSplitter = /\s/g;
 
 
 function generateSampleScript(cfg) {
 	return "spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);";
+	// TODO : randomize script
+	/*
     var buf = "";
     for (var i in cfg.nodes) {
         var n = cfg.nodes[i];
@@ -162,66 +161,16 @@ function generateSampleScript(cfg) {
     /*if (cfg.nodes[4].vms.length > 0) {
         buf += "root({" + cfg.nodes[4].vms[0].id + "});";
     } */
-    return buf;
+    //return buf;
 }
 
-function showScenario() {
-    var id = document.getElementById("plan");
-    var buf = "<ul>";
-    for (var i in scenario.actions) {
-        buf += "<li style='color:#bbb; font-family: monospace; font-size: 10pt;' id='a" + i + "'>" + rephrase(scenario.actions[i]) + "</li>";
-    }
-    buf += "</ul>";
-    id.innerHTML = buf;
-}
-
-function rephrase(a) {
-    var arr = a.split(spaceSplitter);
-    if (arr[1] == "M") {
-        return "migrate " + arr[2] + " from " + arr[3] + " to " + arr[4];
-    } else if (arr[1] == "S") {
-        return "boot " + arr[2];
-    } else if (arr[1] == "H") {
-        return "shutdown " + arr[2];
-    }
-}
-
-function showSyntaxErrors() {
-	if (LOG) console.log("[Log] Showing syntax errors in scenario : ", scenario);
-    var annotations = [];
-
-    var msgs = [];
-
-    for (var j in scenario.errors) {
-        var err = scenario.errors[j];
-        annotations.push({
-                    row: err.row-1,
-                    column: 0,
-                    type: "error",
-                    text: err.message
-        });
-
-    }
-    if (annotations.length > 0) {
-            var node = $("#cstrs-mode > a").get()[0];
-            node.style.fontWeight="bold";
-            node.style.color="red";
-    } else {
-    		$("#cstrs-mode a").css({
-    			"font-weight":"",
-    			"color":""
-    		});
-            //$("#cstrs-mode > a").get()[0].style.fontWeight="";
-            //$("#cstrs-mode > a").get()[0].style.color="";
-    }
-    if (LOG) console.log("[LOG] Anotations :", annotations);
-    editor.getSession().setAnnotations(annotations);
-}
 
 /**
-* Save the configuration into SVG format
-*/
+ * Save the configuration into SVG format.
+ * It's currently not working. Will be implemented in a future release.
+ */
 function saveSVG() {
+	return false ;
     var text = $("#canvas").get()[0].innerHTML;
         a = document.createElement('a');
         a.download = 'configuration.svg';

@@ -90,6 +90,7 @@ function state(id) {
     } else if (id == 4) {
         showSyntaxErrors();
         canSubmit = true ;
+
     }
 }
 
@@ -442,7 +443,7 @@ function shiftSelectedElement(direction){
  */
 function getCatalogContent() {
     var buf = "Supported constraints: ";
-    var cstrs = ["Among", "Ban", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", "Gather", "Killed", "Lonely", "MinMTTR", "Offline", "Online", "OptConstraint", "Overbook", "Preserve", "Quarantine", "Ready", "Root", "Running", "SatConstraint", "SequentialVMTransitions", "SingleResourceCapacity", "SingleRunningCapacity", "Sleeping", "Split", "SplitAmong", "Spread"];
+    var cstrs = ["Among", "Ban", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", "Gather", "Killed", "Lonely", "MinMTTR", "Offline", "Online", "Overbook", "Preserve", "Quarantine", "Ready", "Root", "Running", "SequentialVMTransitions", "SingleResourceCapacity", "SingleRunningCapacity", "Sleeping", "Split", "SplitAmong", "Spread"];
     for (var i in cstrs) {
     	var cstr = cstrs[i];
         buf += "<a href='http://btrp.inria.fr/apidocs/releases/btrplace/solver/last/index.html?btrplace/model/constraint/" + cstr + ".html' target='_blank'>" + cstr.toLowerCase() + "</a>";
@@ -451,6 +452,41 @@ function getCatalogContent() {
         }
     }
     return buf ;
+}
+
+/**
+ * Annotates the lines with syntax errors in the constraints script.
+ */
+function showSyntaxErrors() {
+	if (LOG) console.log("[Log] Showing syntax errors in scenario : ", scenario);
+    var annotations = [];
+
+    var msgs = [];
+
+    for (var j in scenario.errors) {
+        var err = scenario.errors[j];
+        annotations.push({
+                    row: err.row-1,
+                    column: 0,
+                    type: "error",
+                    text: err.message
+        });
+
+    }
+    if (annotations.length > 0) {
+            var node = $("#cstrs-mode > a").get()[0];
+            node.style.fontWeight="bold";
+            node.style.color="red";
+    } else {
+    		$("#cstrs-mode a").css({
+    			"font-weight":"",
+    			"color":""
+    		});
+            //$("#cstrs-mode > a").get()[0].style.fontWeight="";
+            //$("#cstrs-mode > a").get()[0].style.color="";
+    }
+    if (LOG) console.log("[LOG] Anotations :", annotations);
+    editor.getSession().setAnnotations(annotations);
 }
 
 // Setup keyboard actions
