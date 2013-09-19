@@ -22,7 +22,12 @@ function changeView(viewName, instant){
 	else if( viewName == "solution"){
 		console.log("Fading out inputWrapper");
 		$("#input_zone_wrapper").hide(duration, function(){
-			$("#solution > div").show(duration);
+			$("#solution > div").show(duration, function(){
+				// Scroll to content
+				$('html, body').animate({
+						scrollTop: $("#content").offset().top
+					}, 1000);
+			});
 		});
 	}
 }
