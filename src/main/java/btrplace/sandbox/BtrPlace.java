@@ -21,10 +21,7 @@ package btrplace.sandbox;
 
 
 import btrplace.btrpsl.*;
-import btrplace.btrpsl.constraint.ConstraintsCatalog;
-import btrplace.btrpsl.constraint.DefaultConstraintsCatalog;
 import btrplace.json.JSONConverterException;
-import btrplace.json.model.ModelConverter;
 import btrplace.json.plan.ReconfigurationPlanConverter;
 import btrplace.model.*;
 import btrplace.model.constraint.SatConstraint;
@@ -35,14 +32,10 @@ import btrplace.plan.TimeBasedPlanApplier;
 import btrplace.solver.SolverException;
 import btrplace.solver.choco.ChocoReconfigurationAlgorithm;
 import btrplace.solver.choco.DefaultChocoReconfigurationAlgorithm;
-import btrplace.solver.choco.durationEvaluator.DurationEvaluators;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-import net.minidev.json.parser.JSONParser;
 
-//import org.codehaus.jettison.json.JSONObject;
-//import sun.org.mozilla.javascript.internal.ErrorReporter;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.FormParam;
@@ -50,12 +43,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Simili Resource to check then solve non-viable configurations.
@@ -65,38 +53,12 @@ import java.util.regex.Pattern;
 @Path("/inspect")
 public class BtrPlace {
 
-    private DurationEvaluators durEv;
-
-    private ConstraintsCatalog catalog;
-
-    /*private DefaultVirtualMachineTemplateFactory vtpls;
-
-    private DefaultPlatformFactory ptpls;
-
-    private static PlainTextConfigurationSerializer confReader = PlainTextConfigurationSerializer.getInstance();
-
-    private static ActionComparator cmp = new ActionComparator(ActionComparator.Type.start);   */
-
     public BtrPlace(@Context ServletContext context) {
-        catalog = new DefaultConstraintsCatalog();
-        /*try {
-            PropertiesHelper p = new PropertiesHelper(context.getRealPath("config/durations.properties"));
-            durEv = FastDurationEvaluatorFactory.readFromProperties(p);
-            PropertiesHelper p2 = new PropertiesHelper(context.getRealPath("config/catalog.properties"));
-            catalog = new ConstraintsCatalogBuilderFromProperties(p2).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        vtpls = new DefaultVirtualMachineTemplateFactory();
-        vtpls.add(new VirtualMachineTemplateStub("mockVM"));
-
-        ptpls = new DefaultPlatformFactory();
-        */
 
     }
 
 
-    private String complete(Model model, String constraints, int padding) {
+    private String complete(Model model, String constraints) {
 		StringBuilder n = new StringBuilder();
 
 		NamingService namingService = (NamingService) model.getView("btrpsl.ns");
@@ -106,20 +68,13 @@ public class BtrPlace {
 		for(Node node : model.getNodes()){
 			String nodeRealID = namingService.resolve(node);
 			constraints = constraints.replaceAll(nodeRealID.substring(1), nodeRealID);
-			//n.append(nodeRealID).append(" : xen<boot=60>;\n");
 		}
 
-
-		padding = 1;
-		for (int i = 0; i <= padding; i++) {
-			n.append('\n');
-		}
+		n.append('\n');
 
 		n.append(constraints).append("\n");
 
-        String s = n.toString(); 
-
-        return s;
+        return n.toString();
     }
 
 
@@ -152,7 +107,7 @@ public class BtrPlace {
 			// Register the node
 			try {
 				n = (Node) namingService.register("@"+node.get("id")).getElement();
-				System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
+				//System.out.println("Node : "+"@"+node.get("id")+" <=> "+n.id());
                 model.getAttributes().put(n, "btrpsl.id", node.get("id").toString());
 			} catch (NamingServiceException e) {
 				e.printStackTrace();
@@ -203,53 +158,34 @@ public class BtrPlace {
   		model.attach(rcCPU);
 		model.attach(rcMem);
 
-		System.out.println("############### MODEL BUILT SUCCESSFULLY! ###################");
+		System.out.println("Model built successfully");
 
 		JSONObject response = new JSONObject();
 		response.put("errors",null);
 		response.put("solution",null);
-		//System.out.println("CLIENT Config : \n"+cfg);
-		System.out.println("CLIENT INPUT : \n"+scriptInput);
 
 		// End of previous code
         System.out.println("======= Sending mock response to client.");
 
-		//GettingStarted gs = new GettingStarted();
-        //gs.run();
-
-		System.out.println("=== SNAPSHOT 1 : "+model.getVMs().size()+" VMs in the model.");
 
 		// Fixing the script to match BtrpSL requirements
 		int initialLength = scriptInput.split("\n").length;
-		scriptInput = complete(model, scriptInput,2);
+		scriptInput = complete(model, scriptInput);
 		// Number of lines added by the 'complete' method
 		int addedLinesNum = scriptInput.split("\n").length-initialLength;
 
-		System.out.println("=========== Resulting script : \n"+scriptInput+"\n===================");
+		//System.out.println("=========== Resulting script : \n"+scriptInput+"\n===================");
 		ScriptBuilder scriptBuilder = new ScriptBuilder(model);
-		Script script = null ;
+		Script script ;
 		try {
-			System.out.println("=== SNAPSHOT 2 : "+model.getVMs().size()+" VMs in the model.");
 			script = scriptBuilder.build(scriptInput);
-			System.out.println("=== SNAPSHOT 3 : "+model.getVMs().size()+" VMs in the model.");
 
-			/*for(VM vm : model.getVMs()){
-				System.out.println("=== Test : VM:  "+vm.toString());
-			}
-			for(Node n : model.getNodes()){
-				System.out.println("=== Test : Node:  "+n.toString());
-			} */
-
-			System.out.println("=== SNAPSHOT 4 : "+model.getVMs().size()+" VMs in the model.");
-			//if(true)return null;
-			System.out.println("=== SCRIPT : \n"+script.toString());
 
 		} catch (ScriptBuilderException sbe){
 			List<ErrorMessage> errorsList = sbe.getErrorReporter().getErrors();
 			List<JSONObject> errors = new ArrayList<JSONObject>();
 
 			for(ErrorMessage error : errorsList){
-				//System.out.println("Error at line "+error.lineNo());
 				JSONObject e = new JSONObject();
 				e.put("row",error.lineNo() - addedLinesNum);
 				e.put("column",error.colNo());
@@ -258,7 +194,6 @@ public class BtrPlace {
 			}
 
 			response.put("errors",errors);
-			System.out.println("==== Sending JSON of errors: \n"+response.toString());
 			return Response.ok(response).build();
 		}
 
@@ -303,16 +238,18 @@ public class BtrPlace {
                 e.printStackTrace();
             }
 
+			/*
             System.out.println("=== Time-based plan: ====");
             new TimeBasedPlanApplier().apply(plan);
             System.out.println(new TimeBasedPlanApplier().toString(plan));
             System.out.println("\n ====== Dependency based plan: ===== ");
             System.out.println(new DependencyBasedPlanApplier().toString(plan));
-            //return (plan != null);
+            */
+
         } catch (SolverException ex) {
 			ex.printStackTrace();
             System.err.println(ex.getMessage());
         }
-        return null;
+		return Response.serverError().build();
     }
 }
