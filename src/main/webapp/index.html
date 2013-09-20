@@ -19,137 +19,201 @@
   -->
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>BtrPlace sandbox</title>
-    <link rel="stylesheet" href="css/common.css" type="text/css"/>
-    <link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
-    <link rel="stylesheet" href="css/jqModal.css" type="text/css"/>
-    <link rel="stylesheet" href="css/jquery-linedtextarea.css" type="text/css"/>
-    <script src="js/common.js" type="text/javascript"></script>
-    <script src="js/raphael.js" type="text/javascript"></script>
-    <script src="js/svgConfig.js" type="text/javascript"></script>
+	<title>BtrPlace sandbox</title>
+	<link rel="stylesheet" href="css/common.css" type="text/css"/>
+	<link rel="stylesheet" href="css/sandbox.css" type="text/css"/>
+	<link rel="stylesheet" href="css/jqModal.css" type="text/css"/>
+	<link rel="stylesheet" href="css/tabs.css" type="text/css"/>
+	<!--<link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.3.custom.min.css" type="text/css"/>-->
+
     <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/jquery-linedtextarea.js" type="text/javascript"></script>
-    <script src="js/console.js" type="text/javascript"></script>
-    <script src="js/analytics.js" type="text/javascript"></script>
-    <script src="js/pin.js" type="text/javascript"></script>
-    <script src="js/jqModal.js" type="text/javascript"></script>
-    <script src="js/player.js" type="text/javascript"></script>
-    <meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
-    <meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
-    <meta name="author" content="Fabien Hermenier"/>
-    <meta charset="UTF-8"/>
-    <link href="atom.xml" type="application/atom+xml" rel="alternate" title="Btrplace Sandbox updates"/>
+	<script src="js/lz-string-1.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/configuration.class.js" type="text/javascript"></script>
+	<script src="js/node.class.js" type="text/javascript"></script>
+	<script src="js/vm.class.js" type="text/javascript"></script>
+	<script src="js/common.js" type="text/javascript"></script>
+	<script src="js/raphael.js" type="text/javascript"></script>
+	<script src="js/svgConfig.js" type="text/javascript"></script>
+	<script src="js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+	<script src="js/jquery.color-2.1.2.min.js" type=text/javascript></script>
+	<script src="js/jqModal.js" type="text/javascript"></script>
+	<script src="js/deepCopy.js" type="text/javascript"></script>
+	<script src="js/player.js" type="text/javascript"></script>
+	<script src="js/pin.js" type="text/javascript"></script>
+	<script src="js/config.js" type="text/javascript"></script>
+	<script src="js/sandbox.js" type="text/javascript"></script>
+	<script src="js/diagram.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-34657431-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+	<meta name="description" content="Sandbox for the Btrplace constraint catalog"/>
+	<meta name="keywords" content="btrplace, virtualization, resource management, placement constraints"/>
+	<meta name="author" content="Fabien Hermenier"/>
+	<meta charset="UTF-8"/>
+	<link href="atom.xml" type="application/atom+xml" rel="alternate" title="Btrplace Sandbox updates" />
 </head>
 <body onload="init()">
-<div id="content">
-    <h1>BtrPlace sandbox</h1>
+<div id="top_line" class="green_line">
+	<div id="intro_wrapper" class="centered">
+		<a href="http://btrp.inria.fr"><img id="sandbox_logo" src="img/logo_sandbox.png" alt="Projet logo"/></a>
+		<!--<h1>BtrPlace sandbox</h1>   -->
+		<div id="intro">
+			<p>
+            The figure depicts a sample infrastructure. Each grid is a server providing CPU and memory resources to VMs.
+            Customize the infrastructure, express the constraints you care about and watch BtrPlace fixing the
+            issues for you.
+			</p>
+			<a href="javascript:void(0)" onclick="$('#aboutWindow').jqm().jqmShow(); return false;">Read more &#9654;</a><br />
+		</div>
+	</div>
+</div>
+<div id="content_wrapper">
+	<div id="content" class="centered">
+		<div id="sandbox">
+			<div id="configurationHelpText">
+				<ul>
+						<li>Up/Down arrows : change the CPU of the selected element</li>
+						<li>Left/Right arrows : change the MEM of the selected element</li>
+						<li>N : new Node or VM in the selected Node</li>
+						<li>V and B : select previous and next element</li>
+						<li>O : switching online state of a Node</li>
+						<li>D, Del or Backspace : deletes the selected element</li>
+						<li>Escape : go to parent element or deselect if no parent</li>
+				</ul>
+			</div>
+			<div class="export_button" id="txt_export"></div>
+			<div class="export_button" id="svg_export"></div>
+			<div id="canvas" ondblclick="saveSVG();" title="Double-click to save the SVG"></div>
+		</div>
+		<div id="input_zone_wrapper">
+			<!--<div id="input_zone" class="centered">-->
+			<div id="tab-container" class="tab-container">
+				<ul class="etabs">
+					<li class="tab" id="cstrs-mode"><a>Constraints script</a></li>
+				</ul>
+				<div class="panel-container">
+					<div id="editor"></div>
+					<div class="note" id="catalog"></div>
+				</div>
+				<script type="text/javascript">
+					$(document).ready(function(){
+					$(".panel-container").resizable({
+					grid:50,
+					handles: "se, e, s",
+					minWidth:200,
+					maxWidth:480,
+					minHeight:90,
+					resize:function(event, ui){
+					$("#editor").height(ui.size.height-45);
+					editor.resize(true);
+					}
+					});
+					});
+				</script>
+			</div>
+			<div id="script">
+				<div id="output">
+					<div class="state" id="state0">
+						<p>Customize the constraints or the configuration
+							then let BtrPlace inspect the configuration to check for its viability.
+						</p>
+						<!--<div class="check_button" onclick="check('constraints');"></div>-->
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
+						<a href="javascript:void(0)" class="buttonBase buttonGreen shareButton" onclick="pinSandbox()">Share !</a>
+						<br/>
+					</div>
+					<div class="state" id="state1">
+					</div>
+					<div class="state" id="state2">
+						<p>
+							Every constraints are already satisfied.
+							Declare other constraints in the script.
+						</p>
 
-    <div id="sandbox">
-        <div id="intro">
-            <p>
-                This sandbox allows to test the effect of constraints restricting the placement of VMs on servers.
-                The following figure depicts a sample configuration. Each grid represents a server with a finite amount
-                of CPU and memory resources to share among virtual machines.
-                Each gray rectangle denotes a virtual machine that consumes some resources on its server.
-                Customize the script with some of the available constraints
-                and observe BtrPlace fixing a non-viable placement for you !
-            </p>
-            <a href="about.html" target="_blank">Read more &#9654;</a>
-        </div>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
+					</div>
+					<div class="state" id="state3">
+						<p>
+							Some constraints are not satisfied and BtrPlace found there
+							is no possible placement that can satisfy then. Try again
+                            with a different infrastructure or different constraints.
+						</p>
 
-        <div class="export_button" id="txt_export"></div>
-        <div class="export_button" id="svg_export"></div>
-        <div id="canvas"></div>
-        <div id="script">
-            <div id="input">
-                <h3>Script:</h3>
-                <textarea class="lined" id="constraints" placeholder="insert constraints here...  " rows="8"
-                          cols="40"></textarea>
-            </div>
-            <div id="output">
-                <div class="state" id="state0">
-                    <p>Customize the script on the right then let BtrPlace
-                        inspect it to check for the constraints' viability.
-                    </p>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
+					</div>
+					<div class="state" id="state4">
+						<p>Errors in the script prevent its interpretation. Fix them then retry to inspect the configuration.</p>
+						<a href="javascript:void(0)" class="buttonBase searchIcon" onclick="check('constraints');">Inspect</a>
+					</div>
+				</div>
+			</div>
+			<!--</div>-->
+		</div>
+		<div id="solution">
+			<div id="userInput"></div>
+			<div id="diagramWrapper">
+				<div id="diagram">
+					<div id="actionLines"></div>
+					<div id="currentFrameLine"></div>
+					<div id="timeLine">
+						<div id="graduations"></div>
+						<div id="timeLineBar"></div>
+					</div>
+				</div>
+				<div id="playerControls">
+					<div id="rewindButton" class="greenButton" onclick="playerRewind();"><img src="../img/rewind.png" height="10" alt="rewind"/></div>
+					<div id="previousStepButton" class="greenButton" onclick="playerPreviousStep();"><img src="../img/previous.png" height="10" alt="previous"/></div>
+					<div id="playButton" class="greenButton" onclick="playerPlay();"><img src="../img/play.png" alt="play"/></div>
+					<div id="pauseButton" class="greenButton" onclick="playerPause();"><img src="../img/pause.png" alt="play"/></div>
+					<div id="nextStepButton" class="greenButton" onclick="playerNextStep();"><img src="../img/next.png" height="10" alt="next"/></div>
+				</div>
+			</div>
+			<div id="solutionBottomControls">
+				<a href="javascript:void(0)" id="editModeButton" class="blackButton" onclick="changeView('input')">Edit Mode</a>
+				<a href="javascript:void(0)" class="buttonBase buttonGreen shareButton" onclick="pinSandbox()">Share !</a>
+				<!--<a href="#" class="greenButton">Save</a>-->
+			</div>
+		</div>
+	</div>
+</div>
 
-                    <div class="check_button" onclick="check('constraints');"></div>
-                    <br/>
-
-                    <div id="available_constraints"></div>
-                </div>
-                <div class="state" id="state1">
-                    <p>
-                        The constraints in red are not satisfied but
-                        Btrplace found doing the following actions makes the placement viable. Use
-                        the player to navigate through the reconfiguration.
-                    </p>
-
-                    <div id="scenario">
-                        <div id="plan"></div>
-                        <div id="player">
-                            <div class="player_button" id="begin_button" onclick="reset()"><span class="tt">Reset</span>
-                            </div>
-                            <div class="player_button" id="prev_button" onclick="prev()"><span
-                                    class="tt">Previous</span></div>
-                            <div class="player_button" id="play_button" onclick="playOrPause();"><span
-                                    class="tt">Play</span></div>
-                            <div class="player_button" id="next_button" onclick="next()"><span class="tt">Next</span>
-                            </div>
-                            <div class="player_button" id="end_button" onclick="directEnd()"><span class="tt">End</span>
-                            </div>
-                            <div class="player_button" id="pin_button" onclick="pinSandbox()"><span class="tt">Pin this sandbox</span>
-                            </div>
-                            <br>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="state" id="state2">
-                    <p>
-                        Every constraints are already satisfied.
-                        Declare other constraints in the script.
-                    </p>
-
-                    <div class="check_button" onclick="check('constraints');"></div>
-                </div>
-                <div class="state" id="state3">
-                    <p>
-                        The constraints in red are not satisfied and BtrPlace found there
-                        is no possible placement that can satisfy every constraint. Use other
-                        constraints or refresh the page for a new configuration.
-                    </p>
-
-                    <div class="check_button" onclick="check('constraints');"></div>
-                </div>
-                <div class="state" id="state4">
-                    <p>The script was not interpreted due to the following errors:</p>
-
-                    <div id="syntax_error"></div>
-                    <div class="check_button" onclick="check('constraints');"></div>
-                </div>
-            </div>
-        </div>
-        <div id="restart">
-            <div class="restart_button" onclick="step(0);"></div>
-        </div>
-        <div id="footer">
-            BtrPlace-sandbox version 1.2.1
-            © <a href="mailto:fabien.hermenier@unice.fr">Fabien Hermenier</a> 2012
-        </div>
-
-    </div>
+<div id="footer">
+    BtrPlace-sandbox version 2.0
+    © University of Nice/Sophia Antipolis 2013
 </div>
 <div id="pinBox" class="jqmWindow">
-    <img src="img/info.png" class="logo"/>
-
-    <p>The sandbox is now pinned and can be accessed at the following address:</p>
-    <a id="goToPin" href="#"><code id="pinURL"></code></a>
+	<img src="img/info.png" class="logo"/>
+		<p>The sandbox is now saved. It can be accessed at the following address:</p>
+		<p style="text-align:center;">
+			<input type="text" value="URL" id="pinURLInput" readonly="readonly" onClick="this.select();"/><br><i>or by clicking</i><br />
+			<a id="goToPin" class="buttonBase" href="javascript:void(0)"><code id="pinURL"></code></a>
+		</p>
 </div>
 <div id="unknownPinBox" class="jqmWindow">
-    <img src="img/error.png" class="logo"/>
+	<img src="img/error.png" class="logo"/>
+	<p>Unable to retrieve the asked sandbox</p>
+	<a href=".">Ok</a>
+</div>
+<div id="aboutWindow" class="jqmWindow">
+	<h2>About</h2>
+	<p>This sandbox is currently running version 0.31 of <a href="http://btrp.inria.fr">BtrPlace</a>.
+	The language used to express the placement constraint is a subset of <a href="https://github.com/fhermeni/btrplace-btrpsl">BtrpSL</a>.</p>
 
-    <p>Unable to retrieve the asked sandbox</p>
-    <a href=".">Ok</a>
+	<p>
+	This webapp has been implemented by Tom Guillermin for the
+	<a href="http://www.ow2.org/view/Events2013ProgrammingContest/">OW2 Programming Contest 2013</a>.		
+	The source code is licensed under the terms of the LGPLv3. It is available on
+	<a href="https://github.com/fhermeni/btrplace-sandbox">Github</a>.
+    </p>
 </div>
 </body>
 </html>

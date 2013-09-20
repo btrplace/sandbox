@@ -1,41 +1,80 @@
 //Check for an id
 
+
+var configEditor;
+var cstrsEditor;
+var editor;
+
 function init() {
-    var o = parseUri(location.href);
-    if (o.queryKey.id) {
-        console.log("re-using sandbox " + o.queryKey.id);
-        loadExperiment(o.queryKey.id);
-    } else {
-        console.log("New sandbox");
-        step(0);
+    //var o = parseUri(location.href);
+    var get = GETParameters();
+
+    editor = ace.edit("editor");
+    var EditSession = ace.require('ace/edit_session').EditSession;
+    /*configEditor = new EditSession("");
+    cstrsEditor = new EditSession("");*/
+    if (get.cfg) {
+    	var cfg = decodeURIComponent(get.cfg);
+        if (LOG) console.log("Re-using sandbox from configuration : " + cfg);
+        loadExperiment(cfg);
+        state(0);
+        //document.getElementById('lock_button').style.display="none";
+        //document.getElementById('unlock_button').style.display="inline";
+        //editor.setReadOnly(true);
+    } else if (false) {
+        if (LOG) console.log("Unlocked sandbox from " + o.queryKey.unlock);
+        loadExperiment(o.queryKey.unlock);
+        document.getElementById('lock_button').style.display="inline";
+        document.getElementById('unlock_button').style.display="none";
+        editor.setReadOnly(false);
+    } else  {
+        if (LOG) console.log("New sandbox");
+        editor.setReadOnly(false);
+
+        // Create configuration and fill the editor
+		randomConfiguration();
+		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+
+		if( paper )
+			paper.clear();
+
+		drawConfiguration("canvas");
+        state(0);
     }
+    editor.clearSelection();
+    //configEditor.on("change", function(e) {updateConfiguration(configEditor.getValue());});
+    //insertCatalogContent();
 }
 
-	            $().ready(function() {
-                  $('#pinBox').jqm({modal:true});
-                  $('#unknownPinBox').jqm({modal:true});
-                });
-
-
 function pinSandbox() {
-    var experiment = {"cfg":serialize(nodes), "scenario" : scenario,"script" : document.getElementById('constraints').value};
-    document.getElementById('pin_button').style.visibility="hidden";
+    var experiment = {"cfg":configEditor.getValue(), "scenario" : scenario,"script" : cstrsEditor.getValue()};
+    document.getElementById('lock_button').style.display="none";
+    document.getElementById('unlock_button').style.display="inline";
     postToAPI("pin","experiment="+encodeURI(JSON.stringify(experiment)),function() {
 	    if (this.readyState == 4) {
 	        if (this.status == 201) {
 	            var l = this.getResponseHeader("Location");
                 document.getElementById('pinURL').innerHTML = l;
                 document.getElementById('goToPin').href = l;
+                $('#pinBox').jqm();
                 $('#pinBox').jqmShow();
 	        } else {
-	            console.log("ERROR. Status code " + this.status + "\n" + this.responseText);
+	            console.error("ERROR. Status code " + this.status + "\n" + this.responseText);
 	        }
 	    }
     });
 }
 
+function unpinSandbox() {
+    var o = parseUri(location.href);
+    location.href=location.origin + location.pathname + "?unlock=" + o.queryKey.lock;
+}
 
-function loadExperiment(id) {
+
+function loadExperiment(cfg) {
+		var parsedCfg = JSON.parse(cfg.replace("%22",'"'));
+		config.fromStorage(parsedCfg);
+		/*
         var http = createXhrObject();
         //Remove the possible index.html at the end
         if (!location.origin) {
@@ -48,8 +87,10 @@ function loadExperiment(id) {
     	        if (this.status == 200) {
     	            var experiment = JSON.parse(this.responseText);
     	            scenario = experiment.scenario;
-    	            unserialize(experiment.cfg);
-    	            document.getElementById('constraints').value = experiment.script;
+    	            config = parseConfiguration(experiment.cfg)[0];
+    	            cstrsEditor.setValue(experiment.script);
+    	            configEditor.setValue(experiment.cfg);
+    	            console.log("[LOG] Going to redraw after Load Experiment");
     	            drawConfiguration('canvas');
     	            step(1);
     	        } else {
@@ -60,35 +101,18 @@ function loadExperiment(id) {
     	    }
         }
         http.send(null);
+        */
 }
 
-function serialize(nodes) {
-    var cpy = [];
-    for (var i in nodes) {
-        var n = nodes[i];
-        cpy[i] = new Node(n.id, n.cpu, n.mem);
-
-        for (var j in n.vms) {
-            var v = n.vms[j];
-            var x = new VirtualMachine(v.id, v.cpu, v.mem);
-            cpy[i].host(x);
-        }
-    }
-    return cpy;
-}
-
-function unserialize(src) {
-    nodes = [];
-    vms = [];
-    for (var i in src) {
-        s = src[i];
-        var n = new Node(s.id, s.cpu, s.mem);
-        for (var j in s.vms) {
-            v = s.vms[j];
-            vv = new VirtualMachine(v.id, v.cpu, v.mem);
-            n.host(vv);
-            vms.push(vv);
-        }
-        nodes.push(n);
-    }
+function pinSandbox(){
+	var configStr = JSON.stringify(config.toStorage()),
+		//encodedCfg =
+		pinUrl = document.location.origin + document.location.pathname+ "?cfg="+encodeURIComponent(configStr);
+		//pinUrlText = pinUrl;
+		pinUrlText = "Here";
+	$("#pinURLInput").val(pinUrl);
+	$("#goToPin").attr("href",pinUrl).text(pinUrlText);
+    $("#pinBox").jqm();
+    $("#pinBox").jqmShow();
+    moveCaretToStart($("#pinURLInput").get(0));
 }

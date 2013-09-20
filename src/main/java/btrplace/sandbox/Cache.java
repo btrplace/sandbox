@@ -69,7 +69,7 @@ public class Cache {
             //Remove the /rest/cache stuff
             String rest = req.getRequestURL().substring(0,req.getRequestURL().lastIndexOf("/"));
             String root = rest.substring(0, rest.lastIndexOf("/") + 1);
-            String uri = root + "?id=" + id;
+            String uri = root + "?lock=" + id;
             return Response.created(new URI(uri)).build();
         } catch(Exception e) {
             e.printStackTrace();

@@ -3,3 +3,5 @@
 *.iws
 target
 src/main/webapp/cache
+.idea
+.idea

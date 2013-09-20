@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1147.9944"
-   height="327.00269"
+   width="1476.0135"
+   height="490.99554"
    id="svg4433"
    version="1.1"
    inkscape:version="0.48.2 r9819"
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.82924908"
-     inkscape:cx="411.77283"
-     inkscape:cy="125.10839"
+     inkscape:zoom="0.37948015"
+     inkscape:cx="626.57615"
+     inkscape:cy="438.84325"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -37,7 +37,7 @@
      inkscape:window-width="1280"
      inkscape:window-height="752"
      inkscape:window-x="0"
-     inkscape:window-y="22"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -59,7 +59,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,12 +67,12 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(372.61378,-492.87495)">
+     transform="translate(384.91972,-473.80572)">
     <g
-       id="g4118"
-       transform="translate(-13.150527,0)">
+       id="g4367"
+       transform="translate(-1.9999442,-21.000045)">
       <g
-         transform="translate(65.036585,-42.000052)"
+         transform="translate(41.580059,-40.069234)"
          id="g3840">
         <rect
            style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -106,7 +106,7 @@
            inkscape:transform-center-x="-10" />
       </g>
       <g
-         transform="translate(-98.9634,-222.00005)"
+         transform="translate(-122.41993,-220.06923)"
          id="g3930">
         <rect
            inkscape:export-ydpi="14.04878"
@@ -144,7 +144,7 @@
         </g>
       </g>
       <g
-         transform="translate(29.036578,-62.000052)"
+         transform="translate(5.580052,-60.069234)"
          id="g3892">
         <rect
            inkscape:export-ydpi="14.04878"
@@ -199,7 +199,7 @@
         </g>
       </g>
       <g
-         transform="matrix(-1,0,0,1,256.03673,-42.000052)"
+         transform="matrix(-1,0,0,1,232.5802,-40.069234)"
          id="g3868">
         <rect
            style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -254,7 +254,7 @@
         </g>
       </g>
       <g
-         transform="matrix(-1,0,0,1,272.03675,-42.000052)"
+         transform="matrix(-1,0,0,1,248.58022,-40.069234)"
          id="g3916">
         <rect
            inkscape:export-ydpi="14.04878"
@@ -301,76 +301,143 @@
         </g>
       </g>
       <g
-         id="g4088">
+         transform="translate(-30.419914,-40.069234)"
+         id="g3910">
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3039"
+           width="159.99998"
+           height="160"
+           x="469.50006"
+           y="-696.87524"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
         <g
-           id="g3910"
-           transform="translate(-6.9633877,-42.000052)">
+           id="g3906"
+           transform="translate(-37.500068,-220)">
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(322.00012,369.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path3884"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
           <rect
-             inkscape:export-ydpi="14.04878"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             transform="scale(1,-1)"
              ry="20"
-             rx="20"
-             y="-696.87524"
-             x="469.50006"
-             height="160"
-             width="159.99998"
-             id="rect3039"
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-          <g
-             transform="translate(-37.500068,-220)"
-             id="g3906">
-            <path
-               sodipodi:type="star"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="path3884"
-               sodipodi:sides="3"
-               sodipodi:cx="240"
-               sodipodi:cy="467.50024"
-               sodipodi:r1="40"
-               sodipodi:r2="20"
-               sodipodi:arg1="0"
-               sodipodi:arg2="1.0471976"
-               inkscape:flatsided="true"
-               inkscape:rounded="0"
-               inkscape:randomized="0"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               transform="translate(322.00012,369.375)"
-               inkscape:transform-center-x="-10" />
-            <rect
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="rect3904"
-               width="10"
-               height="80"
-               x="622.00012"
-               y="796.87524"
-               rx="0"
-               ry="20" />
-          </g>
+             rx="0"
+             y="796.87524"
+             x="622.00012"
+             height="80"
+             width="10"
+             id="rect3904"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
         </g>
+      </g>
+      <g
+         transform="translate(-23.456526,1.930818)"
+         id="g4074">
+        <rect
+           inkscape:export-ydpi="14.04878"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           transform="scale(1,-1)"
+           ry="20"
+           rx="20"
+           y="-818.87531"
+           x="134.53665"
+           height="160"
+           width="159.99998"
+           id="rect3970"
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(584.53664,651.37506)"
+           d="m -340,87.500244 -60,34.641016 0,-69.282032 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="87.500244"
+           sodipodi:cx="-380"
+           sodipodi:sides="3"
+           id="path3972"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:40;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3976"
+           width="159.99998"
+           height="160"
+           x="-29.463331"
+           y="-818.87531"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
         <g
-           id="g4074">
+           id="g3978"
+           transform="translate(-98.9634,-57.99994)">
           <rect
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-             id="rect3970"
-             width="159.99998"
-             height="160"
-             x="134.53665"
-             y="-818.87531"
-             rx="20"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="rect3980"
+             width="15"
+             height="100"
+             x="116.64062"
+             y="746.87524"
+             rx="0"
+             ry="20" />
+          <rect
              ry="20"
-             transform="scale(1,-1)"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-ydpi="14.04878" />
+             rx="0"
+             y="746.87524"
+             x="167.35951"
+             height="100"
+             width="15"
+             id="rect3982"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        </g>
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3986"
+           width="159.99998"
+           height="160"
+           x="298.53665"
+           y="-818.87531"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
+        <g
+           transform="translate(29.036566,122.00006)"
+           id="g3988">
           <path
              sodipodi:type="star"
-             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:40;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-             id="path3972"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="path3990"
              sodipodi:sides="3"
-             sodipodi:cx="-380"
-             sodipodi:cy="87.500244"
+             sodipodi:cx="240"
+             sodipodi:cy="467.50024"
              sodipodi:r1="40"
              sodipodi:r2="20"
              sodipodi:arg1="0"
@@ -378,240 +445,167 @@
              inkscape:flatsided="true"
              inkscape:rounded="0"
              inkscape:randomized="0"
-             d="m -340,87.500244 -60,34.641016 0,-69.282032 z"
-             transform="translate(584.53664,651.37506)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             transform="translate(74.14062,149.375)"
+             inkscape:transform-center-x="-10" />
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(124.85951,149.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path3992"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
+        </g>
+        <rect
+           inkscape:export-ydpi="14.04878"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           transform="scale(-1,-1)"
+           ry="20"
+           rx="20"
+           y="-818.87531"
+           x="33.463329"
+           height="160"
+           width="159.99998"
+           id="rect3996"
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <g
+           id="g3998"
+           transform="matrix(-1,0,0,1,251.39619,-77.99994)">
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(89.500072,349.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path4000"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
+          <path
+             sodipodi:type="star"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="path4002"
+             sodipodi:sides="3"
+             sodipodi:cx="240"
+             sodipodi:cy="467.50024"
+             sodipodi:r1="40"
+             sodipodi:r2="20"
+             sodipodi:arg1="0"
+             sodipodi:arg2="1.0471976"
+             inkscape:flatsided="true"
+             inkscape:rounded="0"
+             inkscape:randomized="0"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             transform="translate(140.21896,349.375)"
+             inkscape:transform-center-x="-10" />
+        </g>
+        <rect
+           inkscape:export-ydpi="14.04878"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           transform="scale(1,-1)"
+           ry="20"
+           rx="20"
+           y="-818.87531"
+           x="462.53662"
+           height="160"
+           width="159.99998"
+           id="rect4006"
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <g
+           transform="translate(-44.463506,-97.99994)"
+           id="g4008">
+          <path
+             sodipodi:type="star"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="path4010"
+             sodipodi:sides="3"
+             sodipodi:cx="240"
+             sodipodi:cy="467.50024"
+             sodipodi:r1="40"
+             sodipodi:r2="20"
+             sodipodi:arg1="0"
+             sodipodi:arg2="1.0471976"
+             inkscape:flatsided="true"
+             inkscape:rounded="0"
+             inkscape:randomized="0"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             transform="translate(322.00012,369.375)"
              inkscape:transform-center-x="-10" />
           <rect
-             inkscape:export-ydpi="14.04878"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             transform="scale(1,-1)"
-             ry="20"
-             rx="20"
-             y="-818.87531"
-             x="-29.463331"
-             height="160"
-             width="159.99998"
-             id="rect3976"
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-          <g
-             transform="translate(-98.9634,-57.99994)"
-             id="g3978">
-            <rect
-               ry="20"
-               rx="0"
-               y="746.87524"
-               x="116.64062"
-               height="100"
-               width="15"
-               id="rect3980"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-            <rect
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="rect3982"
-               width="15"
-               height="100"
-               x="167.35951"
-               y="746.87524"
-               rx="0"
-               ry="20" />
-          </g>
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="rect4012"
+             width="10"
+             height="80"
+             x="622.00012"
+             y="796.87524"
+             rx="0"
+             ry="20" />
+        </g>
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect4016"
+           width="159.99998"
+           height="160"
+           x="197.46332"
+           y="-818.87531"
+           rx="20"
+           ry="20"
+           transform="scale(-1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
+        <g
+           id="g4018"
+           transform="matrix(-1,0,0,1,309.53682,-97.99994)">
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(322.00012,369.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path4020"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
           <rect
-             inkscape:export-ydpi="14.04878"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             transform="scale(1,-1)"
              ry="20"
-             rx="20"
-             y="-818.87531"
-             x="298.53665"
-             height="160"
-             width="159.99998"
-             id="rect3986"
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-          <g
-             id="g3988"
-             transform="translate(29.036566,122.00006)">
-            <path
-               inkscape:transform-center-x="-10"
-               transform="translate(74.14062,149.375)"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               inkscape:randomized="0"
-               inkscape:rounded="0"
-               inkscape:flatsided="true"
-               sodipodi:arg2="1.0471976"
-               sodipodi:arg1="0"
-               sodipodi:r2="20"
-               sodipodi:r1="40"
-               sodipodi:cy="467.50024"
-               sodipodi:cx="240"
-               sodipodi:sides="3"
-               id="path3990"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               sodipodi:type="star" />
-            <path
-               sodipodi:type="star"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="path3992"
-               sodipodi:sides="3"
-               sodipodi:cx="240"
-               sodipodi:cy="467.50024"
-               sodipodi:r1="40"
-               sodipodi:r2="20"
-               sodipodi:arg1="0"
-               sodipodi:arg2="1.0471976"
-               inkscape:flatsided="true"
-               inkscape:rounded="0"
-               inkscape:randomized="0"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               transform="translate(124.85951,149.375)"
-               inkscape:transform-center-x="-10" />
-          </g>
-          <rect
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-             id="rect3996"
-             width="159.99998"
-             height="160"
-             x="33.463329"
-             y="-818.87531"
-             rx="20"
-             ry="20"
-             transform="scale(-1,-1)"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-ydpi="14.04878" />
-          <g
-             transform="matrix(-1,0,0,1,251.39619,-77.99994)"
-             id="g3998">
-            <path
-               sodipodi:type="star"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="path4000"
-               sodipodi:sides="3"
-               sodipodi:cx="240"
-               sodipodi:cy="467.50024"
-               sodipodi:r1="40"
-               sodipodi:r2="20"
-               sodipodi:arg1="0"
-               sodipodi:arg2="1.0471976"
-               inkscape:flatsided="true"
-               inkscape:rounded="0"
-               inkscape:randomized="0"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               transform="translate(89.500072,349.375)"
-               inkscape:transform-center-x="-10" />
-            <path
-               inkscape:transform-center-x="-10"
-               transform="translate(140.21896,349.375)"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               inkscape:randomized="0"
-               inkscape:rounded="0"
-               inkscape:flatsided="true"
-               sodipodi:arg2="1.0471976"
-               sodipodi:arg1="0"
-               sodipodi:r2="20"
-               sodipodi:r1="40"
-               sodipodi:cy="467.50024"
-               sodipodi:cx="240"
-               sodipodi:sides="3"
-               id="path4002"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               sodipodi:type="star" />
-          </g>
-          <rect
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-             id="rect4006"
-             width="159.99998"
-             height="160"
-             x="462.53662"
-             y="-818.87531"
-             rx="20"
-             ry="20"
-             transform="scale(1,-1)"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-ydpi="14.04878" />
-          <g
-             id="g4008"
-             transform="translate(-44.463506,-97.99994)">
-            <path
-               inkscape:transform-center-x="-10"
-               transform="translate(322.00012,369.375)"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               inkscape:randomized="0"
-               inkscape:rounded="0"
-               inkscape:flatsided="true"
-               sodipodi:arg2="1.0471976"
-               sodipodi:arg1="0"
-               sodipodi:r2="20"
-               sodipodi:r1="40"
-               sodipodi:cy="467.50024"
-               sodipodi:cx="240"
-               sodipodi:sides="3"
-               id="path4010"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               sodipodi:type="star" />
-            <rect
-               ry="20"
-               rx="0"
-               y="796.87524"
-               x="622.00012"
-               height="80"
-               width="10"
-               id="rect4012"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-          </g>
-          <rect
-             inkscape:export-ydpi="14.04878"
-             inkscape:export-xdpi="14.04878"
-             inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
-             transform="scale(-1,-1)"
-             ry="20"
-             rx="20"
-             y="-818.87531"
-             x="197.46332"
-             height="160"
-             width="159.99998"
-             id="rect4016"
-             style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
-          <g
-             transform="matrix(-1,0,0,1,309.53682,-97.99994)"
-             id="g4018">
-            <path
-               sodipodi:type="star"
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="path4020"
-               sodipodi:sides="3"
-               sodipodi:cx="240"
-               sodipodi:cy="467.50024"
-               sodipodi:r1="40"
-               sodipodi:r2="20"
-               sodipodi:arg1="0"
-               sodipodi:arg2="1.0471976"
-               inkscape:flatsided="true"
-               inkscape:rounded="0"
-               inkscape:randomized="0"
-               d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
-               transform="translate(322.00012,369.375)"
-               inkscape:transform-center-x="-10" />
-            <rect
-               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-               id="rect4022"
-               width="10"
-               height="80"
-               x="622.00012"
-               y="796.87524"
-               rx="0"
-               ry="20" />
-          </g>
+             rx="0"
+             y="796.87524"
+             x="622.00012"
+             height="80"
+             width="10"
+             id="rect4022"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
         </g>
       </g>
-    </g>
-    <g
-       id="g4078"
-       transform="translate(-15.272528,4.0624968e-8)">
       <g
-         transform="translate(1148.1219,-4.9998079)"
+         transform="translate(1122.5434,-3.0689899)"
          id="g3247">
         <rect
            style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -639,7 +633,7 @@
         </g>
       </g>
       <g
-         transform="translate(-0.93843617,-0.18487549)"
+         transform="translate(-26.516963,1.7459425)"
          id="g4055">
         <rect
            style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -666,6 +660,1109 @@
              inkscape:connector-curvature="0" />
         </g>
       </g>
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-656.80603"
+         x="-1091.0801"
+         height="160"
+         width="159.99998"
+         id="rect3861"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-820.80615"
+         x="-1090.0801"
+         height="160"
+         width="159.99998"
+         id="rect3869"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3843"
+         width="159.99998"
+         height="160"
+         x="-927.08014"
+         y="-656.80603"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         transform="translate(-40.306073,-159.82161)"
+         id="g3833">
+        <rect
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3045"
+           width="80"
+           height="80"
+           x="1220"
+           y="227.00269"
+           transform="translate(-372.61378,492.87495)"
+           rx="5"
+           ry="5" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           d="m 857.38622,719.87764 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+           id="path3820"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="czc" />
+        <g
+           id="g3827"
+           transform="translate(0,-2.4973145)">
+          <path
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+             d="m 1345,242 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 L 1335,297 l 20,0 -3.7812,-26.375 C 1356.3966,268.26058 1360,263.0639 1360,257 c 0,-8.28428 -6.7157,-15 -15,-15 z"
+             transform="translate(-457.61378,492.87495)"
+             id="path3822"
+             inkscape:connector-curvature="0" />
+        </g>
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3851"
+         width="159.99998"
+         height="160"
+         x="-926.08014"
+         y="-820.80615"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <rect
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3963"
+         width="80"
+         height="80"
+         x="806.08014"
+         y="724.05615"
+         rx="5"
+         ry="5" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 816.08015,724.05615 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         id="path3965"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czc" />
+      <g
+         id="g3967"
+         transform="translate(-41.306073,1.6812001)">
+        <path
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+           d="m 1345,242 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 L 1335,297 l 20,0 -3.7812,-26.375 C 1356.3966,268.26058 1360,263.0639 1360,257 c 0,-8.28428 -6.7157,-15 -15,-15 z"
+           transform="translate(-457.61378,492.87495)"
+           id="path3969"
+           inkscape:connector-curvature="0" />
+      </g>
+      <path
+         sodipodi:nodetypes="czc"
+         inkscape:connector-curvature="0"
+         id="path4037"
+         d="m 1006.8301,724.05616 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <g
+         transform="translate(119.44386,-165.82148)"
+         id="g4048">
+        <rect
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect4035"
+           width="80"
+           height="80"
+           x="827.38623"
+           y="889.87762"
+           rx="5"
+           ry="5" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4041"
+           d="m 867.38623,902.37762 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 l -3.7812,26.375 20,0 -3.7812,-26.375 c 5.1778,-2.36442 8.7812,-7.5611 8.7812,-13.625 0,-8.28428 -6.7157,-15 -15,-15 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+      </g>
+      <path
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 1007.8301,560.05604 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         id="path4060"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czc" />
+      <g
+         transform="translate(120.44386,-329.8216)"
+         id="g4062">
+        <rect
+           ry="5"
+           rx="5"
+           y="889.87762"
+           x="827.38623"
+           height="80"
+           width="80"
+           id="rect4064"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+           d="m 867.38623,902.37762 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 l -3.7812,26.375 20,0 -3.7812,-26.375 c 5.1778,-2.36442 8.7812,-7.5611 8.7812,-13.625 0,-8.28428 -6.7157,-15 -15,-15 z"
+           id="path4066"
+           inkscape:connector-curvature="0" />
+      </g>
+      <g
+         id="g3203"
+         transform="translate(41.580059,-40.069234)">
+        <rect
+           inkscape:export-ydpi="14.04878"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           transform="scale(1,-1)"
+           ry="20"
+           rx="20"
+           y="-696.87524"
+           x="69.500069"
+           height="160"
+           width="159.99998"
+           id="rect3205"
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(519.50006,529.375)"
+           d="m -340,87.500244 -60,34.641016 0,-69.282032 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="87.500244"
+           sodipodi:cx="-380"
+           sodipodi:sides="3"
+           id="path3207"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:40;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+      </g>
+      <g
+         id="g3209"
+         transform="translate(-122.41993,-220.06923)">
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3211"
+           width="159.99998"
+           height="160"
+           x="69.500069"
+           y="-876.87524"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
+        <g
+           id="g3213">
+          <rect
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="rect3215"
+             width="15"
+             height="100"
+             x="116.64062"
+             y="746.87524"
+             rx="0"
+             ry="20" />
+          <rect
+             ry="20"
+             rx="0"
+             y="746.87524"
+             x="167.35951"
+             height="100"
+             width="15"
+             id="rect3217"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        </g>
+      </g>
+      <g
+         id="g3219"
+         transform="translate(5.580052,-60.069234)">
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3221"
+           width="159.99998"
+           height="160"
+           x="269.50006"
+           y="-716.87524"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
+        <g
+           transform="translate(-1.1594238e-5,20)"
+           id="g3223">
+          <path
+             sodipodi:type="star"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="path3225"
+             sodipodi:sides="3"
+             sodipodi:cx="240"
+             sodipodi:cy="467.50024"
+             sodipodi:r1="40"
+             sodipodi:r2="20"
+             sodipodi:arg1="0"
+             sodipodi:arg2="1.0471976"
+             inkscape:flatsided="true"
+             inkscape:rounded="0"
+             inkscape:randomized="0"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             transform="translate(74.14062,149.375)"
+             inkscape:transform-center-x="-10" />
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(124.85951,149.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path3227"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
+        </g>
+      </g>
+      <g
+         id="g3229"
+         transform="matrix(-1,0,0,1,232.5802,-40.069234)">
+        <rect
+           inkscape:export-ydpi="14.04878"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           transform="scale(1,-1)"
+           ry="20"
+           rx="20"
+           y="-696.87524"
+           x="289.50006"
+           height="160"
+           width="159.99998"
+           id="rect3231"
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <g
+           id="g3233"
+           transform="translate(4.6405374,-200)">
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(89.500072,349.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path3235"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
+          <path
+             sodipodi:type="star"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             id="path3237"
+             sodipodi:sides="3"
+             sodipodi:cx="240"
+             sodipodi:cy="467.50024"
+             sodipodi:r1="40"
+             sodipodi:r2="20"
+             sodipodi:arg1="0"
+             sodipodi:arg2="1.0471976"
+             inkscape:flatsided="true"
+             inkscape:rounded="0"
+             inkscape:randomized="0"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             transform="translate(140.21896,349.375)"
+             inkscape:transform-center-x="-10" />
+        </g>
+      </g>
+      <g
+         id="g3239"
+         transform="matrix(-1,0,0,1,248.58022,-40.069234)">
+        <rect
+           style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3241"
+           width="159.99998"
+           height="160"
+           x="469.50006"
+           y="-696.87524"
+           rx="20"
+           ry="20"
+           transform="scale(1,-1)"
+           inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+           inkscape:export-xdpi="14.04878"
+           inkscape:export-ydpi="14.04878" />
+        <g
+           id="g3243"
+           transform="translate(-37.500068,-220)">
+          <path
+             inkscape:transform-center-x="-10"
+             transform="translate(322.00012,369.375)"
+             d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+             inkscape:randomized="0"
+             inkscape:rounded="0"
+             inkscape:flatsided="true"
+             sodipodi:arg2="1.0471976"
+             sodipodi:arg1="0"
+             sodipodi:r2="20"
+             sodipodi:r1="40"
+             sodipodi:cy="467.50024"
+             sodipodi:cx="240"
+             sodipodi:sides="3"
+             id="path3245"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+             sodipodi:type="star" />
+          <rect
+             ry="20"
+             rx="0"
+             y="796.87524"
+             x="622.00012"
+             height="80"
+             width="10"
+             id="rect3247"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        </g>
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3249"
+         width="159.99998"
+         height="160"
+         x="-1091.0801"
+         y="-656.80603"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-656.80603"
+         x="-927.08014"
+         height="160"
+         width="159.99998"
+         id="rect3251"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         id="g3253"
+         transform="translate(-40.306073,-159.82161)">
+        <rect
+           ry="5"
+           rx="5"
+           transform="translate(-372.61378,492.87495)"
+           y="227.00269"
+           x="1220"
+           height="80"
+           width="80"
+           id="rect3255"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <path
+           sodipodi:nodetypes="czc"
+           inkscape:connector-curvature="0"
+           id="path3257"
+           d="m 857.38622,719.87764 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+           style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+        <g
+           transform="translate(0,-2.4973145)"
+           id="g3259">
+          <path
+             inkscape:connector-curvature="0"
+             id="path3261"
+             transform="translate(-457.61378,492.87495)"
+             d="m 1345,242 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 L 1335,297 l 20,0 -3.7812,-26.375 C 1356.3966,268.26058 1360,263.0639 1360,257 c 0,-8.28428 -6.7157,-15 -15,-15 z"
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+        </g>
+      </g>
+      <path
+         sodipodi:nodetypes="czc"
+         inkscape:connector-curvature="0"
+         id="path3263"
+         d="m 1007.8301,560.05604 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <g
+         id="g3265"
+         transform="translate(120.44386,-329.8216)">
+        <rect
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3267"
+           width="80"
+           height="80"
+           x="827.38623"
+           y="889.87762"
+           rx="5"
+           ry="5" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path3269"
+           d="m 867.38623,902.37762 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 l -3.7812,26.375 20,0 -3.7812,-26.375 c 5.1778,-2.36442 8.7812,-7.5611 8.7812,-13.625 0,-8.28428 -6.7157,-15 -15,-15 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+      </g>
+    </g>
+    <g
+       id="g4304"
+       transform="translate(-1.9999397,-36.573736)">
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3309"
+         width="159.99998"
+         height="160"
+         x="111.08012"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <path
+         sodipodi:type="star"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:40;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="path3311"
+         sodipodi:sides="3"
+         sodipodi:cx="-380"
+         sodipodi:cy="87.500244"
+         sodipodi:r1="40"
+         sodipodi:r2="20"
+         sodipodi:arg1="0"
+         sodipodi:arg2="1.0471976"
+         inkscape:flatsided="true"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m -340,87.500244 -60,34.641016 0,-69.282032 z"
+         transform="translate(561.08012,831.87968)"
+         inkscape:transform-center-x="-10" />
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="-52.919861"
+         height="160"
+         width="159.99998"
+         id="rect3315"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         transform="translate(-122.41993,122.50468)"
+         id="g3317">
+        <rect
+           ry="20"
+           rx="0"
+           y="746.87524"
+           x="116.64062"
+           height="100"
+           width="15"
+           id="rect3319"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+        <rect
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3321"
+           width="15"
+           height="100"
+           x="167.35951"
+           y="746.87524"
+           rx="0"
+           ry="20" />
+      </g>
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="275.08011"
+         height="160"
+         width="159.99998"
+         id="rect3325"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         id="g3327"
+         transform="translate(5.5800404,302.50468)">
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(74.14062,149.375)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3329"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+        <path
+           sodipodi:type="star"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3331"
+           sodipodi:sides="3"
+           sodipodi:cx="240"
+           sodipodi:cy="467.50024"
+           sodipodi:r1="40"
+           sodipodi:r2="20"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           transform="translate(124.85951,149.375)"
+           inkscape:transform-center-x="-10" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3335"
+         width="159.99998"
+         height="160"
+         x="56.919861"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         transform="matrix(-1,0,0,1,227.93966,102.50468)"
+         id="g3337">
+        <path
+           sodipodi:type="star"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3339"
+           sodipodi:sides="3"
+           sodipodi:cx="240"
+           sodipodi:cy="467.50024"
+           sodipodi:r1="40"
+           sodipodi:r2="20"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           transform="translate(89.500072,349.375)"
+           inkscape:transform-center-x="-10" />
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(140.21896,349.375)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3341"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+      </g>
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="220.91985"
+         height="160"
+         width="159.99998"
+         id="rect3345"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         transform="matrix(-1,0,0,1,286.08029,82.50468)"
+         id="g3347">
+        <path
+           sodipodi:type="star"
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3349"
+           sodipodi:sides="3"
+           sodipodi:cx="240"
+           sodipodi:cy="467.50024"
+           sodipodi:r1="40"
+           sodipodi:r2="20"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           transform="translate(322.00012,369.375)"
+           inkscape:transform-center-x="-10" />
+        <rect
+           style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3351"
+           width="10"
+           height="80"
+           x="622.00012"
+           y="796.87524"
+           rx="0"
+           ry="20" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3355"
+         width="159.99998"
+         height="160"
+         x="439.08014"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         id="g3357"
+         transform="translate(-67.919982,82.50468)">
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(322.00012,369.375)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3359"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+        <rect
+           ry="20"
+           rx="0"
+           y="796.87524"
+           x="622.00012"
+           height="80"
+           width="10"
+           id="rect3361"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3365"
+         width="159.99998"
+         height="160"
+         x="-763.08014"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         id="g3367"
+         transform="matrix(0.32515707,0.22152369,-0.24413195,0.30163314,504.1385,584.78552)"
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1">
+        <path
+           style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 948.84375,318.90625 7.5625,27.25 -59.09375,104.4375 -27.25,7.5625 52.21875,29.53125 -100.75,218.75 135.5625,-199.03125 52.21875,29.53125 -7.5625,-27.25 59.0938,-104.46875 27.25,-7.53125 -69.625,-39.40625 -69.62505,-39.375 z"
+           transform="matrix(0.87038827,-0.49236598,0.49236598,0.87038827,-182.87424,481.97709)"
+           id="path3369"
+           inkscape:connector-curvature="0" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3371"
+         width="159.99998"
+         height="160"
+         x="-1091.0801"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="-927.08014"
+         height="160"
+         width="159.99998"
+         id="rect3373"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3377"
+         width="80"
+         height="80"
+         x="807.08014"
+         y="902.62994"
+         rx="5"
+         ry="5" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 817.08015,902.62994 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         id="path3379"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czc" />
+      <g
+         id="g3381"
+         transform="translate(-40.306073,180.25499)">
+        <path
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+           d="m 1345,242 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 L 1335,297 l 20,0 -3.7812,-26.375 C 1356.3966,268.26058 1360,263.0639 1360,257 c 0,-8.28428 -6.7157,-15 -15,-15 z"
+           transform="translate(-457.61378,492.87495)"
+           id="path3383"
+           inkscape:connector-curvature="0" />
+      </g>
+      <path
+         sodipodi:nodetypes="czc"
+         inkscape:connector-curvature="0"
+         id="path3385"
+         d="m 1007.8301,902.62995 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <rect
+         ry="5"
+         rx="5"
+         y="902.62994"
+         x="947.83008"
+         height="80"
+         width="80"
+         id="rect3389"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <path
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
+         d="m 987.83009,915.12993 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 l -3.7812,26.375 20,0 -3.7812,-26.375 c 5.1778,-2.36442 8.78121,-7.5611 8.78121,-13.625 0,-8.28428 -6.71571,-15 -15.00001,-15 z"
+         id="path3391"
+         inkscape:connector-curvature="0" />
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="111.08012"
+         height="160"
+         width="159.99998"
+         id="rect3395"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <path
+         inkscape:transform-center-x="-10"
+         transform="translate(561.08012,831.87968)"
+         d="m -340,87.500244 -60,34.641016 0,-69.282032 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="1.0471976"
+         sodipodi:arg1="0"
+         sodipodi:r2="20"
+         sodipodi:r1="40"
+         sodipodi:cy="87.500244"
+         sodipodi:cx="-380"
+         sodipodi:sides="3"
+         id="path3397"
+         style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:40;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         sodipodi:type="star" />
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3401"
+         width="159.99998"
+         height="160"
+         x="-52.919861"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         transform="translate(-122.41993,122.50468)"
+         id="g3403">
+        <rect
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect3405"
+           width="15"
+           height="100"
+           x="116.64062"
+           y="746.87524"
+           rx="0"
+           ry="20" />
+        <rect
+           ry="20"
+           rx="0"
+           y="746.87524"
+           x="167.35951"
+           height="100"
+           width="15"
+           id="rect3407"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3411"
+         width="159.99998"
+         height="160"
+         x="275.08011"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         transform="translate(5.5800404,302.50468)"
+         id="g3413">
+        <path
+           sodipodi:type="star"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3415"
+           sodipodi:sides="3"
+           sodipodi:cx="240"
+           sodipodi:cy="467.50024"
+           sodipodi:r1="40"
+           sodipodi:r2="20"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           transform="translate(74.14062,149.375)"
+           inkscape:transform-center-x="-10" />
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(124.85951,149.375)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3417"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+      </g>
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="56.919861"
+         height="160"
+         width="159.99998"
+         id="rect3421"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <g
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         id="g3423"
+         transform="matrix(-1,0,0,1,227.93966,102.50468)">
+        <path
+           inkscape:transform-center-x="-10"
+           transform="translate(89.500072,349.375)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3425"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+        <path
+           sodipodi:type="star"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3427"
+           sodipodi:sides="3"
+           sodipodi:cx="240"
+           sodipodi:cy="467.50024"
+           sodipodi:r1="40"
+           sodipodi:r2="20"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           transform="translate(140.21896,349.375)"
+           inkscape:transform-center-x="-10" />
+      </g>
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3431"
+         width="159.99998"
+         height="160"
+         x="220.91985"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <g
+         style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         id="g4286">
+        <path
+           inkscape:transform-center-x="-10"
+           transform="matrix(-1,0,0,1,-35.91983,451.87968)"
+           d="m 280,467.50024 -60,34.64102 0,-69.28203 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="20"
+           sodipodi:r1="40"
+           sodipodi:cy="467.50024"
+           sodipodi:cx="240"
+           sodipodi:sides="3"
+           id="path3435"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           sodipodi:type="star" />
+        <rect
+           ry="20"
+           rx="0"
+           y="879.37994"
+           x="335.91983"
+           height="80"
+           width="10"
+           id="rect3437"
+           style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:20;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           transform="scale(-1,1)" />
+      </g>
+      <rect
+         inkscape:export-ydpi="14.04878"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         transform="scale(-1,-1)"
+         ry="20"
+         rx="20"
+         y="-999.37994"
+         x="-1091.0801"
+         height="160"
+         width="159.99998"
+         id="rect3439"
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <rect
+         style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3441"
+         width="159.99998"
+         height="160"
+         x="-927.08014"
+         y="-999.37994"
+         rx="20"
+         ry="20"
+         transform="scale(-1,-1)"
+         inkscape:export-filename="/Users/fhermeni/Research/Code/Btrpcc/sandbox/src/main/webapp/img/rect3023.png"
+         inkscape:export-xdpi="14.04878"
+         inkscape:export-ydpi="14.04878" />
+      <rect
+         ry="5"
+         rx="5"
+         y="902.62994"
+         x="807.08014"
+         height="80"
+         width="80"
+         id="rect3445"
+         style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <path
+         sodipodi:nodetypes="czc"
+         inkscape:connector-curvature="0"
+         id="path3447"
+         d="m 817.08015,902.62994 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         style="fill:none;stroke:#b3b3b3;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <g
+         style="fill:#ffffff;fill-opacity:1;stroke:#b3b3b3;stroke-opacity:1"
+         transform="translate(-40.306073,180.25499)"
+         id="g3449">
+        <path
+           inkscape:connector-curvature="0"
+           id="path3451"
+           transform="translate(-457.61378,492.87495)"
+           d="m 1345,242 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 L 1335,297 l 20,0 -3.7812,-26.375 C 1356.3966,268.26058 1360,263.0639 1360,257 c 0,-8.28428 -6.7157,-15 -15,-15 z"
+           style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+      </g>
+      <path
+         style="fill:none;stroke:#b3b3b3;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 1007.8301,902.62995 c 0,0 0,-40 30,-40 30,0 30,40 30,40"
+         id="path3453"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czc" />
+      <rect
+         style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#b3b3b3;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3457"
+         width="80"
+         height="80"
+         x="947.83008"
+         y="902.62994"
+         rx="5"
+         ry="5" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3459"
+         d="m 987.83009,915.12993 c -8.2843,0 -15,6.71572 -15,15 0,6.0639 3.6034,11.26058 8.7812,13.625 l -3.7812,26.375 20,0 -3.7812,-26.375 c 5.1778,-2.36442 8.78121,-7.5611 8.78121,-13.625 0,-8.28428 -6.71571,-15 -15.00001,-15 z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
     </g>
   </g>
 </svg>

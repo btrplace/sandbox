@@ -9,9 +9,10 @@
     
     position: fixed;
     top: 17%;
-    left: 50%;
-    
-    margin-left: -300px;
+    left: 30%;
+    right: 30%;
+
+    /*margin-left: -300px;*/
     width: auto;
     
     background-color: #FFF;
@@ -19,6 +20,7 @@
     border: 1px solid black;
     padding: 10px;
     text-align:center;
+    border-radius:3px;
 }
 
 .jqmOverlay { background-color: #000; }

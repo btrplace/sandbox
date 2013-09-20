@@ -1,153 +1,140 @@
-//
-var playing = false;
+/*
+ * Everything related to the player and the animations.
+ */
 
-var currentTime = 0;
+var animationQueue = [];
+var playerNextTarget  = 1, //
+	isPlaying = false; // Indicates if the player is playing or not.
+	doPause = false,  // If set to true, the player will pause before next step
+	playSpeed = 1000, // Duration of one step in regular Play mode or step by step mode
+	rewindSpeed = 100 ; // Duration of the rewind
 
-//Go very fast
-var fast = false;
-
-//Play the reconfiguration or pause it
-
-function playMode() {
-    playing = true;
-    document.getElementById("play_button").style.backgroundPositionX="-40px";
+/**
+ * Changes the Player mode to the specified mode.
+ * Modes are 'play','pause'
+ * @param mode
+ */
+function setPlayerMode(mode){
+	if( mode == "play" ){
+		$("#playButton").hide();
+		$("#pauseButton").show();
+	}
+	if( mode == "pause" ){
+		isPlaying = false;
+		$("#pauseButton").hide();
+    	$("#playButton").show();
+	}
 }
 
-function pauseMode() {
-    playing = false;
-    document.getElementById("play_button").style.backgroundPositionX="-60px";
-    fast = false;
-}
-function playOrPause() {
-    if (!playing && !pending && animationStep < scenario.actions.length) { //run & reveals the pause button if not at the end
-        playMode();
-        doAction(autoCommit);
-    }
-    else { //pause & reveals the play button
-        pauseMode();
-    }
+function playerNextStep(){
+	playerStepMove(1, animationBaseDuration);
 }
 
-//Move back to the source configuration
-function reset() {
-    if (pending || animationStep == 0) {return false;}
-    playMode();
-    if (animationStep != 0) {
-        fast = true;
-        undoAction(autoRollback);
-    }
-
+function playerPreviousStep(){
+	playerStepMove(-1, animationBaseDuration);
 }
 
-
-//Go directly to the destination configuration
-function directEnd() {
-    if (pending) {return false;}
-    if (animationStep < scenario.actions.length) {
-        playMode();
-        fast = true;
-        doAction(autoCommit);
-    }
+var pauseCallback ;
+function playerPause(callback){
+	$("#pauseButton").addClass("disabled");
+	doPause = true;
+	pauseCallback = callback;
 }
 
-//Go to the previous move in a reconfiguration
-function prev() {
-    if (pending) {return false;}
-    if (animationStep != 0) {
-        pauseMode();
-        undoAction(rollback);
-    }
-    return true;
+function playerRewind(callback){
+	if( isPlaying ){
+		if (LOG) console.error("Can't rewind ! It's alreay playing !!");
+		return ;
+	}
+
+	playLoop(-1,rewindSpeed, function(){
+		console.error("Updating click bindings !");
+		// In the case some of the Node have been .refresh()'d.
+    	updateClickBindings();
+    });
+    return ;
+    /*
+	var backLoop = function(){
+		if (LOG) console.log("BACK LOOP !");
+		var canPlay = playerStepMove(-1, 100);
+		setTimeout(function(){
+			if( canPlay ){
+				backLoop();
+			}
+		}, 100);
+	};
+
+	backLoop();
+	*/
 }
 
-//Go to the next move of the reconfiguration
-function next() {
-    if (pending) {return false;}
-    if (animationStep < scenario.actions.length) {
-        pauseMode();
-        doAction(commit);
-    }
-    return true;
-}
+$(document).ready(function(){
+	setPlayerMode("pause");
+});
 
-//Execute the current action
-function doAction(f) {
-    //console.log("do '" + scenario.actions[animationStep] + "'");
-    begin(animationStep);
-    var arr = scenario.actions[animationStep].split(spaceSplitter);
-    if (arr[1] == "M") {migrate(animationStep, getVM(arr[2]),getNode(arr[3]),getNode(arr[4]), f);}
-    else if (arr[1] == "H") {halt(animationStep, getNode(arr[2]), f);}
-    else if (arr[1] == "S") {boot(animationStep, getNode(arr[2]), f);}
-}
+function actionHandler(action, direction, timeUnit, callback){
+	var duration = (action.end - action.start) * timeUnit * 0.9;
+	var name = action.id;
+	if( name == "bootNode" ){
+		if(direction == 1 ){
+			animationQueue.push(function(){ bootNode(config.getNode("N"+action.node), duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1){
+			animationQueue.push(function(){ shutdownNode(config.getNode("N"+action.node), duration, callback);  });
+		}
+	}
+	else if( name == "shutdownNode" ){
+		if (direction == 1){
+			animationQueue.push(function(){ shutdownNode(config.getNode("N"+action.node), duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1){
+			animationQueue.push(function(){ bootNode(config.getNode("N"+action.node), duration, callback); });
+		}
+	}
+	else if( name == "bootVM" ){
+		if (direction == 1) {
+			bootVM(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+action.node));
+			animationQueue.push(function(){ bootVMAnim(config.getVirtualMachine("VM"+action.vm), duration, callback);  });
+		}
+		// Reverse mode
+		else if (direction == -1) {
+			//shutdownVM(config.vms[action.vm], config.nodes[action.to]);
+			animationQueue.push(function(){ shutdownVM(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+action.to), duration, callback); });
+		}
+	}
+	else if (name == "shutdownVM") {
+		if (direction == 1) {
+			//shutdownVM(config.vms[action.vm], config.nodes[action.on]);
+			animationQueue.push(function(){ shutdownVM(config.getVirtualMachine("VM"+action.vm), config.nodes[action.on], duration, callback); });
+		}
+		// Reverse mode
+		else if (direction == -1) {
+			bootVM(config.vms[action.vm], config.nodes[action.on]);
+			animationQueue.push(function(){ bootVMAnim(config.getVirtualMachine("VM"+action.vm), duration, callback); });
+		}
+	}
+	else if( name == "migrateVM" ){
+		var from, to ;
+		if( direction == 1 ){
+			from = action.from;
+			to = action.to;
+		}
+		// Reverse mode
+		else if( direction == -1 ){
+			from = action.to;
+			to = action.from;
+		}
 
-//Undo the last committed action
-function undoAction(f) {
-    begin(animationStep - 1);
-    var arr = scenario.actions[animationStep - 1].split(spaceSplitter);
-    if (arr[1] == "M") {migrate(animationStep - 1, getVM(arr[2]),getNode(arr[4]),getNode(arr[3]), f);}
-    else if (arr[1] == "S") {halt(animationStep - 1, getNode(arr[2]),f);}
-    else if (arr[1] == "H") {boot(animationStep - 1, getNode(arr[2]),f);}
-}
-
-//Commit the current action.
-function commit() {
-    document.getElementById('a' + animationStep).style.color="#666";
-    document.getElementById('a' + animationStep).style.fontWeight="normal";
-    animationStep++;
-    colorLines(animationStep);
-    pending = false;
-}
-
-//Commit the current action.
-function autoCommit() {
-        document.getElementById('a' + animationStep).style.color="#666";
-        document.getElementById('a' + animationStep).style.fontWeight="normal";
-        animationStep++;
-        colorLines(animationStep);
-        pending = false;
-        if (animationStep == scenario.actions.length) {
-            document.getElementById("play_button").style.backgroundPositionX="-60px";
-            fast = false;
-            pauseMode();
-        } else if (playing) {
-            doAction(autoCommit);
-        }
-}
-
-//Cancel the current action.
-function rollback() {
-    animationStep--;
-    document.getElementById('a' + animationStep).style.color="#bbb";
-    document.getElementById('a' + animationStep).style.fontWeight="normal";
-    colorLines(animationStep);
-    pending = false;
-}
-
-//Cancel the current action.
-function autoRollback() {
-    animationStep--;
-    document.getElementById('a' + animationStep).style.color="#bbb";
-    document.getElementById('a' + animationStep).style.fontWeight="normal";
-    colorLines(animationStep);
-    pending = false;
-    if (animationStep > 0 && playing) {
-        undoAction(autoRollback);
-    } else {
-        pauseMode();
-        fast = false;
-    }
-}
-
-//Begin an action.
-function begin(a){
-    document.getElementById('a' + a).style.color="red";
-    document.getElementById('a' + a).style.fontWeight="bold";
-    pending = true;
+		animationQueue.push(function(){ migrate(config.getVirtualMachine("VM"+action.vm), config.getNode("N"+from), config.getNode("N"+to), duration, callback) });
+	};
 }
 
 //Animation for a migrate action
-function migrate(a, vm, src, dst, f) {
-
+function migrate(vm, src, dst, duration, f) {
+	if (LOG) console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
+	var a = 0;
     //A light gray VM is posted on the destination
     var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
     ghostDst.bgColor = "#eee";
@@ -162,32 +149,72 @@ function migrate(a, vm, src, dst, f) {
     movingVM.strokeColor = "#ddd";
     movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
     movingVM.box.toFront();
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
-        function() {
-            //The source VM goes away
-            src.unhost(vm);
+    var callbackAlreadyCalled = false;
+    var animationEnd = function() {
+		//The source VM goes away
+		src.unhost(vm);
 
-            // the dst light gray VM into dark gray
-            ghostDst.box.remove();
-            dst.vms.length--;    //remove ghostDst
-            vm.posX = ghostDst.posX;
-            vm.posY = ghostDst.posY;
-            dst.host(vm);
-            src.refresh();
-            dst.refresh();
-            f(a);
+		// the dst light gray VM into dark gray
+		ghostDst.box.remove();
+		movingVM.box.remove();
+
+		dst.vms.length--;    //remove ghostDst
+		vm.posX = ghostDst.posX;
+		vm.posY = ghostDst.posY;
+		dst.host(vm);
+		src.refresh();
+		dst.refresh();
+
+		//drawConfiguration('canvas');
+		//f(a);
+   }
+    //movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
+    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",function(){
+        	animationEnd();
+        	callbackAlreadyCalled = true ;
         }
-        );
+    );
+    // This is a safety, in the eventuality of some drawing error ;
+    setTimeout(function(){
+    	if( ! callbackAlreadyCalled ){
+    		animationEnd();
+    	}
+    }, duration+100);
 }
 
 //Animation for booting a node
-function boot(a, node, f) {
-    node.boxStroke.animate({'stroke': 'black'}, fast ? 50 :500,"<>", function() {node.online = true;f(a);});
-    node.boxFill.animate({'fill': 'black'}, fast ? 50 : 500,"<>", function() {});
+function bootNode(node, duration) {
+	if (LOG) console.log("[ANIM] Booting node "+node.id);
+    node.boxStroke.animate({'stroke': 'black'}, duration,"<>", function() {node.online = true;});
+    node.boxFill.animate({'fill': 'black'}, duration,"<>", function() {});
 }
 
-//Animation for halting a node.
-function halt(a, node, f) {
-    node.boxStroke.animate({'stroke': '#bbb'}, fast ? 50 : 500,"<>", function(){node.online = false;f(a);});
-    node.boxFill.animate({'fill': '#bbb'}, fast ? 50 : 500,"<>", function() {});
+// Animation for shutting down a node
+function shutdownNode(node, duration){
+	if (LOG) console.log("[ANIM] Shutting down node "+node.id+" time : "+duration);
+    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){
+    	node.online = false;});
+    node.boxFill.animate({'fill': '#bbb'}, duration,"<>");
+}
+
+// Preparation for Animation for booting a VM
+function bootVM(vm, node, duration){
+	node.host(vm);
+}
+
+// Animation for booting a VM
+function bootVMAnim(vm, duration){
+	if (LOG) console.log("[ANIM] Booting "+vm.id);
+   	vm.box.attr({"opacity":0});
+	vm.box.animate({'opacity': 1}, duration,"<>", function() {});
+}
+
+// Animation for shutting down a VM
+function shutdownVM(vm, node, duration){
+	if (LOG) console.log("[ANIM] Shutting down "+vm.id+" on node "+node.id);
+	vm.box.attr({"opacity":1}); // Ensure the opacity is at 1.
+    vm.box.animate({'opacity': 0}, duration,"<>", function(){
+    	if (LOG) console.log("[ANIM DONE] Unhosted "+vm.id+" from "+node.id);
+    	node.unhost(vm);
+    });
 }
