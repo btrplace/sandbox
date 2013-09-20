@@ -30,6 +30,11 @@ The webapp will then be available at [localhost:8080] (http://localhost:8080).
 Release notes
 -------------------------------
 
+### 20 sep. 2013 - 2.0.0 ###
+- complete rewrite of the UI by Tom Guillermin
+- the sandbox is finally running btrplace
+- bug fixes
+
 ### 21 nov. 2012 - 1.2.1 ###
 - bug fixes
 - the configuration can now be created manually
