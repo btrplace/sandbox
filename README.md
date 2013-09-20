@@ -30,6 +30,8 @@ The webapp will then be available at [localhost:8080] (http://localhost:8080).
 
 Release notes
 -------------------------------
+### ???? ###
+- bug fixes
 
 ### 20 sep. 2013 - 2.0.0 ###
 - complete rewrite of the UI by Tom Guillermin
