@@ -2,11 +2,10 @@ Btrplace Sandbox
 ===============================
 
 This web application allows to simply test the behavior of BtrPlace.
-It first generate a sample configuration. The user can then write
-some placement constraints and check BtrPlace fix the configuration when
-it is stated as not viable.
+It first generates a sample configuration. The user can then write
+some placement constraints then asks BtrPlace to the violations.
 
-- author: Fabien Hermenier
+- author: Tom Guillermin, Fabien Hermenier
 - contact: fabien.hermenier@unice.fr
 
 The last release of the sandbox is always deployed and usable on [this server] (http://btrp.inria.fr/sandbox).
