@@ -150,7 +150,7 @@ function Node(name, cpu, mem) {
 	            break;
 	        }
 	    }
-	    return freeMem > 0 && freeCPU > 0;
+	    return freeMem >= 0 && freeCPU >= 0;
     }
 
     this.getVMsIds = function() {
