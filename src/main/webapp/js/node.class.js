@@ -189,4 +189,14 @@ function Node(name, cpu, mem) {
     		config.vms.push(vm);
     	}
     }
+
+    this.free = function() {
+        var freeCPU = this.cpu;
+        var freeMem = this.mem;
+        for (var v in this.vms) {
+            freeCPU -= this.vms[v].cpu;
+            freeMem -= this.vms[v].mem;
+        }
+        return [freeCPU, freeMem];
+    }
 }

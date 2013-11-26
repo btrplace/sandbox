@@ -5,6 +5,74 @@ var configEditor;
 var cstrsEditor;
 var editor;
 
+function randomConfiguration() {
+    config = new Configuration();
+    //Generate the 4 nodes
+    for (var i = 0; i < 4; i++) {
+        var n;
+        if (i <= 3) {
+            n = new Node("N" + i, 8, 6);
+        } else {
+            n = new Node("N" + i, 6, 6);
+        }
+        config.nodes.push(n);
+    }
+
+    //Templates
+    var tpls = [[2,2],[2,3],[2,2],[2,4],[2,3]];
+    var picked = [];
+    var i = 0
+    //Pick a random node
+    while (i < 8) {
+        var nIdx = Math.floor(Math.random() * config.nodes.length);
+        //pick a satisfying size, minimum 2x2
+        freeRcs = config.nodes[nIdx].free();
+        if (freeRcs[0] <= 1 || freeRcs[1] <= 1) {
+            continue
+        }
+        //console.log(freeRcs)
+        //Check for a template that fit
+        var c = Math.floor(Math.random() * (freeRcs[0]/4)) + 2
+        var m = Math.floor(Math.random() * (freeRcs[1]/4)) + 2
+        if (c > freeRcs[0]) {
+            c = freeRcs[0]
+        }
+        if (m > freeRcs[1]) {
+            m = freeRcs[1]
+        }
+
+        var v = new VirtualMachine("VM" + i, c, m);
+        //console.log(v)
+        if (config.nodes[nIdx].fit(v)) {
+            config.vms.push(v);
+            config.nodes[nIdx].host(v);
+        }  else {
+            console.log("BUG: cannot fit")
+        }
+        i++
+    }
+}
+
+function generateSampleScript(cfg) {
+
+     var buf = "";
+     for (var i in cfg.nodes) {
+        var n = cfg.nodes[i];
+        if (n.vms.length >= 2) {
+            buf += "spread({" + n.vms[0].id + ", " + n.vms[1].id + "});\n";
+            break;
+        }
+     }
+     //One ban on the 3 first VMs that are placed, after vms[5]
+     nIdx  =Math.floor(Math.random() * config.nodes.length);
+     if (config.nodes[nIdx].vms.length > 0) {
+        buf += "ban(" + config.nodes[0].vms[0].id + ", " + config.nodes[0].id + ");\n";
+     }
+     //maxOnlines
+    buf += "maxOnline({N0,N1,N2,N3}, 3);\n"
+    return buf;
+}
+
 function init() {
     //var o = parseUri(location.href);
     var get = GETParameters();
@@ -32,8 +100,8 @@ function init() {
         editor.setReadOnly(false);
 
         // Create configuration and fill the editor
-		randomConfiguration();
-		editor.setValue("spread({VM0, VM3});\nban({VM5}, {N1,N2,N3});\noffline(N3);");
+        randomConfiguration();
+		editor.setValue(generateSampleScript(config));
 
 		if( paper )
 			paper.clear();
@@ -74,34 +142,6 @@ function unpinSandbox() {
 function loadExperiment(cfg) {
 		var parsedCfg = JSON.parse(cfg.replace("%22",'"'));
 		config.fromStorage(parsedCfg);
-		/*
-        var http = createXhrObject();
-        //Remove the possible index.html at the end
-        if (!location.origin) {
-            location.origin = location.protocol + "//" + location.host;
-        }
-        var url = location.origin + location.pathname;
-        http.open("GET", url + "/cache/" + id, true);
-        http.onreadystatechange = function() {
-    	    if (this.readyState == 4) {
-    	        if (this.status == 200) {
-    	            var experiment = JSON.parse(this.responseText);
-    	            scenario = experiment.scenario;
-    	            config = parseConfiguration(experiment.cfg)[0];
-    	            cstrsEditor.setValue(experiment.script);
-    	            configEditor.setValue(experiment.cfg);
-    	            console.log("[LOG] Going to redraw after Load Experiment");
-    	            drawConfiguration('canvas');
-    	            step(1);
-    	        } else {
-    	            console.log("ERROR: " + this.status + ":\n" + this.responseText);
-    	            step(0);
-    	            $('#unknownPinBox').jqmShow();
-    	        }
-    	    }
-        }
-        http.send(null);
-        */
 }
 
 function pinSandbox(){

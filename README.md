@@ -30,8 +30,11 @@ The webapp will then be available at [localhost:8080] (http://localhost:8080).
 
 Release notes
 -------------------------------
-### ???? ###
+
+### 27 nov. 2013 - 2.1 ###
 - bug fixes
+- integrate new constraints
+- support for the bootNode action
 
 ### 20 sep. 2013 - 2.0.0 ###
 - complete rewrite of the UI by Tom Guillermin

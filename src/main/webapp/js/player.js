@@ -2,6 +2,8 @@
  * Everything related to the player and the animations.
  */
 
+var LOG = true ;
+
 var animationQueue = [];
 var playerNextTarget  = 1, //
 	isPlaying = false; // Indicates if the player is playing or not.
@@ -192,8 +194,7 @@ function bootNode(node, duration) {
 // Animation for shutting down a node
 function shutdownNode(node, duration){
 	if (LOG) console.log("[ANIM] Shutting down node "+node.id+" time : "+duration);
-    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){
-    	node.online = false;});
+    node.boxStroke.animate({'stroke': '#bbb'}, duration,"<>", function(){node.online = false;});
     node.boxFill.animate({'fill': '#bbb'}, duration,"<>");
 }
 
