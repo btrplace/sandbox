@@ -69,7 +69,6 @@ function actionToString(action){
  * @param number Ending time of the action
  */
 function addAction(label, start, end){
-    console.log("addAction(" + label + "," + start + "," + end);
     var actionContainer = $("<div></div>").addClass("actionContainer"),
 		actionBar = $("<div></div>").addClass("actionBar"),
 		actionLine = $("<div></div>").addClass("actionLine"),

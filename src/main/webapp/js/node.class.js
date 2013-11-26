@@ -150,7 +150,7 @@ function Node(name, cpu, mem) {
 	            break;
 	        }
 	    }
-	    return freeMem > 0 && freeCPU > 0;
+	    return freeMem >= 0 && freeCPU >= 0;
     }
 
     this.getVMsIds = function() {
@@ -188,5 +188,15 @@ function Node(name, cpu, mem) {
     		this.host(vm);
     		config.vms.push(vm);
     	}
+    }
+
+    this.free = function() {
+        var freeCPU = this.cpu;
+        var freeMem = this.mem;
+        for (var v in this.vms) {
+            freeCPU -= this.vms[v].cpu;
+            freeMem -= this.vms[v].mem;
+        }
+        return [freeCPU, freeMem];
     }
 }

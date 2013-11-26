@@ -178,6 +178,10 @@ public class BtrPlace {
 		Script script ;
 		try {
 			script = scriptBuilder.build(scriptInput);
+            //Ignore continuous constraints
+            for (SatConstraint cstr : script.getConstraints()) {
+                cstr.setContinuous(false);
+            }
 		} catch (ScriptBuilderException sbe){
 			List<ErrorMessage> errorsList = sbe.getErrorReporter().getErrors();
 			List<JSONObject> errors = new ArrayList<JSONObject>();
