@@ -53,6 +53,8 @@ function actionToString(action){
 			return "migrate(VM"+action.vm+") from N"+action.from+" to N"+action.to;
 		case "shutdownNode":
 			return "shutdown(N"+action.node+")";
+        case "bootNode":
+            return "bootNode(N"+action.node+")";
 		case "allocate":
 			return "allocate(VM"+action.vm+","+action.rc+"="+action.amount+") on N"+action.on;
 		case "root":
@@ -67,6 +69,7 @@ function actionToString(action){
  * @param number Ending time of the action
  */
 function addAction(label, start, end){
+    console.log("addAction(" + label + "," + start + "," + end);
     var actionContainer = $("<div></div>").addClass("actionContainer"),
 		actionBar = $("<div></div>").addClass("actionBar"),
 		actionLine = $("<div></div>").addClass("actionLine"),
