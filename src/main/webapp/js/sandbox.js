@@ -466,7 +466,7 @@ function shiftSelectedElement(direction){
  */
 function getCatalogContent() {
     var buf = "Supported constraints: ";
-    var cstrs = ["MaxOnline", "Among", "Ban", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", "Gather", "Killed", "Lonely", "Offline", "Online", "Overbook", "Preserve", "Quarantine", "Ready", "Root", "Running", "SequentialVMTransitions", "SingleResourceCapacity", "SingleRunningCapacity", "Sleeping", "Split", "SplitAmong", "Spread"];
+    var cstrs = ["MaxOnline", "Among", "Ban", "Gather", "Root", "CumulatedResourceCapacity", "CumulatedRunningCapacity", "Fence", , "Killed", "Lonely", "Offline", "Online", "Overbook", "Preserve", "Quarantine", "Ready", "Running", "SequentialVMTransitions", "Sleeping", "Split","Spread","SingleResourceCapacity", "SingleRunningCapacity", "SplitAmong"];
     for (var i in cstrs) {
     	var cstr = cstrs[i],
     		caseCstr = cstr.charAt(0).toLowerCase() + cstr.slice(1);
