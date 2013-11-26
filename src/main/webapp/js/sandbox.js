@@ -174,22 +174,26 @@ function onServerResponse(json){
 	if (LOG) console.log("Received JSON : ",json);
 	// If there is a solution : the data contains action
 	if( json.actions ){
-		editor.getSession().clearAnnotations();
-		// Move to solution state
-		state(1);
-		//showSyntaxErrors();
-		changeView("solution");
-    	$("#userInput").html(editor.getValue().replace(/\n/g,"<br />"));
-    	createDiagram(json.actions);
+        if (json.actions.length > 0) {
+		    editor.getSession().clearAnnotations();
+		    // Move to solution state
+		    state(1);
+		    //showSyntaxErrors();
+		    changeView("solution");
+    	    $("#userInput").html(editor.getValue().replace(/\n/g,"<br />"));
+    	    createDiagram(json.actions);
+        } else {
+            state(2)
+        }
 	}
 	// There are errors in the user constraints script.
-	if (json.errors) {
+	else if (json.errors) {
 		if (LOG) console.log("There are some errors in the user input.");
 		// Move to the error-in-script UI state.
 		state(4);
 	}
 
-	if (json.errors == null && json.solution == null) {
+	else if (json.errors == null && json.solution == null) {
 		if (LOG) console.log("[SOLVER] There is no solution to the problem.");
 		state(3);
 	}
