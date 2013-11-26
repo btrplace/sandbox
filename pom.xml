@@ -21,7 +21,7 @@
     <groupId>btrplace</groupId>
     <artifactId>sandbox</artifactId>
     <packaging>war</packaging>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1</version>
     <name>Btrplace sandbox</name>
     <url>http://github.com/fhermeni/btrplace-sandbox</url>
     <licenses>
@@ -93,7 +93,8 @@
         <connection>scm:git:git@github.com:fhermeni/btrplace-sandbox.git</connection>
         <url>scm:git:git@github.com:fhermeni/btrplace-sandbox</url>
         <developerConnection>scm:git:git@github.com:fhermeni/btrplace-sandbox.git</developerConnection>
-    </scm>
+      <tag>btrplace-sandbox-2.1</tag>
+  </scm>
 
     <properties>
         <github.global.server>github</github.global.server>
