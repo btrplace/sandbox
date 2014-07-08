@@ -292,4 +292,51 @@ public class BtrPlace {
 		}
 		//return Response.serverError().build();
     }
+
+	@GET
+	@Produces("text/plain")
+	public String export(@PathParam("path") String path, @QueryParam("dir") String directory) {
+		if (! path.equals("export")) return "NOT IMPLEMENTED";
+
+		if (lastConfig != null && lastScript != null && lastPlan != null ) {
+
+			String exportPath = "export/" + directory.replaceAll("\\W+", "_");
+
+			// Create dir
+			try {
+				Files.createDirectory(Paths.get(exportPath));
+			} catch (IOException e) {
+	            e.printStackTrace();
+	            return "ERROR: Already exist !";
+			}
+
+			// Create files
+			try {
+				FileWriter fileConfig = new FileWriter(exportPath + "/config.json");
+				FileWriter fileScript = new FileWriter(exportPath + "/script.btrp");
+				FileWriter filePlan = new FileWriter(exportPath + "/plan.json");
+
+				// Write
+				fileConfig.write(lastConfig.toJSONString());
+				fileScript.write(lastScript);
+				filePlan.write(lastPlan.toJSONString());
+
+				// Flush
+				fileConfig.flush();
+				fileScript.flush();
+				filePlan.flush();
+
+				// Close
+				fileConfig.close();
+				fileScript.close();
+				filePlan.close();
+
+			} catch (IOException e) {
+	            e.printStackTrace();
+	            return "ERROR: Write failed !";
+			}
+			return "Done !";
+		}
+		return "ERROR: No valid plan !";
+	}
 }
