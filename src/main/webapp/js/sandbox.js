@@ -262,7 +262,9 @@ function setSelectedElement(element){
 var CPU_UNIT = new VirtualMachine("CPU_UNIT", 1, 0),
 	MEM_UNIT = new VirtualMachine("MEM_UNIT", 0, 1);
 
-function onKeyEvent(keyCode){
+function onKeyEvent(event){
+	var keyCode = event.which;
+
 	if (!canEdit) {
 		return false ;
 	}
@@ -519,7 +521,7 @@ $(function() {
 	$(document).keydown(function(event){
 		// Do keyboard actions only if the user is not typing in the text editor.
 		if( ! editor.isFocused() ){
-			onKeyEvent(event.which);
+			onKeyEvent(event);
 		}
 	});
 });
