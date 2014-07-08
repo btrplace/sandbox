@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 University of Nice Sophia-Antipolis
+ * Copyright (c) 2014 University of Nice Sophia-Antipolis
  *
  * This file is part of btrplace-sandbox.
  *
