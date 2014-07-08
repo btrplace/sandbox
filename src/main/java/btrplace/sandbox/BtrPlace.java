@@ -57,7 +57,7 @@ import java.util.*;
  *
  * @author Fabien Hermenier
  */
-@Path("/inspect")
+@Path("{path}")
 public class BtrPlace {
 
     public BtrPlace(@Context ServletContext context) {
@@ -99,7 +99,9 @@ public class BtrPlace {
 	 */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response check(@FormParam("cfg") String cfg, @FormParam("script") String scriptInput) {
+    public Response check(@Context ServletContext context, @PathParam("path") String path, @FormParam("cfg") String cfg, @FormParam("script") String scriptInput) {
+		if (! path.equals("inspect")) return null;
+
 		Model model = new DefaultModel();
 
         // Create the resources
