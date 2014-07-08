@@ -59,9 +59,15 @@ import java.util.*;
  */
 @Path("{path}")
 public class BtrPlace {
+	
+	private JSONArray lastConfig = null;
+	private String lastScript = null;
+	private JSONObject lastPlan = null;
 
     public BtrPlace(@Context ServletContext context) {
-
+		lastConfig = (JSONArray) context.getAttribute("lastConfig");
+		lastScript = (String) context.getAttribute("lastScript");
+		lastPlan = (JSONObject) context.getAttribute("lastPlan");
     }
 
 	/**
@@ -166,6 +172,10 @@ public class BtrPlace {
 			}
 		}
 
+		// Store the last config
+		lastConfig = config;
+		context.setAttribute("lastConfig", lastConfig);
+
 		// Attach the views
   		model.attach(rcCPU);
 		model.attach(rcMem);
@@ -177,12 +187,15 @@ public class BtrPlace {
 		response.put("errors",null);
 		response.put("solution",null);
 
-
 		// Fixing the script to match BtrpSL requirements
 		int initialLength = scriptInput.split("\n").length;
 		scriptInput = complete(model, scriptInput);
 		// Number of lines added by the 'complete' method
 		int addedLinesNum = scriptInput.split("\n").length-initialLength;
+
+		// Store the last script
+		lastScript = new String(scriptInput);
+		context.setAttribute("lastScript", lastScript);
 
 		Script script ;
 		try {
@@ -207,7 +220,6 @@ public class BtrPlace {
 			return Response.ok(response).build();
 		}
         List<SatConstraint> constraints = new ArrayList(script.getConstraints());
-
 
         ArrayList<Integer> unsatisfiedConstrains = new ArrayList<Integer>();
         Integer currentConstrain = 0 ;
@@ -258,6 +270,11 @@ public class BtrPlace {
 					}
 				}
 				response.put("actions",actionsJSON);
+
+				// Store the last plan
+				lastPlan = new JSONObject(response);
+				context.setAttribute("lastPlan", lastPlan);
+
                 return Response.ok(response).build();
             } catch (JSONConverterException e) {
 				System.err.println("[ERROR] Could not convert Plan to JSON.");
