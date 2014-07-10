@@ -117,6 +117,7 @@ public class BtrPlace {
 	public Response check(@Context ServletContext context,
 			@PathParam("path") String path, @FormParam("cfg") String cfg,
 			@FormParam("script") String scriptInput) {
+
 		if (!path.equals("inspect"))
 			return null;
 
@@ -131,8 +132,8 @@ public class BtrPlace {
 
 		ScriptBuilder scriptBuilder = new ScriptBuilder(model);
 		NamingService ns = scriptBuilder.getNamingService();
-		// Load the nodes
 
+		// Load the nodes
 		JSONArray config = (JSONArray) JSONValue.parse(cfg);
 		for (Object nodeObject : config) {
 			JSONObject node = (JSONObject) nodeObject;
