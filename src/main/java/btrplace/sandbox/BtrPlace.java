@@ -61,11 +61,13 @@ public class BtrPlace {
 
 	private JSONArray lastConfig = null;
 	private String lastScript = null;
+	private String lastCompleteScript = null;
 	private JSONObject lastPlan = null;
 
 	public BtrPlace(@Context ServletContext context) {
 		lastConfig = (JSONArray) context.getAttribute("lastConfig");
 		lastScript = (String) context.getAttribute("lastScript");
+		lastCompleteScript = (String) context.getAttribute("lastCompleteScript");
 		lastPlan = (JSONObject) context.getAttribute("lastPlan");
 	}
 
@@ -199,15 +201,19 @@ public class BtrPlace {
 		response.put("errors", null);
 		response.put("solution", null);
 
+		// Store the last script
+		lastScript = new String(scriptInput);
+		context.setAttribute("lastScript", lastScript);
+
 		// Fixing the script to match BtrpSL requirements
 		int initialLength = scriptInput.split("\n").length;
 		scriptInput = complete(model, scriptInput);
 		// Number of lines added by the 'complete' method
 		int addedLinesNum = scriptInput.split("\n").length - initialLength;
 
-		// Store the last script
-		lastScript = new String(scriptInput);
-		context.setAttribute("lastScript", lastScript);
+		// Store the completed script version
+		lastCompleteScript = new String(scriptInput);
+		context.setAttribute("lastCompleteScript", lastCompleteScript);
 
 		Script script;
 		try {
@@ -336,26 +342,30 @@ public class BtrPlace {
 
 			// Create files
 			try {
-				FileWriter fileConfig = new FileWriter(exportPath
-						+ "/config.json");
-				FileWriter fileScript = new FileWriter(exportPath
-						+ "/script.btrp");
+				FileWriter fileConfig = new FileWriter(exportPath + "/config.json");
+				FileWriter fileScript = new FileWriter(exportPath + "/script.btrp");
 				FileWriter filePlan = new FileWriter(exportPath + "/plan.json");
+				FileWriter fileJs = new FileWriter(exportPath + "/config.js");
 
 				// Write
 				fileConfig.write(lastConfig.toJSONString());
-				fileScript.write(lastScript);
+				fileScript.write(lastCompleteScript);
 				filePlan.write(lastPlan.toJSONString());
+				fileJs.write("var cfg = '" + lastConfig.toJSONString() + "';\n");
+				fileJs.write("var script = '" + lastScript.replaceAll("\n", "\\\\n") + "';\n");
+				fileJs.write("var scenario = '" + lastPlan.toJSONString() + "';");
 
 				// Flush
 				fileConfig.flush();
 				fileScript.flush();
 				filePlan.flush();
+				fileJs.flush();
 
 				// Close
 				fileConfig.close();
 				fileScript.close();
 				filePlan.close();
+				fileJs.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
