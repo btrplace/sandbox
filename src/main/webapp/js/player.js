@@ -137,51 +137,56 @@ function actionHandler(action, direction, timeUnit, callback){
 function migrate(vm, src, dst, duration, f) {
 	if (LOG) console.log("[ANIM] Migrating "+vm.id+" from "+src.id+" to "+dst.id+" for "+duration+"ms");
 	var a = 0;
-    //A light gray VM is posted on the destination
-    var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
-    ghostDst.bgColor = "#eee";
-    ghostDst.strokeColor = "#ddd";
-    // remove the moving light gray and the source dark gray
-    dst.host(ghostDst);
-    dst.refresh();
+	
+	//A light gray (ghost) VM is posted on the destination
+	var ghostDst = new VirtualMachine(vm.id, vm.cpu, vm.mem);
+	ghostDst.bgColor = "#eee";
+	ghostDst.strokeColor = "#ddd";
+	dst.host(ghostDst);
+	dst.refresh();
+	
+	//A light gray VM will move from the source to the destination
+	var movingVM = new VirtualMachine(vm.id, vm.cpu, vm.mem);
+	movingVM.bgColor = "#eee";
+	movingVM.strokeColor = "#ddd";
+	movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
+	movingVM.box.toFront();
+	
+	var callbackAlreadyCalled = false;
+	var animationEnd = function() {
 
-    //a light gray VM will move from the source to the destination
-    var movingVM = new VirtualMachine(vm.id, vm.cpu, vm.mem);
-    movingVM.bgColor = "#eee";
-    movingVM.strokeColor = "#ddd";
-    movingVM.draw(paper, vm.posX, vm.posY + vm.mem * unit_size);
-    movingVM.box.toFront();
-    var callbackAlreadyCalled = false;
-    var animationEnd = function() {
-		//The source VM goes away
-		src.unhost(vm);
-
-		// the dst light gray VM into dark gray
-		ghostDst.box.remove();
-		movingVM.box.remove();
-
-		dst.vms.length--;    //remove ghostDst
+		//Update vm position for reverse animation
 		vm.posX = ghostDst.posX;
 		vm.posY = ghostDst.posY;
-		dst.host(vm);
+
+		//The source VM goes away
+		src.unhost(vm);
+		vm.box.remove();
+
+		//Remove the moving VM
+		movingVM.box.remove();
+
+		//The ghost VM becomes normal
+		ghostDst.bgColor = "#bbb";
+		ghostDst.strokeColor = "#000";
+
+		//Refresh the nodes
 		src.refresh();
 		dst.refresh();
+	}
+	//movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
+	movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",function(){
+	    	animationEnd();
+	    	callbackAlreadyCalled = true ;
+	    }
+	);
 
-		//drawConfiguration('canvas');
-		//f(a);
-   }
-    //movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, fast ? 50 : (300 * vm.mem),"<>",
-    movingVM.box.animate({transform :"T " + (ghostDst.posX - vm.posX) + " " + (ghostDst.posY - vm.posY)}, duration,"<>",function(){
-        	animationEnd();
-        	callbackAlreadyCalled = true ;
-        }
-    );
-    // This is a safety, in the eventuality of some drawing error ;
-    setTimeout(function(){
-    	if( ! callbackAlreadyCalled ){
-    		animationEnd();
-    	}
-    }, duration+100);
+	// This is a safety, in the eventuality of some drawing error ;
+	setTimeout(function(){
+		if( ! callbackAlreadyCalled ){
+			animationEnd();
+		}
+	}, duration+100);
 }
 
 //Animation for booting a node
