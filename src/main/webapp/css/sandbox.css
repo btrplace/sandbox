@@ -531,9 +531,10 @@ code {
 	border:1px solid #444;
 	background-color: #d2d8b1;
 	border-radius:2px;
-	padding-left:10px;
+	padding-left:0px;
 	font-size:10px;
 	white-space: nowrap;
+	text-align: center;
 }
 
 .finishedAction {
