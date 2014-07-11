@@ -123,7 +123,7 @@ function Node(name, cpu, mem) {
     this.unhost = function(vm) {
         for (var i in this.vms) {
             if (this.vms[i].id == vm.id) {
-                this.vms[i].box.remove();
+                if (this.vms[i].box) this.vms[i].box.remove();
                 this.vms.splice(i, 1);
                 break;
             }
