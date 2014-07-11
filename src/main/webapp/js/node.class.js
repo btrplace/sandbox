@@ -49,7 +49,7 @@ function Node(name, cpu, mem) {
         this.boxFill.push(canvas.text(x + 2,y + border - 7,"memory").attr({'font-size': '12pt','text-anchor':'start','baseline-shift':'0em','fill':bgColor}));
 
 	    //Node name, bottom left
-	    this.boxFill.push(canvas.text(x + border, y + border + box_height, name).attr({'text-anchor': 'end' ,'baseline-shift': '-2em','font-size' : '16pt', 'fill' : bgColor}));
+	    this.boxFill.push(canvas.text(x - 1 + border, y + border + box_height, name).attr({'text-anchor': 'end' ,'baseline-shift': '-2em','font-size' : '16pt', 'fill' : bgColor}));
 
         //Resource grid
 	    for (var i = 1; i < this.cpu; i+=1) {
