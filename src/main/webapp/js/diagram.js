@@ -82,7 +82,7 @@ function addAction(label, start, end){
 
 	var actionTime = 3,
 		xLeft = start * TIME_UNIT_SIZE,
-		width = (end-start) * TIME_UNIT_SIZE;
+		width = (end-start) * TIME_UNIT_SIZE - 1;
 
 
 	actionBar.css({
