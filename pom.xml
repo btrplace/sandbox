@@ -152,7 +152,7 @@
         </snapshotRepository>
     </distributionManagement>
 
-<!--
+
     <repositories>
         <repository>
             <id>btrp-releases</id>
@@ -163,6 +163,6 @@
             <url>http://btrp.inria.fr/repos/snapshot-releases</url>
         </repository>
     </repositories>
--->
+
 
 </project>
