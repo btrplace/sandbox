@@ -67,26 +67,29 @@
             <version>3.0-alpha-1</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-api</artifactId>
-            <version>0.34</version>
+            <version>0.38.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-choco</artifactId>
-            <version>0.34</version>
+            <version>0.38.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>solver-json</artifactId>
-            <version>0.34</version>
+            <version>0.38.3-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>btrplace</groupId>
             <artifactId>btrpsl</artifactId>
-            <version>1.3</version>
+            <version>1.5</version>
         </dependency>
+
     </dependencies>
 
     <scm>
@@ -149,6 +152,7 @@
         </snapshotRepository>
     </distributionManagement>
 
+<!--
     <repositories>
         <repository>
             <id>btrp-releases</id>
@@ -159,4 +163,6 @@
             <url>http://btrp.inria.fr/repos/snapshot-releases</url>
         </repository>
     </repositories>
+-->
+
 </project>
